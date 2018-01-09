@@ -3,6 +3,7 @@ import {Inject, Service} from "typedi";
 import {Url} from "../../model/Url";
 import * as crypto from 'crypto';
 import { UrlService } from "../../services/UrlService";
+import * as http from 'http';
 
 @Service()
 @JsonController('/api')
@@ -18,9 +19,31 @@ export class ApiSampleController {
      */
     @Post('/urls')
     async insertNewUrl(@Body() urlModel: any): Promise<any> {
-        if(!urlModel.url || !urlModel.title){
-            return 'Inform url and title';
+
+        if(!urlModel.title){
+            return 'Inform title';
         }
+        if (!/^https?:\/\//i.test(urlModel.url)) {
+            return 'Invalid url';
+        }
+        const { origin, hostname, pathname, searchParams } = new URL(urlModel.url);
+        const path = decodeURIComponent(pathname);
+
+        const res = await new Promise((resolve, reject) => {
+            const req = http.request({
+              method: 'HEAD',
+              host: hostname,
+              path,
+            }, ({ statusCode, headers }) => {
+              if (!headers || (statusCode == 200 && !/text\/html/i.test(headers['content-type']))){
+                reject(new Error('Not a HTML page'));
+              } else {
+                resolve();
+              }
+            });
+            req.on('error', reject);
+            req.end();
+          });
 
         const newUrl = new Url();
         newUrl.hash = crypto.createHash('sha1').update(urlModel.url).digest('hex').substring(0, 4);

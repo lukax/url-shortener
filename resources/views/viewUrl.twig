@@ -5,10 +5,21 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
-    <hr>
-    <table>
-        <tr>Title: {{ url._title }}</tr>
-        <tr>Url: {{ url._url }}</tr>
-    </table>
+
+    <div style="    
+        position: fixed;
+        bottom: 0px;
+        right: 0;
+        background-color: red;
+        margin: 5px;
+        width: 250px;
+        padding: 13px;">
+        <p style="color: white; margin: 0 auto; width: 250px;">
+            {{ url._title }}
+            <br/>
+            <a href="{{url._url}}" style="color: gold">CLIQUE AQUI</a>
+        </p>
+    </div>
+
+    {{ text }}
 {% endblock %}
