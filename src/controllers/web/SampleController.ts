@@ -73,7 +73,9 @@ export class SampleController {
         const url: Url = await this.urls.findOneByHash(hash);
         if(!url) return null;
 
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            args: ['--no-sandbox', '--disable-setuid-sandbox']
+        });
         const page = await browser.newPage();
 
         const { host } = request.headers;
