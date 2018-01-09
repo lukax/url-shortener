@@ -5,6 +5,7 @@
   "description": "No description provided",
   "license": "MIT",
   "scripts": {
+    "postinstall": "npm run build",
     "start": "npm run build && node ./build/app.js",
     "start:watch": "npm run build:watch & nodemon ./build/app.js",
     "build": "node_modules/.bin/tsc",
