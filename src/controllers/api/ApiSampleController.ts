@@ -50,7 +50,7 @@ export class ApiSampleController {
         newUrl.url = urlModel.url;
         newUrl.title = urlModel.title;
         this.urls.persist(newUrl);
-        return 'ok';
+        return newUrl.hash;
     }
 
     /**

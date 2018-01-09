@@ -71,22 +71,35 @@
 
 {% block body %}
     <h1>{{ title }}</h1>
-    <form id="formurlftw">
+    <form id="url-form">
         <input type="url" name="url" required placeholder="enter a url">
         <br/>
         <input type="text" name="title" required placeholder="give it a cool title">
-    <br/>
-    <button name="shortit">short it!</button>
+        <br/>
+        <button name="shortit" type="submit">short it!</button>
     </form>
 
     <br/>
     <table style="width: 350px; font-size: 16px; margin: 0 auto; margin-top: 100px;">
-            {% for url in urls %}
-                <tr>
-                    <td><a href="/{{ url._hash }}">{{ url._hash }}</a></td>
-                    <td>{{ url._title }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% for url in urls %}
+            <tr>
+                <td><a href="/{{ url._hash }}">{{ url._hash }}</a></td>
+                <td>{{ url._title }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        
+        fetch("/api/v1/urls", {
+            method: "POST",
+            body: new FormData(document.getElementById('url-form'))
+        }).then(res => {
+            console.log(res.json());
+        }).catch(err => {
+            console.log(err);
+        });
+    </script>
 
 {% endblock %}
+
