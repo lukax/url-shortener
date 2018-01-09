@@ -4,13 +4,14 @@ host:
 
 database:
   type: mssql
-  host: localhost
+  host: templatestoreappdbserver.database.windows.net
   port: 1433
-  username: sa
-  password: jXCU0uTXgOAa
-  database: urlftw
+  username: templatestoreapp@templatestoreappdbserver
+  password: zW3IDyCRQI9FmK7Uz24l5be3IxzujBm
+  database: templatestoreapp_db
   synchronize: true
   logging: false
+  encrypt: false
 
 # Remove this, sample extra config
 sample:

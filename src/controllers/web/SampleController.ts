@@ -71,6 +71,7 @@ export class SampleController {
     async viewUrlAction(@Param("hash") hash: string, @Req() request: Request, @Res() response: Response): Promise<any> {
         log("Loading url hash: " + hash);
         const url: Url = await this.urls.findOneByHash(hash);
+        if(!url) return null;
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
