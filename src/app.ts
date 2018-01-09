@@ -19,6 +19,7 @@ cfg.database.host = process.env.DATABASE_HOST || cfg.host;
 cfg.database.username = process.env.DATABASE_USERNAME || cfg.username;
 cfg.database.password = process.env.DATABASE_PASSWORD || cfg.password;
 cfg.database.port = process.env.DATABASE_PORT || cfg.port;
+cfg.host.port = process.env.PORT || cfg.host.port;
 
 console.log(JSON.stringify(cfg));
 
