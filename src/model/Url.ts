@@ -15,6 +15,12 @@ export class Url {
     @Column({length: 6})
     private _hash: string;
 
+    @Column()
+    private _cache: string;
+
+    @Column()
+    private _cacheTime: number;
+
     get id(): ObjectID {
         return this._id;
     }
@@ -46,4 +52,21 @@ export class Url {
     set hash(value: string) {
         this._hash = value;
     }
+
+    get cache(): string {
+        return this._cache;
+    }
+
+    set cache(value: string) {
+        this._cache = value;
+    }
+
+    get cacheTime(): number {
+        return this._cacheTime;
+    }
+
+    set cacheTime(value: number) {
+        this._cacheTime = value;
+    }
+
 }

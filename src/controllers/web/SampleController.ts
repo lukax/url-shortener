@@ -6,9 +6,11 @@ import * as crypto from "crypto";
 import { UrlService } from "../../services/UrlService";
 import { Url } from "../../model/Url";
 import { log } from "util";
-import * as puppeteer from "puppeteer";
 import * as pTimeout from "p-timeout";
 import { URL as SYSURL } from "url";
+import * as puppeteer from "puppeteer";
+
+let browser: puppeteer.Browser;
 
 @Service()
 @Controller()
@@ -73,27 +75,41 @@ export class SampleController {
         const url: Url = await this.urls.findOneByHash(hash);
         if(!url) return null;
 
-        const browser = await puppeteer.launch({
-            args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-        });
-
         const { host } = request.headers;
 
-        const result = await this.run(browser, url.url, host);
+        let content;
+        if(this.urls.isCacheExpired(url)){
+            console.log(`access -> ${hash}. no cache`);
+            content = await this.runInBrowser(url.url, host);
+            this.urls.setCacheForUrl(hash, content);
+        }
+        else {
+            console.log(`access -> ${hash}. cached`);
+            content = url.cache;
+        }
 
         return {
             port: this.config.host.port,
             title: this.config.sample.title,
             url: url,
-            text: result
+            text: content || "An error has occurred"
         };
     }
 
-    private async run(browser: puppeteer.Browser, pageURL: string, hostURL: string) : Promise<any>{
-        let content;
-        const page = await browser.newPage();
+    private async runInBrowser(pageURL: string, hostURL: string) : Promise<any>{
+        let content: string;
+        let page: puppeteer.Page;
 
         try {
+
+            if(!browser){
+                browser = await puppeteer.launch({
+                    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+                })
+            }
+            
+            page = await browser.newPage();
+
             const nowTime = +new Date();
             let reqCount = 0;
             await page.setRequestInterception(true);
@@ -176,16 +192,17 @@ export class SampleController {
                 absEls.forEach((el: any) => {
                 let href = el.getAttribute('href');
                 let src = el.getAttribute('src');
-                if (src && !/^https?:\/\//i.test(src.trim())){
+                var r = new RegExp('^(?:[a-z]+:)?//', 'i');
+                if (src && !r.test(src.trim())){
                     src = src.trim();
                     if(!(/^\/[^/]/i.test(src))){
-                    src = '/' + src;
+                        src = '/' + src;
                     }
                     el.src = origin + src;
-                } else if (href && !/^https?:\/\//i.test(href.trim())){
+                } else if (href && !r.test(href.trim())){
                     href = href.trim();
                     if(!(/^\/[^/]/i.test(href))){
-                    href = '/' + href;
+                        href = '/' + href;
                     }
                     el.href = origin + href;
                 }
@@ -197,7 +214,7 @@ export class SampleController {
                 content = content.replace(/<!--[\s\S]*?-->/g, '');
 
                 return content;
-            }), 10 * 1000, 'Render timed out');
+            }), 20 * 1000, 'Render timed out');
 
             console.log('💥 Done action render');
 
@@ -212,6 +229,10 @@ export class SampleController {
                     (<any>requestAnimationFrame) = (_: any)=>_;
                 });
             });
+
+            page.removeAllListeners();
+            //await page.deleteCookie((await page.cookies()).map(x => { name: x.name,  }));
+            await page.close();
         }
         catch (e) {
             if (page) {
@@ -225,7 +246,7 @@ export class SampleController {
             //res.writeHead(400, {
             //  'content-type': 'text/plain',
             //});
-            content = "Oops. Something is wrong.\n\n";
+            content = null;
 
             // Handle websocket not opened error
             if (/not opened/i.test(message) && browser){
