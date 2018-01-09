@@ -14,11 +14,11 @@ import bodyParser = require("body-parser");
  * Provide a configuration injectable.
  */
 const cfg = loadYAML(readFileSync(join(__dirname, '/../resources/config.yml')).toString());
-cfg.database = process.env.DATABASE_NAME || cfg.database;
-cfg.host = process.env.DATABASE_HOST || cfg.host;
-cfg.username = process.env.DATABASE_USERNAME || cfg.username;
-cfg.password = process.env.DATABASE_PASSWORD || cfg.password;
-cfg.port = process.env.DATABASE_PORT || cfg.port;
+cfg.database.database = process.env.DATABASE_NAME || cfg.database;
+cfg.database.host = process.env.DATABASE_HOST || cfg.host;
+cfg.database.username = process.env.DATABASE_USERNAME || cfg.username;
+cfg.database.password = process.env.DATABASE_PASSWORD || cfg.password;
+cfg.database.port = process.env.DATABASE_PORT || cfg.port;
 
 console.log(JSON.stringify(cfg));
 
