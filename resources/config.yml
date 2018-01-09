@@ -5,7 +5,7 @@ host:
 database:
   type: mssql
   host: localhost
-  port: 5432
+  port: 32770
   username: sa
   password: jXCU0uTXgOAa
   database: urlshort
@@ -14,4 +14,4 @@ database:
 
 # Remove this, sample extra config
 sample:
-  title: A full node backend
+  title: urlftw

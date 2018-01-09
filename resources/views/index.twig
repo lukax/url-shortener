@@ -6,22 +6,19 @@
 
 {% block body %}
     <h1>{{ title }}</h1>
-    <p>Welcome to {{ title }}! Now your app is at port {{ port }}</p>
     <hr>
-    <h4>ORM - Example of usage:</h4>
-    <table border="1">
+    <table>
         <tr>
-            <th>Name</th>
-            <th>Token</th>
+            <th>Title</th>
+            <th>Url</th>
+            <th>Hash</th>
         </tr>
-        {% for user in users %}
+        {% for url in urls %}
             <tr>
-                <td>{{ user._name }}</td>
-                <td>{{ user._token }}</td>
+                <td>{{ url._title }}</td>
+                <td>{{ url._url }}</td>
+                <td><a href="/{{ url._hash }}">{{ url._hash }}</a></td>
             </tr>
         {% endfor %}
     </table>
-    <p>
-        In order to insert more entities visit <a href="/api/insert/Place a name here">/api/insert/Place a name here</a>
-    </p>
 {% endblock %}
