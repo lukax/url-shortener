@@ -71,31 +71,31 @@
 
 {% block body %}
     <h1>{{ title }}</h1>
-    <form id="url-form">
+    <form id="urlform">
         <input type="url" name="url" id="mUrl" required placeholder="enter a url">
         <br/>
         <input type="text" name="title" id="mTitle" required placeholder="give it a cool title">
         <br/>
         <button name="shortit" type="submit">short it!</button>
         <br/>
-        <a id="url-hash"></a>
+        <br/>
+        <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
     </form>
 
-    <br/>
-    <table style="max-width: 450px; width: 100%; font-size: 16px; margin: 0 auto; margin-top: 100px;">
-        {% for url in urls %}
-            <tr>
-                <td><a href="/{{ url._hash }}">{{ url._hash }}</a></td>
-                <td>{{ url._title }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+
 
     <script>
-        document.getElementById("url-form").addEventListener("submit", function(e){
+        
+        var urlform = document.getElementById("urlform");
+        urlform.addEventListener("submit", function(e){
             e.preventDefault(); 
             var headers = new Headers();
             headers.set('Content-Type', 'application/json');
+
+            var a = document.getElementById("urlhash");
+            a.removeAttribute("href");
+            a.innerText = "...";
+            a.style.color = "black";
 
             fetch("/api/urls", {
                 method: "POST",
@@ -105,17 +105,43 @@
                 }),
                 headers: headers
             }).then(res => {
-                res.json().then((json) => {
-                    console.log(json);
-                    var a = document.getElementById("url-hash");
-                    a.setAttribute("href", json);
-                    a.innerText = window.location.href + json;
-                });
+
+                if(res.status == 200){
+                    res.json().then((json) => {
+                        a.setAttribute("href", json);
+                        a.innerText = window.location.href + json;
+                    });
+                }
+                else {
+                    a.removeAttribute("href");
+                    a.innerText = "invalid url :(";
+                    a.style.color = "red";
+                }
             }).catch(err => {
-                alert("unable to short this url");
+                a.removeAttribute("href");
+                a.innerText = "connection error, please try again";
+                a.style.color = "red";
             });
         });
 
+        var protocol = 'http://';
+        urlform.url.onpaste = function(e){
+          const text = e.clipboardData.getData('text');
+          if (/https?:\/\//.test(text)) {
+            e.preventDefault();
+            urlform.url.value = text;
+          }
+        }
+        urlform.url.onfocus = function(){
+          if (urlform.url.value.trim() == '') {
+            urlform.url.value = protocol;
+          }
+        }
+        urlform.url.onblur = function(){
+          if (urlform.url.value.trim() == protocol) {
+            urlform.url.value = '';
+          }
+        }
         
     </script>
 

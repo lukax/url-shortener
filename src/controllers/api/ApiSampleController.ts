@@ -1,4 +1,4 @@
-import {JsonController, Get, Post, Param, Body} from "routing-controllers";
+import {JsonController, Get, Post, Param, Body, NotFoundError} from "routing-controllers";
 import {Inject, Service} from "typedi";
 import {Url} from "../../model/Url";
 import * as crypto from 'crypto';
@@ -33,24 +33,34 @@ export class ApiSampleController {
         const { origin, hostname, pathname, searchParams } = new SYSURL(model.url);
         const path = decodeURIComponent(pathname);
 
-        const res = await new Promise((resolve, reject) => {
-            const req = http.request({
-              method: 'HEAD',
-              host: hostname,
-              path,
-            }, ({ statusCode, headers }) => {
-              if (!headers || (statusCode == 200 && !/text\/html/i.test(headers['content-type']))){
-                reject(new Error('not a HTML page :('));
-              } else {
-                resolve();
-              }
+        try{
+            const res = await new Promise((resolve, reject) => {
+                const req = http.request({
+                method: 'HEAD',
+                host: hostname,
+                path,
+                timeout: 5000 
+                }, ({ statusCode, headers }) => {
+                if (!headers || (statusCode == 200 && !/text\/html/i.test(headers['content-type']))){
+                    reject(new Error('not a HTML page :('));
+                } else {
+                    resolve();
+                }
+                });
+                req.on('error', reject);
+                req.end();
             });
-            req.on('error', reject);
-            req.end();
-          });
+        } catch(e){
+            if(new RegExp("not a HTML page").test(e)){
+                throw new NotFoundError(`URL is not a HTML page :(`); // message is optional
+            }
+            else {
+                throw new NotFoundError(`please try again`); // message is optional
+            }
+        }
 
         const newUrl = new Url();
-        newUrl.hash = crypto.createHash('sha1').update(model.url).digest('hex').substring(0, 5);
+        newUrl.hash = crypto.createHash('sha1').update(model.url + (+new Date())).digest('hex').substring(0, 5);
         newUrl.url = model.url;
         newUrl.title = model.title;
         this.urls.persist(newUrl);
