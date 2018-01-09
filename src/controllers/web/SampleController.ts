@@ -8,7 +8,7 @@ import { Url } from "../../model/Url";
 import { log } from "util";
 import * as puppeteer from "puppeteer";
 import * as pTimeout from "p-timeout";
-import { URL } from "url";
+import { URL as SYSURL } from "url";
 
 @Service()
 @Controller()
@@ -35,7 +35,7 @@ export class SampleController {
             for (const x of sample) {
                 const url = new Url();
                 url.title = x.title;
-                url.hash = crypto.createHash('sha1').update(x.url).digest('hex').substring(0, 4);
+                url.hash = crypto.createHash('sha1').update(x.url).digest('hex').substring(0, 5);
                 url.url = x.url;
                 await this.urls.persist(url);
             }
@@ -86,8 +86,6 @@ export class SampleController {
             text: result
         };
     }
-
-
 
     private async run(page: puppeteer.Page, url: string, host: string) : Promise<any>{
         
@@ -141,7 +139,7 @@ export class SampleController {
             });
         });
 
-        const { origin, hostname, pathname, searchParams } = new URL(url);
+        const { origin, hostname, pathname, searchParams } = new SYSURL(url);
         const raw = searchParams.get('raw') || false;
 
         const content = await pTimeout(raw ? page.content() : page.evaluate(() => {
@@ -196,4 +194,5 @@ export class SampleController {
 
         return content;
     }
+
 }

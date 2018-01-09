@@ -72,15 +72,17 @@
 {% block body %}
     <h1>{{ title }}</h1>
     <form id="url-form">
-        <input type="url" name="url" required placeholder="enter a url">
+        <input type="url" name="url" id="mUrl" required placeholder="enter a url">
         <br/>
-        <input type="text" name="title" required placeholder="give it a cool title">
+        <input type="text" name="title" id="mTitle" required placeholder="give it a cool title">
         <br/>
         <button name="shortit" type="submit">short it!</button>
+        <br/>
+        <a id="url-hash"></a>
     </form>
 
     <br/>
-    <table style="width: 350px; font-size: 16px; margin: 0 auto; margin-top: 100px;">
+    <table style="width: 380px; font-size: 16px; margin: 0 auto; margin-top: 100px;">
         {% for url in urls %}
             <tr>
                 <td><a href="/{{ url._hash }}">{{ url._hash }}</a></td>
@@ -90,15 +92,31 @@
     </table>
 
     <script>
-        
-        fetch("/api/v1/urls", {
-            method: "POST",
-            body: new FormData(document.getElementById('url-form'))
-        }).then(res => {
-            console.log(res.json());
-        }).catch(err => {
-            console.log(err);
+        document.getElementById("url-form").addEventListener("submit", function(e){
+            e.preventDefault(); 
+            var headers = new Headers();
+            headers.set('Content-Type', 'application/json');
+
+            fetch("/api/urls", {
+                method: "POST",
+                body: JSON.stringify({
+                    url: document.getElementById('mUrl').value,
+                    title: document.getElementById('mTitle').value
+                }),
+                headers: headers
+            }).then(res => {
+                res.json().then((json) => {
+                    console.log(json);
+                    var a = document.getElementById("url-hash");
+                    a.setAttribute("href", json);
+                    a.innerText = window.location.href + json;
+                });
+            }).catch(err => {
+                alert("unable to short this url");
+            });
         });
+
+        
     </script>
 
 {% endblock %}

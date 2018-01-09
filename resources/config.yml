@@ -5,10 +5,10 @@ host:
 database:
   type: mssql
   host: localhost
-  port: 32770
+  port: 1433
   username: sa
   password: jXCU0uTXgOAa
-  database: urlshort
+  database: urlftw
   synchronize: true
   logging: false
 

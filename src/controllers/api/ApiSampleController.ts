@@ -4,6 +4,8 @@ import {Url} from "../../model/Url";
 import * as crypto from 'crypto';
 import { UrlService } from "../../services/UrlService";
 import * as http from 'http';
+import { log } from "util";
+import { URL as SYSURL } from "url";
 
 @Service()
 @JsonController('/api')
@@ -18,15 +20,17 @@ export class ApiSampleController {
      * @returns {Promise<any>}
      */
     @Post('/urls')
-    async insertNewUrl(@Body() urlModel: any): Promise<any> {
+    async insertNewUrl(@Body() model: { title: string, url: string}): Promise<any> {
 
-        if(!urlModel.title){
-            return 'Inform title';
+        log("InsertNewUrl " + JSON.stringify(model));
+
+        if(!model.title){
+            return 'no title!';
         }
-        if (!/^https?:\/\//i.test(urlModel.url)) {
-            return 'Invalid url';
+        if (!/^https?:\/\//i.test(model.url)) {
+            return 'invalid url!';
         }
-        const { origin, hostname, pathname, searchParams } = new URL(urlModel.url);
+        const { origin, hostname, pathname, searchParams } = new SYSURL(model.url);
         const path = decodeURIComponent(pathname);
 
         const res = await new Promise((resolve, reject) => {
@@ -36,7 +40,7 @@ export class ApiSampleController {
               path,
             }, ({ statusCode, headers }) => {
               if (!headers || (statusCode == 200 && !/text\/html/i.test(headers['content-type']))){
-                reject(new Error('Not a HTML page'));
+                reject(new Error('not a HTML page :('));
               } else {
                 resolve();
               }
@@ -46,9 +50,9 @@ export class ApiSampleController {
           });
 
         const newUrl = new Url();
-        newUrl.hash = crypto.createHash('sha1').update(urlModel.url).digest('hex').substring(0, 4);
-        newUrl.url = urlModel.url;
-        newUrl.title = urlModel.title;
+        newUrl.hash = crypto.createHash('sha1').update(model.url).digest('hex').substring(0, 5);
+        newUrl.url = model.url;
+        newUrl.title = model.title;
         this.urls.persist(newUrl);
         return newUrl.hash;
     }
