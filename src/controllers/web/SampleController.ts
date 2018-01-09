@@ -28,9 +28,9 @@ export class SampleController {
         const urls: Url[] = await this.urls.getAll();
         if (!urls.length) {
             const sample = [
-                {title: 'A title', url: 'http://www.google.com'},
-                {title: 'Another kind of title', url: 'http://www.example.com'},
-                {title: 'Veja os políticos que apoiam a pena de morte.', url: 'http://www1.folha.uol.com.br/cotidiano/2018/01/1948659-apoio-a-pena-de-morte-bate-recorde-entre-brasileiros-aponta-o-datafolha.shtml'}
+                {title: 'search engine', url: 'http://www.google.com'},
+                {title: 'example page', url: 'http://www.example.com'},
+                {title: 'veja os políticos que apoiam a pena de morte', url: 'http://www1.folha.uol.com.br/cotidiano/2018/01/1948659-apoio-a-pena-de-morte-bate-recorde-entre-brasileiros-aponta-o-datafolha.shtml'}
             ];
             for (const x of sample) {
                 const url = new Url();

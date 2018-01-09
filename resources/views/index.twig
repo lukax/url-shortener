@@ -1,24 +1,92 @@
 {% extends 'layout.twig' %}
 
+
 {% block styles %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Signika:400,700" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <style>
+            html {
+                display: flex;
+                height: 100%;
+            }
+            body {
+                margin: auto;
+                width: 100%;
+                padding: 0 .5em;
+            }
+            body, * {
+                font-family: Signika, sans-serif;
+                font-weight: 400;
+                color: rgb(0, 0, 0);
+                text-align: center;
+            }
+            body, button, input {
+                font-size: 30px;
+            }
+            h1 {
+                font-weight: 700;
+                font-size: 60px;
+                margin: 0 0 .25em;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            input{
+                display: inline-block;
+                width: 90%;
+                max-width: 600px;
+                padding: .45em;
+                margin: .5em;
+                border: 0;
+                border-radius: 0;
+                background-color: rgb(241, 232, 232);
+            }
+            input:focus{
+                outline: 3px solid rgb(0, 0, 0);
+            }
+            button {
+                border-radius: 0;
+                border: 0;
+                padding: .45em 1em;
+                margin: .5em;
+                width: 90%;
+                max-width: 15ex;
+                color: rgba(255,255,255,.75);
+                background-color: rgb(0, 0, 0);
+            }
+            button:hover {
+                color: rgba(255,255,255,1);
+            }
+            button:active {
+                color: rgba(255,255,255,.55);
+                transform: scale(.95);
+            }
+            footer {
+                font-size: 16px;
+            }
+        </style>
 {% endblock %}
 
 {% block body %}
     <h1>{{ title }}</h1>
-    <hr>
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Url</th>
-            <th>Hash</th>
-        </tr>
-        {% for url in urls %}
-            <tr>
-                <td>{{ url._title }}</td>
-                <td>{{ url._url }}</td>
-                <td><a href="/{{ url._hash }}">{{ url._hash }}</a></td>
-            </tr>
-        {% endfor %}
-    </table>
+    <form id="formurlftw">
+        <input type="url" name="url" required placeholder="enter a url">
+        <br/>
+        <input type="text" name="title" required placeholder="give it a cool title">
+    <br/>
+    <button name="shortit">short it!</button>
+    </form>
+
+    <br/>
+    <table style="width: 350px; font-size: 16px; margin: 0 auto; margin-top: 100px;">
+            {% for url in urls %}
+                <tr>
+                    <td><a href="/{{ url._hash }}">{{ url._hash }}</a></td>
+                    <td>{{ url._title }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
 {% endblock %}
