@@ -3,16 +3,12 @@ host:
   port: 8080
 
 database:
-  type: mssql
-  host: templatestoreappdbserver.database.windows.net
-  port: 1433
-  username: templatestoreapp@templatestoreappdbserver
-  password: zW3IDyCRQI9FmK7Uz24l5be3IxzujBm
-  database: templatestoreapp_db
-  synchronize: true
-  logging: false
-  encrypt: false
-
+  type: mongodb
+  host: localhost
+  port: 27017
+  database: urlftw
+  logging: true
+    
 # Remove this, sample extra config
 sample:
   title: urlftw

@@ -1,10 +1,10 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, ObjectIdColumn, ObjectID} from "typeorm";
 
 @Entity()
 export class User {
 
-    @PrimaryGeneratedColumn()
-    private _id: number;
+    @ObjectIdColumn()
+    private _id: ObjectID;
 
     @Column()
     private _name: string;
@@ -12,11 +12,11 @@ export class User {
     @Column({length: 128})
     private _token: string;
 
-    get id(): number {
+    get id(): ObjectID {
         return this._id;
     }
 
-    set id(value: number) {
+    set id(value: ObjectID) {
         this._id = value;
     }
 

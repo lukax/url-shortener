@@ -13,15 +13,16 @@ import bodyParser = require("body-parser");
 /**
  * Provide a configuration injectable.
  */
-const cfg = loadYAML(readFileSync('./resources/config.yml').toString());
+const cfg = loadYAML(readFileSync(join(__dirname, '/../resources/config.yml')).toString());
 cfg.database = process.env.DATABASE_NAME || cfg.database;
 cfg.host = process.env.DATABASE_HOST || cfg.host;
 cfg.username = process.env.DATABASE_USERNAME || cfg.username;
 cfg.password = process.env.DATABASE_PASSWORD || cfg.password;
-cfg.encrypt = process.env.DATABASE_ENCRYPT || cfg.encrypt;
 cfg.port = process.env.DATABASE_PORT || cfg.port;
 
-Container.provide([{ id: 'config', value: cfg }]);
+console.log(JSON.stringify(cfg));
+
+Container.set([{ id: 'config', value: cfg }]);
 
 /**
  * Setup routing-controllers to use typedi container.

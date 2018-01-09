@@ -1,10 +1,10 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, ObjectID, ObjectIdColumn} from "typeorm";
 
 @Entity()
 export class Url {
 
-    @PrimaryGeneratedColumn()
-    private _id: number;
+    @ObjectIdColumn()
+    private _id: ObjectID;
 
     @Column()
     private _title: string;
@@ -15,11 +15,11 @@ export class Url {
     @Column({length: 6})
     private _hash: string;
 
-    get id(): number {
+    get id(): ObjectID {
         return this._id;
     }
 
-    set id(value: number) {
+    set id(value: ObjectID) {
         this._id = value;
     }
 
