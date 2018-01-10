@@ -21,6 +21,16 @@ export class Link {
     @Column()
     private _cacheTime: number;
 
+
+    @Column({length: 3000})
+    private _ctaUrl: string;
+
+    @Column()
+    private _ctaHeader: string;
+
+    @Column()
+    private _description: string;
+
     get id(): ObjectID {
         return this._id;
     }
@@ -69,4 +79,27 @@ export class Link {
         this._cacheTime = value;
     }
 
+    get ctaHeader(): string {
+        return this._ctaHeader;
+    }
+
+    set ctaHeader(value: string) {
+        this._ctaHeader = value;
+    }
+
+    get ctaUrl(): string {
+        return this._ctaUrl;
+    }
+
+    set ctaUrl(value: string) {
+        this._ctaUrl = value;
+    }
+
+    get description(): string {
+        return this._description;
+    }
+
+    set description(value: string) {
+        this._description = value;
+    }
 }

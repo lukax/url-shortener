@@ -71,21 +71,24 @@
 
 {% block body %}
     <h1>{{ title }}</h1>
-    <form id="urlform">
-        <input type="url" name="url" id="mUrl" required placeholder="enter a url">
+    <form id="urlform" style="margin: 0 auto; max-width: 900px">
+        <h5 style="margin: 10px; color: gray;">it's simple, first enter a...</h5>
+        <input type="url" name="url" id="mUrl" required placeholder="URL to short">
         <br/>
-        <input type="text" name="title" id="mTitle" required placeholder="give it a cool title">
+        <h5 style="margin: 10px; color: gray;">then give it a...</h5>
+        <input type="text" name="title" id="mTitle" required placeholder="nice attention grabbing header!" value="A nice attention grabbing header!">
+        <input type="text" name="description" id="mDescription" required placeholder="descriptive sentence for the CTA" value="A descriptive sentence for the Call To Action (CTA).">
+        <input type="text" name="ctaHeader" id="mCtaHeader" required placeholder="CTA button header" value="CONTACT US NOW!">
+        <input type="url" name="ctaUrl" id="mCtaUrl" required placeholder="Call To Action URL">
         <br/>
-        <button name="shortit" type="submit">short it!</button>
-        <br/>
-        <br/>
-        <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
+        <button name="shortit" type="submit">...short it!</button>
     </form>
 
-
+    <div style="margin: 35px 0;">
+        <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
+    </div>
 
     <script>
-        
         var urlform = document.getElementById("urlform");
         urlform.addEventListener("submit", function(e){
             e.preventDefault(); 
@@ -101,7 +104,10 @@
                 method: "POST",
                 body: JSON.stringify({
                     url: document.getElementById('mUrl').value,
-                    title: document.getElementById('mTitle').value
+                    title: document.getElementById('mTitle').value,
+                    description: document.getElementById('mDescription').value,
+                    ctaHeader: document.getElementById('mCtaHeader').value,
+                    ctaUrl: document.getElementById('mCtaUrl').value,
                 }),
                 headers: headers
             }).then(res => {
@@ -124,24 +130,30 @@
             });
         });
 
-        var protocol = 'http://';
-        urlform.url.onpaste = function(e){
-          const text = e.clipboardData.getData('text');
-          if (/https?:\/\//.test(text)) {
-            e.preventDefault();
-            urlform.url.value = text;
-          }
+        function applyUrlProtocol(formElement){
+            var protocol = 'http://';
+            formElement.onpaste = function(e){
+                const text = e.clipboardData.getData('text');
+                if (/https?:\/\//.test(text)) {
+                  e.preventDefault();
+                  formElement.value = text;
+                }
+            }
+            formElement.onfocus = function(){
+                if (formElement.value.trim() == '') {
+                    formElement.value = protocol;
+                }
+            }
+            formElement.onblur = function(){
+                if (formElement.value.trim() == protocol) {
+                    formElement.value = '';
+                }
+            }
         }
-        urlform.url.onfocus = function(){
-          if (urlform.url.value.trim() == '') {
-            urlform.url.value = protocol;
-          }
-        }
-        urlform.url.onblur = function(){
-          if (urlform.url.value.trim() == protocol) {
-            urlform.url.value = '';
-          }
-        }
+
+        applyUrlProtocol(urlform.url);
+        applyUrlProtocol(urlform.ctaUrl);
+
         
     </script>
 

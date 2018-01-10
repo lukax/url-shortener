@@ -20,12 +20,21 @@ export class ApiSampleController {
      * @returns {Promise<any>}
      */
     @Post('/urls')
-    async insertNewUrl(@Body() model: { title: string, url: string}): Promise<any> {
+    async insertNewUrl(@Body() model: { title: string, url: string, description: string, ctaUrl: string, ctaHeader: string }): Promise<any> {
 
         log("InsertNewUrl " + JSON.stringify(model));
 
         if(!model.title){
             return 'no title!';
+        }
+        if(!model.description){
+            return 'no description!';
+        }
+        if(!model.ctaUrl){
+            return 'no cta url!';
+        }
+        if(!model.ctaHeader){
+            return 'no cta header!';
         }
         if (!/^https?:\/\//i.test(model.url)) {
             return 'invalid url!';
@@ -59,12 +68,15 @@ export class ApiSampleController {
             }
         }
 
-        const newUrl = new Link();
-        newUrl.hash = crypto.createHash('sha1').update(model.url + (+new Date())).digest('hex').substring(0, 5);
-        newUrl.url = model.url;
-        newUrl.title = model.title;
-        this.links.persist(newUrl);
-        return newUrl.hash;
+        const newLink = new Link();
+        newLink.hash = crypto.createHash('sha1').update(model.url + (+new Date())).digest('hex').substring(0, 5);
+        newLink.url = model.url;
+        newLink.title = model.title;
+        newLink.ctaHeader = model.ctaHeader;
+        newLink.ctaUrl = model.ctaUrl;
+        newLink.description = model.description;
+        this.links.persist(newLink);
+        return newLink.hash;
     }
 
     /**
