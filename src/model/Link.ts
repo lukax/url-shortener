@@ -1,7 +1,7 @@
 import {Column, Entity, PrimaryGeneratedColumn, ObjectID, ObjectIdColumn} from "typeorm";
 
 @Entity()
-export class Url {
+export class Link {
 
     @ObjectIdColumn()
     private _id: ObjectID;

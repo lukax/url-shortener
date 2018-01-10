@@ -1,8 +1,8 @@
 import {EntityRepository, Repository} from "typeorm";
-import {Url} from "../model/Url";
+import {Link} from "../model/Link";
 import { MongoRepository } from "typeorm/repository/MongoRepository";
 
-@EntityRepository(Url)
-export class UrlRepository extends MongoRepository<Url> {
+@EntityRepository(Link)
+export class LinkRepository extends MongoRepository<Link> {
 
 }

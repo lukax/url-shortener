@@ -1,18 +1,18 @@
 import {JsonController, Get, Post, Param, Body, NotFoundError} from "routing-controllers";
 import {Inject, Service} from "typedi";
-import {Url} from "../../model/Url";
+import {Link} from "../../model/Link";
 import * as crypto from 'crypto';
-import { UrlService } from "../../services/UrlService";
+import { LinkService } from "../../services/LinkService";
 import * as http from 'http';
 import { log } from "util";
-import { URL as SYSURL } from "url";
+import { URL } from "url";
 
 @Service()
 @JsonController('/api')
 export class ApiSampleController {
 
     @Inject()
-    private urls: UrlService;
+    private links: LinkService;
 
     /**
      * Sample API type insert
@@ -30,7 +30,7 @@ export class ApiSampleController {
         if (!/^https?:\/\//i.test(model.url)) {
             return 'invalid url!';
         }
-        const { origin, hostname, pathname, searchParams } = new SYSURL(model.url);
+        const { origin, hostname, pathname, searchParams } = new URL(model.url);
         const path = decodeURIComponent(pathname);
 
         try{
@@ -59,11 +59,11 @@ export class ApiSampleController {
             }
         }
 
-        const newUrl = new Url();
+        const newUrl = new Link();
         newUrl.hash = crypto.createHash('sha1').update(model.url + (+new Date())).digest('hex').substring(0, 5);
         newUrl.url = model.url;
         newUrl.title = model.title;
-        this.urls.persist(newUrl);
+        this.links.persist(newUrl);
         return newUrl.hash;
     }
 
@@ -73,7 +73,7 @@ export class ApiSampleController {
      */
     @Get('/urls')
     async getAllUrls(): Promise<any> {
-        return this.urls.getAll();
+        return this.links.getAll();
     }
 
     

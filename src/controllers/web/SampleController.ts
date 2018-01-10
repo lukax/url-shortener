@@ -3,11 +3,11 @@ import {Controller, Get, Post, Redirect, Render, QueryParam, HttpCode, Req, Res,
 import {ApiSampleController} from "../api/ApiSampleController";
 import {Request, Response} from "express";
 import * as crypto from "crypto";
-import { UrlService } from "../../services/UrlService";
-import { Url } from "../../model/Url";
+import { LinkService } from "../../services/LinkService";
+import { Link } from "../../model/Link";
 import { log } from "util";
 import * as pTimeout from "p-timeout";
-import { URL as SYSURL } from "url";
+import { URL } from "url";
 import * as puppeteer from "puppeteer";
 
 let browser: puppeteer.Browser;
@@ -17,7 +17,7 @@ let browser: puppeteer.Browser;
 export class SampleController {
 
     @Inject()
-    private urls: UrlService;
+    private links: LinkService;
 
     @Inject()
     private api: ApiSampleController;
@@ -27,7 +27,7 @@ export class SampleController {
      * @returns {Promise<void>}
      */
     private async checkUrls() {
-        const urls: Url[] = await this.urls.getAll();
+        const urls: Link[] = await this.links.getAll();
         if (!urls.length) {
             const sample = [
                 {title: 'search engine', url: 'http://www.google.com'},
@@ -35,11 +35,11 @@ export class SampleController {
                 {title: 'veja os políticos que apoiam a pena de morte', url: 'http://www1.folha.uol.com.br/cotidiano/2018/01/1948659-apoio-a-pena-de-morte-bate-recorde-entre-brasileiros-aponta-o-datafolha.shtml'}
             ];
             for (const x of sample) {
-                const url = new Url();
+                const url = new Link();
                 url.title = x.title;
                 url.hash = crypto.createHash('sha1').update(x.url).digest('hex').substring(0, 5);
                 url.url = x.url;
-                await this.urls.persist(url);
+                await this.links.persist(url);
             }
         }
     }
@@ -55,7 +55,7 @@ export class SampleController {
     @HttpCode(200)
     async indexAction(): Promise<any> {
         await this.checkUrls();
-        const urls: Url[] = await this.urls.getAll();
+        const urls: Link[] = await this.links.getAll();
         return {
             port: this.config.host.port,
             title: this.config.sample.title,
@@ -72,26 +72,26 @@ export class SampleController {
     @HttpCode(200)
     async viewUrlAction(@Param("hash") hash: string, @Req() request: Request, @Res() response: Response): Promise<any> {
         log("Loading url hash: " + hash);
-        const url: Url = await this.urls.findOneByHash(hash);
-        if(!url) return null;
+        const link: Link = await this.links.findOneByHash(hash);
+        if(!link) return null;
 
         const { host } = request.headers;
 
         let content;
-        if(this.urls.isCacheExpired(url)){
-            console.log(`access -> ${hash}. no cache`);
-            content = await this.runInBrowser(url.url, host);
-            this.urls.setCacheForUrl(hash, content);
+        if(await this.links.hasCacheForLink(link)) {
+            console.log(`access -> ${hash}. cached`);
+            content = (await this.links.getCacheReadyLink(link)).cache;
         }
         else {
-            console.log(`access -> ${hash}. cached`);
-            content = url.cache;
+            console.log(`access -> ${hash}. no cache`);
+            content = await this.runInBrowser(link.url, host);
+            this.links.updateCache(link, content);
         }
 
         return {
             port: this.config.host.port,
             title: this.config.sample.title,
-            url: url,
+            url: link,
             text: content || "An error has occurred"
         };
     }
@@ -160,7 +160,7 @@ export class SampleController {
                 });
             });
 
-            const { origin, hostname, pathname, searchParams } = new SYSURL(pageURL);
+            const { origin, hostname, pathname, searchParams } = new URL(pageURL);
             const raw = searchParams.get('raw') || false;
 
             content = await pTimeout(raw ? page.content() : page.evaluate(() => {
