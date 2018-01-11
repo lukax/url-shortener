@@ -92,7 +92,7 @@ export class SampleController {
             port: this.config.host.port,
             title: this.config.sample.title,
             link: link,
-            content: content || "An error has occurred"
+            content: content || "An error has occurred, please try again"
         };
     }
 

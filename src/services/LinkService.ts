@@ -43,7 +43,7 @@ export class LinkService {
     private isCacheExpired(url: Link): boolean {
         const seconds = (+new Date() - url.cacheTime) / 1000;
         const maxTimeAliveSeconds = 60 * 60 * 24;
-        return seconds > maxTimeAliveSeconds;
+        return url.cache == null || seconds > maxTimeAliveSeconds;
     }
 
 }
