@@ -1,3 +1,4 @@
+import 'newrelic';
 import "reflect-metadata";
 import {createExpressServer, useContainer as rtUsec} from "routing-controllers";
 import {Container} from "typedi";
