@@ -6,23 +6,31 @@ import morgan = require("morgan");
 import {readdirSync, readFileSync} from "fs";
 import {load as loadYAML} from "js-yaml";
 import serveStatic = require("serve-static");
+import bodyParser = require("body-parser");
 import {join} from "path";
 import {getConnectionManager, useContainer as ormUsec} from "typeorm";
-import bodyParser = require("body-parser");
+import { ConnectionOptions } from "tls";
+import {registerAuthMiddleware} from './app.auth';
+import dotenv = require('dotenv');
 
+const dotenvConfig = dotenv.config();
+if (dotenvConfig.error) { throw dotenvConfig.error; }
+  
 /**
  * Provide a configuration injectable.
  */
-const cfg = loadYAML(readFileSync(join(__dirname, '/../resources/config.yml')).toString());
-cfg.database.database = process.env.DATABASE_NAME || cfg.database.database;
-cfg.database.host = process.env.DATABASE_HOST || cfg.database.host;
-cfg.database.username = process.env.DATABASE_USERNAME || cfg.database.username;
-cfg.database.password = process.env.DATABASE_PASSWORD || cfg.database.password;
-cfg.database.port = process.env.DATABASE_PORT || cfg.database.port;
-cfg.host.port = process.env.PORT || cfg.host.port;
-
-console.log(JSON.stringify(cfg));
-
+const cfg: { database: any, host: any } = {
+    database: {
+        database: process.env.DB_NAME,
+        host: process.env.DB_HOST,
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT
+    },
+    host: {
+        port: process.env.PORT
+    }
+};
 Container.set([{ id: 'config', value: cfg }]);
 
 /**
@@ -73,11 +81,9 @@ getConnectionManager().create(cfg.database).connect().then(() => {
 /**
  * Use middlewares
  */
-expressApp.use(morgan('combined'));
+expressApp.use(morgan('combined')); //logger
 expressApp.use(bodyParser.raw());
-expressApp.use(bodyParser.urlencoded({
-    extended: true
-}));
+expressApp.use(bodyParser.urlencoded({ extended: true }));
 expressApp.use(bodyParser.json());
 
 /**
@@ -87,9 +93,46 @@ expressApp.set('view engine', 'twig');
 expressApp.set('views', join(__dirname, '/../resources/views'));
 
 /**
+ * Configure authentication
+ */
+registerAuthMiddleware(expressApp);
+
+/**
  * Setup static file serving
  */
 expressApp.use(serveStatic('static'));
+
+/**
+ * Setup error handlers
+ */
+// catch 404 and forward to error handler
+expressApp.use(function(req, res, next) {
+    const err: any = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  });
+
+// development error handler
+// will print stacktrace
+if (expressApp.get('env') === 'development') {
+    expressApp.use((err: any, req: any, res: any, next: any) => {
+        res.status(err.status || 500);
+        res.render('error', {
+        message: err.message,
+        error: err
+        });
+    });
+}
+  
+// production error handler
+// no stacktraces leaked to user
+expressApp.use((err: any, req: any, res: any, next: any) => {
+    res.status(err.status || 500);
+    res.render('error', {
+        message: err.message,
+        error: {}
+    });
+});
 
 /**
  * Start the express app.
