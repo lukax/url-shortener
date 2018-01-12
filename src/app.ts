@@ -19,8 +19,9 @@ if (dotenvConfig.error) { throw dotenvConfig.error; }
 /**
  * Provide a configuration injectable.
  */
-const cfg: { database: any, host: any } = {
+const cfg: { database: any, host: any, app: any } = {
     database: {
+        type: process.env.DB_TYPE,
         database: process.env.DB_NAME,
         host: process.env.DB_HOST,
         username: process.env.DB_USERNAME,
@@ -29,6 +30,9 @@ const cfg: { database: any, host: any } = {
     },
     host: {
         port: process.env.PORT
+    },
+    app: {
+        title: process.env.APP_TITLE
     }
 };
 Container.set([{ id: 'config', value: cfg }]);

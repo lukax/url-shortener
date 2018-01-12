@@ -1,41 +1,42 @@
 import {Express} from "express";
 import passport = require('passport');
 import flash = require('connect-flash');
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
+import session = require('express-session');
+import cookieParser = require('cookie-parser');
 const Auth0Strategy = require('passport-auth0');
 
-// Configure Passport to use Auth0
-const strategy = new Auth0Strategy(
-    {
-      domain: process.env.AUTH0_DOMAIN,
-      clientID: process.env.AUTH0_CLIENT_ID,
-      clientSecret: process.env.AUTH0_CLIENT_SECRET,
-      callbackURL:
-        process.env.AUTH0_CALLBACK_URL || `http://localhost:${process.env.PORT}/callback`
-    },
-    function(accessToken: any, refreshToken: any, extraParams: any, profile: any, done: any) {
-      // accessToken is the token to call Auth0 API (not needed in the most cases)
-      // extraParams.id_token has the JSON Web Token
-      // profile has all the information from the user
-      return done(null, profile);
-    }
-  );
-  
-  passport.use(strategy);
-  
-  // This can be used to keep a smaller payload
-  passport.serializeUser(function(user, done) {
-    done(null, user);
-  });
-  
-  passport.deserializeUser(function(user, done) {
-    done(null, user);
-  });
+function registerAuthMiddleware(expressApp: Express) {
+      
+    // Configure Passport to use Auth0
+    const strategy = new Auth0Strategy(
+        {
+        domain: process.env.AUTH0_DOMAIN,
+        clientID: process.env.AUTH0_CLIENT_ID,
+        clientSecret: process.env.AUTH0_CLIENT_SECRET,
+        callbackURL:
+            process.env.AUTH0_CALLBACK_URL || `http://localhost:${process.env.PORT}/callback`
+        },
+        function(accessToken: any, refreshToken: any, extraParams: any, profile: any, done: any) {
+        // accessToken is the token to call Auth0 API (not needed in the most cases)
+        // extraParams.id_token has the JSON Web Token
+        // profile has all the information from the user
+        return done(null, profile);
+        }
+    );
+    
+    passport.use(strategy);
+    
+    // This can be used to keep a smaller payload
+    passport.serializeUser(function(user, done) {
+        done(null, user);
+    });
+    
+    passport.deserializeUser(function(user, done) {
+        done(null, user);
+    });
 
-  // -----
+    // -----
 
-  const registerAuthMiddleware = function (expressApp: Express) {
     expressApp.use(cookieParser());
     expressApp.use(
       session({

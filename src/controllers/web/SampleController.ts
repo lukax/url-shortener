@@ -58,7 +58,7 @@ export class SampleController {
         const urls: Link[] = await this.links.getAll();
         return {
             port: this.config.host.port,
-            title: this.config.sample.title,
+            title: this.config.app.title,
             urls: urls
         };
     }
@@ -90,7 +90,7 @@ export class SampleController {
 
         return {
             port: this.config.host.port,
-            title: this.config.sample.title,
+            title: this.config.app.title,
             link: link,
             content: content || "An error has occurred, please try again"
         };
