@@ -10,31 +10,15 @@ import bodyParser = require("body-parser");
 import {join} from "path";
 import {getConnectionManager, useContainer as ormUsec} from "typeorm";
 import {registerAuthMiddleware} from './app.auth';
-import dotenv = require('dotenv');
+import {appConfig} from "./app.config";
 
-const dotenvConfig = dotenv.config();
-if (dotenvConfig.error) { throw dotenvConfig.error; }
 
 /**
  * Provide a configuration injectable.
  */
-const cfg: { database: any, host: any, app: any } = {
-    database: {
-        type: process.env.DB_TYPE,
-        database: process.env.DB_NAME,
-        host: process.env.DB_HOST,
-        username: process.env.DB_USERNAME,
-        password: process.env.DB_PASSWORD,
-        port: process.env.DB_PORT
-    },
-    host: {
-        port: process.env.PORT
-    },
-    app: {
-        title: process.env.APP_TITLE
-    }
-};
-Container.set([{ id: 'config', value: cfg }]);
+
+;
+Container.set([{ id: 'config', value: appConfig }]);
 
 /**
  * Setup routing-controllers to use typedi container.
@@ -64,20 +48,20 @@ readdirSync(join(__dirname, '/services'))
 /**
  * Import entities
  */
-cfg.database.entities = [];
+appConfig.database.entities = [];
 readdirSync(join(__dirname, '/model'))
     .filter(file => file.endsWith('.js'))
     .forEach((file) => {
         const exported = require(join(__dirname, '/model', file));
         Object.keys(exported).forEach(className => {
-            cfg.database.entities.push(exported[className]);
+            appConfig.database.entities.push(exported[className]);
         });
     });
 
 /**
  * This creates the default connection using config.yml
  */
-getConnectionManager().create(cfg.database).connect().then(() => {
+getConnectionManager().create(appConfig.database).connect().then(() => {
     console.log('Connected!');
 });
 
@@ -139,6 +123,6 @@ expressApp.use((err: any, req: any, res: any, next: any) => {
 /**
  * Start the express app.
  */
-expressApp.listen(cfg.host.port);
+expressApp.listen(appConfig.host.port);
 
-console.log(`Server is up and running at port ${cfg.host.port}`);
+console.log(`Server is up and running at port ${appConfig.host.port}`);

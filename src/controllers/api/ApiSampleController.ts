@@ -1,14 +1,16 @@
-import {JsonController, Get, Post, Param, Body, NotFoundError} from "routing-controllers";
-import {Inject, Service} from "typedi";
-import {Link} from "../../model/Link";
-import * as crypto from 'crypto';
+import { JsonController, Get, Post, Body, NotFoundError, UseBefore } from "routing-controllers";
+import { Inject, Service } from "typedi";
+import { Link } from "../../model/Link";
+import { createHash } from 'crypto';
 import { LinkService } from "../../services/LinkService";
-import * as http from 'http';
+import { request } from 'http';
 import { log } from "util";
 import { URL } from "url";
+import { ensureLoggedIn } from 'connect-ensure-login';
 
 @Service()
 @JsonController('/api')
+@UseBefore(ensureLoggedIn)
 export class ApiSampleController {
 
     @Inject()
@@ -44,7 +46,7 @@ export class ApiSampleController {
 
         try{
             const res = await new Promise((resolve, reject) => {
-                const req = http.request({
+                const req = request({
                 method: 'HEAD',
                 host: hostname,
                 path,
@@ -69,7 +71,7 @@ export class ApiSampleController {
         }
 
         const newLink = new Link();
-        newLink.hash = crypto.createHash('sha1').update(model.url + (+new Date())).digest('hex').substring(0, 5);
+        newLink.hash = createHash('sha1').update(model.url + (+new Date())).digest('hex').substring(0, 5);
         newLink.url = model.url;
         newLink.title = model.title;
         newLink.ctaHeader = model.ctaHeader;

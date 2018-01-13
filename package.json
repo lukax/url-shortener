@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "@types/body-parser": "1.16.3",
+    "@types/connect-ensure-login": "^0.1.4",
     "@types/connect-flash": "^0.0.34",
     "@types/cookie-parser": "^1.4.1",
     "@types/dotenv": "^4.0.2",

@@ -1,11 +1,9 @@
 import {Inject, Service} from "typedi";
-import {Controller, Get, Post, Redirect, Render, QueryParam, HttpCode, Req, Res, Param} from "routing-controllers";
+import {Controller, Get, Render, HttpCode, Req, Res, Param} from "routing-controllers";
 import {ApiSampleController} from "../api/ApiSampleController";
 import {Request, Response} from "express";
-import * as crypto from "crypto";
 import { LinkService } from "../../services/LinkService";
 import { Link } from "../../model/Link";
-import { log } from "util";
 import * as pTimeout from "p-timeout";
 import { URL } from "url";
 import * as puppeteer from "puppeteer";
@@ -15,7 +13,7 @@ let browser: puppeteer.Browser;
 
 @Service()
 @Controller()
-export class SampleController {
+export class HomeController {
 
     @Inject()
     private links: LinkService;
@@ -23,39 +21,16 @@ export class SampleController {
     @Inject()
     private api: ApiSampleController;
 
-    /**
-     * Generate sample content if nothing provided.
-     * @returns {Promise<void>}
-     */
-    private async checkUrls() {
-        const urls: Link[] = await this.links.getAll();
-        if (!urls.length) {
-            const sample = [
-                {title: 'search engine', url: 'http://www.google.com'},
-                {title: 'example page', url: 'http://www.example.com'},
-                {title: 'veja os políticos que apoiam a pena de morte', url: 'http://www1.folha.uol.com.br/cotidiano/2018/01/1948659-apoio-a-pena-de-morte-bate-recorde-entre-brasileiros-aponta-o-datafolha.shtml'}
-            ];
-            for (const x of sample) {
-                const url = new Link();
-                url.title = x.title;
-                url.hash = crypto.createHash('sha1').update(x.url).digest('hex').substring(0, 5);
-                url.url = x.url;
-                await this.links.persist(url);
-            }
-        }
-    }
-
     constructor (@Inject('config') private config: any) {}
 
     /**
-     * Sample index action.
+     * Index action.
      * @returns {any}
      */
     @Render('index')
     @Get('/')
     @HttpCode(200)
     async indexAction(): Promise<any> {
-        await this.checkUrls();
         const urls: Link[] = await this.links.getAll();
         return {
             port: this.config.host.port,
@@ -65,14 +40,14 @@ export class SampleController {
     }
 
      /**
-     * Sample index action.
+     * ViewUrl action.
      * @returns {any}
      */
     @Render('viewUrl')
     @Get('/:hash')
     @HttpCode(200)
     async viewUrlAction(@Param("hash") hash: string, @Req() request: Request, @Res() response: Response): Promise<any> {
-        log("Loading url hash: " + hash);
+        console.log("Loading url hash: " + hash);
         const link: Link = await this.links.findOneByHash(hash);
         if(!link) return null;
 
