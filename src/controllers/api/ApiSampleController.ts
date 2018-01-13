@@ -10,7 +10,6 @@ import { ensureLoggedIn } from 'connect-ensure-login';
 
 @Service()
 @JsonController('/api')
-@UseBefore(ensureLoggedIn)
 export class ApiSampleController {
 
     @Inject()

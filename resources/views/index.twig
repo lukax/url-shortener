@@ -1,6 +1,5 @@
 {% extends 'layout.twig' %}
 
-
 {% block styles %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -88,74 +87,76 @@
         <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
     </div>
 
-    <script>
-        var urlform = document.getElementById("urlform");
-        urlform.addEventListener("submit", function(e){
-            e.preventDefault(); 
-            var headers = new Headers();
-            headers.set('Content-Type', 'application/json');
-
-            var a = document.getElementById("urlhash");
-            a.removeAttribute("href");
-            a.innerText = "...";
-            a.style.color = "black";
-
-            fetch("/api/urls", {
-                method: "POST",
-                body: JSON.stringify({
-                    url: document.getElementById('mUrl').value,
-                    title: document.getElementById('mTitle').value,
-                    description: document.getElementById('mDescription').value,
-                    ctaHeader: document.getElementById('mCtaHeader').value,
-                    ctaUrl: document.getElementById('mCtaUrl').value,
-                }),
-                headers: headers
-            }).then(res => {
-
-                if(res.status == 200){
-                    res.json().then((json) => {
-                        a.setAttribute("href", json);
-                        a.innerText = window.location.href + json;
-                    });
-                }
-                else {
-                    a.removeAttribute("href");
-                    a.innerText = "invalid url :(";
-                    a.style.color = "red";
-                }
-            }).catch(err => {
-                a.removeAttribute("href");
-                a.innerText = "connection error, please try again";
-                a.style.color = "red";
-            });
-        });
-
-        function applyUrlProtocol(formElement){
-            var protocol = 'http://';
-            formElement.onpaste = function(e){
-                const text = e.clipboardData.getData('text');
-                if (/https?:\/\//.test(text)) {
-                  e.preventDefault();
-                  formElement.value = text;
-                }
-            }
-            formElement.onfocus = function(){
-                if (formElement.value.trim() == '') {
-                    formElement.value = protocol;
-                }
-            }
-            formElement.onblur = function(){
-                if (formElement.value.trim() == protocol) {
-                    formElement.value = '';
-                }
-            }
-        }
-
-        applyUrlProtocol(urlform.url);
-        applyUrlProtocol(urlform.ctaUrl);
-
-        
-    </script>
-
 {% endblock %}
 
+
+{% block scripts %}
+
+<script>
+    var urlform = document.getElementById("urlform");
+    urlform.addEventListener("submit", function(e){
+        e.preventDefault(); 
+        var headers = new Headers();
+        headers.set('Content-Type', 'application/json');
+
+        var a = document.getElementById("urlhash");
+        a.removeAttribute("href");
+        a.innerText = "...";
+        a.style.color = "black";
+
+        fetch("/api/urls", {
+            method: "POST",
+            body: JSON.stringify({
+                url: document.getElementById('mUrl').value,
+                title: document.getElementById('mTitle').value,
+                description: document.getElementById('mDescription').value,
+                ctaHeader: document.getElementById('mCtaHeader').value,
+                ctaUrl: document.getElementById('mCtaUrl').value,
+            }),
+            headers: headers
+        }).then(res => {
+
+            if(res.status == 200){
+                res.json().then((json) => {
+                    a.setAttribute("href", json);
+                    a.innerText = window.location.href + json;
+                });
+            }
+            else {
+                a.removeAttribute("href");
+                a.innerText = "invalid url :(";
+                a.style.color = "red";
+            }
+        }).catch(err => {
+            a.removeAttribute("href");
+            a.innerText = "connection error, please try again";
+            a.style.color = "red";
+        });
+    });
+
+    function applyUrlProtocol(formElement){
+        var protocol = 'http://';
+        formElement.onpaste = function(e){
+            const text = e.clipboardData.getData('text');
+            if (/https?:\/\//.test(text)) {
+              e.preventDefault();
+              formElement.value = text;
+            }
+        }
+        formElement.onfocus = function(){
+            if (formElement.value.trim() == '') {
+                formElement.value = protocol;
+            }
+        }
+        formElement.onblur = function(){
+            if (formElement.value.trim() == protocol) {
+                formElement.value = '';
+            }
+        }
+    }
+
+    applyUrlProtocol(urlform.url);
+    applyUrlProtocol(urlform.ctaUrl);
+</script>
+
+{% endblock %}

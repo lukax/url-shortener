@@ -10,11 +10,10 @@ function registerAuthMiddleware(expressApp: Express) {
     // Configure Passport to use Auth0
     const strategy = new Auth0Strategy(
         {
-        domain: process.env.AUTH0_DOMAIN,
-        clientID: process.env.AUTH0_CLIENT_ID,
-        clientSecret: process.env.AUTH0_CLIENT_SECRET,
-        callbackURL:
-            process.env.AUTH0_CALLBACK_URL || `http://localhost:${process.env.PORT}/callback`
+            domain: process.env.AUTH0_DOMAIN,
+            clientID: process.env.AUTH0_CLIENT_ID,
+            clientSecret: process.env.AUTH0_CLIENT_SECRET,
+            callbackURL: process.env.AUTH0_CALLBACK_URL 
         },
         function(accessToken: any, refreshToken: any, extraParams: any, profile: any, done: any) {
         // accessToken is the token to call Auth0 API (not needed in the most cases)

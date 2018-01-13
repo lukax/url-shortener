@@ -1,5 +1,5 @@
 import {Inject, Service} from "typedi";
-import {Controller, Get, Render, HttpCode, Req, Res, Param} from "routing-controllers";
+import {Controller, Get, Render, HttpCode, Req, Res, Param, UseBefore} from "routing-controllers";
 import {ApiSampleController} from "../api/ApiSampleController";
 import {Request, Response} from "express";
 import { LinkService } from "../../services/LinkService";
@@ -8,11 +8,14 @@ import * as pTimeout from "p-timeout";
 import { URL } from "url";
 import * as puppeteer from "puppeteer";
 import blocked = require("../../../blocked.json");
+import { IAppConfig } from "../../app.config";
+import { ensureLoggedIn } from "connect-ensure-login";
 
 let browser: puppeteer.Browser;
 
 @Service()
 @Controller()
+@UseBefore(ensureLoggedIn())
 export class HomeController {
 
     @Inject()
@@ -21,7 +24,7 @@ export class HomeController {
     @Inject()
     private api: ApiSampleController;
 
-    constructor (@Inject('config') private config: any) {}
+    constructor (@Inject('config') private config: IAppConfig) {}
 
     /**
      * Index action.
