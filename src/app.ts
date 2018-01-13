@@ -4,19 +4,17 @@ import {createExpressServer, useContainer as rtUsec} from "routing-controllers";
 import {Container} from "typedi";
 import {Express} from "express";
 import morgan = require("morgan");
-import {readdirSync, readFileSync} from "fs";
-import {load as loadYAML} from "js-yaml";
+import {readdirSync} from "fs";
 import serveStatic = require("serve-static");
 import bodyParser = require("body-parser");
 import {join} from "path";
 import {getConnectionManager, useContainer as ormUsec} from "typeorm";
-import { ConnectionOptions } from "tls";
 import {registerAuthMiddleware} from './app.auth';
 import dotenv = require('dotenv');
 
 const dotenvConfig = dotenv.config();
 if (dotenvConfig.error) { throw dotenvConfig.error; }
-  
+
 /**
  * Provide a configuration injectable.
  */
@@ -109,7 +107,6 @@ expressApp.use(serveStatic('static'));
 
 /**
  * Setup error handlers
- */
 // catch 404 and forward to error handler
 expressApp.use(function(req, res, next) {
     const err: any = new Error('Not Found');
@@ -137,7 +134,7 @@ expressApp.use((err: any, req: any, res: any, next: any) => {
         message: err.message,
         error: {}
     });
-});
+}); */
 
 /**
  * Start the express app.

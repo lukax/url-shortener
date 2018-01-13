@@ -9,6 +9,7 @@ import { log } from "util";
 import * as pTimeout from "p-timeout";
 import { URL } from "url";
 import * as puppeteer from "puppeteer";
+import blocked = require("../../../blocked.json");
 
 let browser: puppeteer.Browser;
 
@@ -78,15 +79,15 @@ export class SampleController {
         const { host } = request.headers;
 
         let content;
-        if(await this.links.hasCacheForLink(link)) {
-            console.log(`access -> ${hash}. cached`);
-            content = (await this.links.getCacheReadyLink(link)).cache;
-        }
-        else {
+        // if(await this.links.hasCacheForLink(link)) {
+        //     console.log(`access -> ${hash}. cached`);
+        //     content = (await this.links.getCacheReadyLink(link)).cache;
+        // }
+        // else {
             console.log(`access -> ${hash}. no cache`);
             content = await this.runInBrowser(link.url, host);
             this.links.updateCache(link, content);
-        }
+        // }
 
         return {
             port: this.config.host.port,
@@ -104,50 +105,59 @@ export class SampleController {
 
             if(!browser){
                 browser = await puppeteer.launch({
+                    ignoreHTTPSErrors: true,
                     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
                 })
             }
             
             page = await browser.newPage();
 
+            const blockedRegExp = new RegExp('(' + blocked.join('|') + ')', 'i');
+
             const nowTime = +new Date();
             let reqCount = 0;
             await page.setRequestInterception(true);
-            page.on('request', (request) => {
-            const { url, method, resourceType } = request;
-    
-            // Skip data URIs
-            if (/^data:/i.test(url)){
-                request.continue();
-                return;
-            }
-    
-            const seconds = (+new Date() - nowTime) / 1000;
-            const otherResources = /^(manifest|other)$/i.test(resourceType);
-            // Abort requests that exceeds 15 seconds
-            // Also abort if more than 100 requests
-            if (seconds > 15 || reqCount > 100){
-                console.log(`❌⏳ ${method} ${url}`);
-                request.abort();
-            } else {
-                console.log(`✅ ${method} ${url}`);
-                request.continue();
-                reqCount++;
-            }
+            page.on('request', (request: any) => {
+                const url = request.url();
+                const method = request.method();
+                const resourceType = request.resourceType();
+
+                // Skip data URIs
+                if (/^data:/i.test(url)) { request.continue(); return; }
+                const seconds = (+new Date() - nowTime) / 1000;
+                const shortURL = this.truncate(url, 70);
+                const otherResources = /^(manifest|other)$/i.test(resourceType);
+                // Abort requests that exceeds 15 seconds
+                // Also abort if more than 100 requests
+                if (seconds > 15 || reqCount > 100 || false){
+                    console.log(`❌⏳ ${method} ${shortURL}`);
+                    request.abort();
+                } else if (blockedRegExp.test(url) || otherResources){
+                    console.log(`❌ ${method} ${shortURL}`);
+                    request.abort();
+                } else {
+                    console.log(`✅ ${method} ${shortURL}`);
+                    request.continue();
+                    reqCount++;
+                }
             });
 
             let responseReject: any;
-            const responsePromise = new Promise((_, reject) => {
-            responseReject = reject;
-            });
+            const responsePromise = new Promise((_, reject) => { responseReject = reject; });
             page.on('response', ({ headers }) => {
-            const location = headers['location'];
-            if (location && location.includes(hostURL)){
-                responseReject(new Error('Possible infinite redirects detected.'));
-            }
+                const location = headers['location'];
+                if (location && location.includes(hostURL)){
+                    responseReject(new Error('Possible infinite redirects detected.'));
+                }
             });
 
-            const result = await page.goto(pageURL, {waitUntil: 'networkidle2'});
+            await page.setViewport({ width: 1920, height: 1080 });
+
+            console.log('⬇️ Fetching ' + pageURL);
+            await Promise.race([
+                responsePromise,
+                page.goto(pageURL, { waitUntil: 'networkidle0', timeout: 10 * 1000 })
+            ]);
 
             // Pause all media and stop buffering
             page.frames().forEach((frame) => {
@@ -155,21 +165,23 @@ export class SampleController {
                 document.querySelectorAll('video, audio').forEach((m: any) => {
                     if (!m) return;
                     if (m.pause) m.pause();
-                    m.preload = 'none';
+                    //m.preload = 'none';
                 });
                 });
             });
 
+
             const { origin, hostname, pathname, searchParams } = new URL(pageURL);
             const raw = searchParams.get('raw') || false;
 
-            content = await pTimeout(raw ? page.content() : page.evaluate(() => {
-                let content = '';
-                if (document.doctype) {
-                content = new XMLSerializer().serializeToString(document.doctype);
-                }
+            if(raw) { console.log('⬇⬇   RAW ' + pageURL); }
 
-                const doc:any = document.documentElement.cloneNode(true);
+            const htmlHandle = await page.$('html');
+
+            content = await pTimeout(raw ? page.content() : page.evaluate((html) => {
+                let content = '';
+                // if (document.doctype) { content = new XMLSerializer().serializeToString(document.doctype); }
+                const doc:any = html;
 
                 // Remove scripts except JSON-LD
                 const scripts = doc.querySelectorAll('script:not([type="application/ld+json"])');
@@ -182,9 +194,9 @@ export class SampleController {
                 const { origin, pathname } = location;
                 // Inject <base> for loading relative resources
                 if (!doc.querySelector('base')){
-                const base = document.createElement('base');
-                base.href = origin + pathname;
-                doc.querySelector('head').appendChild(base);
+                    const base = document.createElement('base');
+                    base.href = origin + pathname;
+                    doc.querySelector('head').appendChild(base);
                 }
 
                 // Try to fix absolute paths
@@ -192,7 +204,7 @@ export class SampleController {
                 absEls.forEach((el: any) => {
                 let href = el.getAttribute('href');
                 let src = el.getAttribute('src');
-                var r = new RegExp('^(?:[a-z]+:)?//', 'i');
+                let r = new RegExp('^(?:[a-z]+:)?//', 'i');
                 if (src && !r.test(src.trim())){
                     src = src.trim();
                     if(!(/^\/[^/]/i.test(src))){
@@ -208,13 +220,13 @@ export class SampleController {
                 }
                 });
 
-                content += doc.outerHTML;
+                content += html.outerHTML;
 
                 // Remove comments
                 content = content.replace(/<!--[\s\S]*?-->/g, '');
 
                 return content;
-            }), 20 * 1000, 'Render timed out');
+            }, htmlHandle), 20 * 1000, 'Render timed out');
 
             console.log('💥 Done action render');
 
@@ -264,4 +276,5 @@ export class SampleController {
           return content;
     }
 
+    private truncate(str: string, len: number) { return  str.length > len ? str.slice(0, len) + '…' : str };
 }

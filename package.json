@@ -8,7 +8,7 @@
   "description": "No description provided",
   "scripts": {
     "start": "npm run build && node ./build/app.js",
-    "start:watch": "npm run build:watch & nodemon ./build/app.js",
+    "dev": "concurrently --kill-others \"npm run build:watch\" \"nodemon ./build/app.js\"",
     "build": "node_modules/.bin/tsc",
     "build:watch": "npm run build -- -w"
   },
@@ -33,6 +33,7 @@
     "@types/puppeteer": "^0.13.9",
     "@types/twig": "^1.10.0",
     "body-parser": "1.17.2",
+    "concurrently": "^3.5.1",
     "connect-ensure-login": "^0.1.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.3",
@@ -48,7 +49,7 @@
     "p-timeout": "^2.0.1",
     "passport": "^0.4.0",
     "passport-auth0": "^0.6.1",
-    "puppeteer": "^0.13.0",
+    "puppeteer": "^1.0.0",
     "reflect-metadata": "0.1.10",
     "routing-controllers": "0.7.6",
     "twig": "^1.10.5",
