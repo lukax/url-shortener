@@ -3,6 +3,8 @@ import passport = require('passport');
 import flash = require('connect-flash');
 import session = require('express-session');
 import cookieParser = require('cookie-parser');
+import {authenticate} from "passport";
+import {appConfig} from "./app.config";
 const Auth0Strategy = require('passport-auth0');
 
 function registerAuthMiddleware(expressApp: Express) {
@@ -67,6 +69,37 @@ function registerAuthMiddleware(expressApp: Express) {
         res.locals.loggedIn = true;
         }
         next();
+    });
+
+    expressApp.get('/login',
+        authenticate('auth0', <any>{
+            clientID: appConfig.auth.AUTH0_CLIENT_ID,
+            domain: appConfig.auth.AUTH0_DOMAIN,
+            redirectUri: appConfig.auth.AUTH0_CALLBACK_URL,
+            responseType: 'code',
+            audience: 'https://' + appConfig.auth.AUTH0_DOMAIN + '/userinfo',
+            scope: 'openid profile'
+        }));
+
+    expressApp.get('/logout', function(req, res){
+        req.logout();
+        res.redirect('/');
+    });
+
+    expressApp.get('/callback',
+        passport.authenticate('auth0', { failureRedirect: '/failure' }),
+        function(req, res) {
+            res.redirect(req.session.returnTo || '/admin');
+        });
+
+    expressApp.get('/failure', function(req, res) {
+        const error = req.flash("error");
+        const error_description = req.flash("error_description");
+        req.logout();
+        res.render('failure', {
+            error: error[0],
+            error_description: error_description[0],
+        });
     });
   }
 

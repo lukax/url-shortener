@@ -1,10 +1,7 @@
 {% extends 'layout.twig' %}
 
 {% block styles %}
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Signika:400,700" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
     <style>
             html {
                 display: flex;
@@ -19,20 +16,21 @@
                 font-family: Signika, sans-serif;
                 font-weight: 400;
                 color: rgb(0, 0, 0);
-                text-align: center;
+                box-sizing: border-box;
             }
             body, button, input {
                 font-size: 30px;
             }
-            h1 {
+            #apptitle {
                 font-weight: 700;
                 font-size: 60px;
                 margin: 0 0 .25em;
+                text-align: center;
             }
-            * {
-                box-sizing: border-box;
+            #urlform {
+                text-align: center;
             }
-            input{
+            #urlform > input{
                 display: inline-block;
                 width: 90%;
                 max-width: 600px;
@@ -42,10 +40,10 @@
                 border-radius: 0;
                 background-color: rgb(241, 232, 232);
             }
-            input:focus{
-                outline: 3px solid rgb(0, 0, 0);
+            #urlform > input:focus{
+                outline: 3px solid #80027f;
             }
-            button {
+            #urlform > button {
                 border-radius: 0;
                 border: 0;
                 padding: .45em 1em;
@@ -53,12 +51,12 @@
                 width: 90%;
                 max-width: 15ex;
                 color: rgba(255,255,255,.75);
-                background-color: rgb(0, 0, 0);
+                background-color: #80027f;
             }
-            button:hover {
+            #urlform > button:hover {
                 color: rgba(255,255,255,1);
             }
-            button:active {
+            #urlform > button:active {
                 color: rgba(255,255,255,.55);
                 transform: scale(.95);
             }
@@ -69,7 +67,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>{{ title }}</h1>
+
+    <h1 id="apptitle">{{ title }}</h1>
+
     <form id="urlform" style="margin: 0 auto; max-width: 900px">
         <h5 style="margin: 10px; color: gray;">it's simple, first enter a...</h5>
         <input type="url" name="url" id="mUrl" required placeholder="URL to short">
@@ -81,21 +81,73 @@
         <input type="url" name="ctaUrl" id="mCtaUrl" required placeholder="Call To Action URL">
         <br/>
         <button name="shortit" type="submit">...short it!</button>
-    </form>
 
-    <div style="margin: 35px 0;">
-        <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
-    </div>
+        <br/>
+        <div style="margin: 35px 0;">
+            <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
+        </div>
+    </form>
 
 {% endblock %}
 
-
 {% block scripts %}
-
+<script src="https://cdn.auth0.com/js/lock-passwordless-2.2.3.min.js"></script>
 <script>
-    var urlform = document.getElementById("urlform");
-    urlform.addEventListener("submit", function(e){
-        e.preventDefault(); 
+
+    function applyUrlProtocol(formElement){
+        var protocol = 'http://';
+        formElement.onpaste = function(e){
+            const text = e.clipboardData.getData('text');
+            if (/https?:\/\//.test(text)) {
+              e.preventDefault();
+              formElement.value = text;
+            }
+        };
+        formElement.onfocus = function(){
+            if (formElement.value.trim() == '') {
+                formElement.value = protocol;
+            }
+        };
+        formElement.onblur = function(){
+            if (formElement.value.trim() == protocol) {
+                formElement.value = '';
+            }
+        }
+    }
+
+    function login(callback) {
+        var options = {
+            "focusInput":true,
+            "closable":true,
+            "callbackURL":"{{AUTH0_CALLBACK_URL}}",
+            "title":"jeit.in",
+            "icon":"http://jeit.in/wp-content/uploads/2017/11/logo-jeitin.jpg",
+            "primaryColor":"#80027f",
+            "responseType":"token",
+            "autoclose":true,
+            "forceJSONP":true,
+            "popup":false,
+            "socialBigButtons":false,
+            "connections":["facebook","twitter"]
+        };
+        var lock = new Auth0LockPasswordless('{{AUTH0_CLIENT_ID}}','{{AUTH0_DOMAIN}}');
+        lock.magiclink(options, function(error, email) {
+            if (!error) {
+                callback(email);
+            }
+        });
+    }
+
+    function shortIt() {
+        var userEmail = '{{userEmail}}';
+        if(userEmail){
+            createLink(userEmail);
+        } else {
+            login(function(e) { createLink(e);  });
+        }
+    }
+
+    function createLink(email) {
         var headers = new Headers();
         headers.set('Content-Type', 'application/json');
 
@@ -112,12 +164,13 @@
                 description: document.getElementById('mDescription').value,
                 ctaHeader: document.getElementById('mCtaHeader').value,
                 ctaUrl: document.getElementById('mCtaUrl').value,
+                email: email
             }),
             headers: headers
-        }).then(res => {
+        }).then(function(res) {
 
             if(res.status == 200){
-                res.json().then((json) => {
+                res.json().then(function(json) {
                     a.setAttribute("href", json);
                     a.innerText = window.location.href + json;
                 });
@@ -127,36 +180,23 @@
                 a.innerText = "invalid url :(";
                 a.style.color = "red";
             }
-        }).catch(err => {
+        }).catch(function(err) {
             a.removeAttribute("href");
             a.innerText = "connection error, please try again";
             a.style.color = "red";
         });
-    });
-
-    function applyUrlProtocol(formElement){
-        var protocol = 'http://';
-        formElement.onpaste = function(e){
-            const text = e.clipboardData.getData('text');
-            if (/https?:\/\//.test(text)) {
-              e.preventDefault();
-              formElement.value = text;
-            }
-        }
-        formElement.onfocus = function(){
-            if (formElement.value.trim() == '') {
-                formElement.value = protocol;
-            }
-        }
-        formElement.onblur = function(){
-            if (formElement.value.trim() == protocol) {
-                formElement.value = '';
-            }
-        }
     }
+
+    var urlform = document.getElementById("urlform");
+    urlform.addEventListener("submit", function(e){
+        e.preventDefault();
+
+        shortIt();
+    });
 
     applyUrlProtocol(urlform.url);
     applyUrlProtocol(urlform.ctaUrl);
+
 </script>
 
 {% endblock %}

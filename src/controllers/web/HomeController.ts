@@ -9,13 +9,11 @@ import { URL } from "url";
 import * as puppeteer from "puppeteer";
 import blocked = require("../../../blocked.json");
 import { IAppConfig } from "../../app.config";
-import { ensureLoggedIn } from "connect-ensure-login";
 
 let browser: puppeteer.Browser;
 
 @Service()
 @Controller()
-@UseBefore(ensureLoggedIn())
 export class HomeController {
 
     @Inject()
@@ -33,28 +31,33 @@ export class HomeController {
     @Render('index')
     @Get('/')
     @HttpCode(200)
-    async indexAction(): Promise<any> {
+    async indexAction(@Req() req: Request): Promise<any> {
         const urls: Link[] = await this.links.getAll();
+        console.log('user' + JSON.stringify(req.user));
         return {
             port: this.config.host.port,
             title: this.config.app.title,
-            urls: urls
+            urls: urls,
+            AUTH0_DOMAIN: this.config.auth.AUTH0_DOMAIN,
+            AUTH0_CLIENT_ID: this.config.auth.AUTH0_CLIENT_ID,
+            AUTH0_CALLBACK_URL: this.config.auth.AUTH0_CALLBACK_URL,
+            userEmail: req.user != null ? req.user.email : null
         };
     }
 
-     /**
+    /**
      * ViewUrl action.
      * @returns {any}
      */
     @Render('viewUrl')
     @Get('/:hash')
     @HttpCode(200)
-    async viewUrlAction(@Param("hash") hash: string, @Req() request: Request, @Res() response: Response): Promise<any> {
+    async viewUrlAction(@Param("hash") hash: string, @Req() req: Request, @Res() res: Response): Promise<any> {
         console.log("Loading url hash: " + hash);
         const link: Link = await this.links.findOneByHash(hash);
         if(!link) return null;
 
-        const { host } = request.headers;
+        const { host } = req.headers;
 
         let content;
         // if(await this.links.hasCacheForLink(link)) {
@@ -62,9 +65,9 @@ export class HomeController {
         //     content = (await this.links.getCacheReadyLink(link)).cache;
         // }
         // else {
-            console.log(`access -> ${hash}. no cache`);
-            content = await this.runInBrowser(link.url, host);
-            this.links.updateCache(link, content);
+        console.log(`access -> ${hash}. no cache`);
+        content = await this.runInBrowser(link.url, host);
+        this.links.updateCache(link, content);
         // }
 
         return {
@@ -87,7 +90,7 @@ export class HomeController {
                     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
                 })
             }
-            
+
             page = await browser.newPage();
 
             const blockedRegExp = new RegExp('(' + blocked.join('|') + ')', 'i');
@@ -140,11 +143,11 @@ export class HomeController {
             // Pause all media and stop buffering
             page.frames().forEach((frame) => {
                 frame.evaluate(() => {
-                document.querySelectorAll('video, audio').forEach((m: any) => {
-                    if (!m) return;
-                    if (m.pause) m.pause();
-                    //m.preload = 'none';
-                });
+                    document.querySelectorAll('video, audio').forEach((m: any) => {
+                        if (!m) return;
+                        if (m.pause) m.pause();
+                        //m.preload = 'none';
+                    });
                 });
             });
 
@@ -180,22 +183,22 @@ export class HomeController {
                 // Try to fix absolute paths
                 const absEls = doc.querySelectorAll('link[href], script[src], img[src]');
                 absEls.forEach((el: any) => {
-                let href = el.getAttribute('href');
-                let src = el.getAttribute('src');
-                let r = new RegExp('^(?:[a-z]+:)?//', 'i');
-                if (src && !r.test(src.trim())){
-                    src = src.trim();
-                    if(!(/^\/[^/]/i.test(src))){
-                        src = '/' + src;
+                    let href = el.getAttribute('href');
+                    let src = el.getAttribute('src');
+                    let r = new RegExp('^(?:[a-z]+:)?//', 'i');
+                    if (src && !r.test(src.trim())){
+                        src = src.trim();
+                        if(!(/^\/[^/]/i.test(src))){
+                            src = '/' + src;
+                        }
+                        el.src = origin + src;
+                    } else if (href && !r.test(href.trim())){
+                        href = href.trim();
+                        if(!(/^\/[^/]/i.test(href))){
+                            href = '/' + href;
+                        }
+                        el.href = origin + href;
                     }
-                    el.src = origin + src;
-                } else if (href && !r.test(href.trim())){
-                    href = href.trim();
-                    if(!(/^\/[^/]/i.test(href))){
-                        href = '/' + href;
-                    }
-                    el.href = origin + href;
-                }
                 });
 
                 content += html.outerHTML;
@@ -226,10 +229,10 @@ export class HomeController {
         }
         catch (e) {
             if (page) {
-              console.error(e);
-              console.log('💔 Force close ' + pageURL);
-              page.removeAllListeners();
-              page.close();
+                console.error(e);
+                console.log('💔 Force close ' + pageURL);
+                page.removeAllListeners();
+                page.close();
             }
             //cache.del(pageURL);
             const { message = '' } = e;
@@ -240,18 +243,18 @@ export class HomeController {
 
             // Handle websocket not opened error
             if (/not opened/i.test(message) && browser){
-              console.error('🕸 Web socket failed');
-              try {
-                browser.close();
-                browser = null;
-              } catch (err) {
-                console.warn(`Chrome could not be killed ${err.message}`);
-                browser = null;
-              }
+                console.error('🕸 Web socket failed');
+                try {
+                    browser.close();
+                    browser = null;
+                } catch (err) {
+                    console.warn(`Chrome could not be killed ${err.message}`);
+                    browser = null;
+                }
             }
-          }
-        
-          return content;
+        }
+
+        return content;
     }
 
     private truncate(str: string, len: number) { return  str.length > len ? str.slice(0, len) + '…' : str };

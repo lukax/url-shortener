@@ -1,6 +1,6 @@
-import 'newrelic';
 import "reflect-metadata";
-import {createExpressServer, useContainer as rtUsec} from "routing-controllers";
+import "newrelic";
+import {createExpressServer, useContainer as rtUsec, useExpressServer} from "routing-controllers";
 import {Container} from "typedi";
 import {Express} from "express";
 import morgan = require("morgan");
@@ -11,7 +11,7 @@ import {join} from "path";
 import {getConnectionManager, useContainer as ormUsec} from "typeorm";
 import {registerAuthMiddleware} from './app.auth';
 import {appConfig} from "./app.config";
-
+import * as express from "express";
 
 /**
  * Provide a configuration injectable.
@@ -30,7 +30,9 @@ ormUsec(Container);
  * We create a new express server instance.
  * We could have also use useExpressServer here to attach controllers to an existing express instance.
  */
-const expressApp: Express = createExpressServer({
+const expressApp = express();
+registerAuthMiddleware(expressApp);
+useExpressServer(expressApp, {
     /**
      * We can add options about how routing-controllers should configure itself.
      * Here we specify what controllers should be registered in our express server.
@@ -80,11 +82,6 @@ expressApp.set('view engine', 'twig');
 expressApp.set('views', join(__dirname, '/../resources/views'));
 
 /**
- * Configure authentication
- */
-registerAuthMiddleware(expressApp);
-
-/**
  * Setup static file serving
  */
 expressApp.use(serveStatic('static'));
@@ -109,7 +106,7 @@ if (expressApp.get('env') === 'development') {
         });
     });
 }
-  
+
 // production error handler
 // no stacktraces leaked to user
 expressApp.use((err: any, req: any, res: any, next: any) => {

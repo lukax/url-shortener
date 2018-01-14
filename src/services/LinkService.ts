@@ -16,6 +16,10 @@ export class LinkService {
         return this.repo.find();
     }
 
+    public async getAllByUser(userEmail: string): Promise<Link[]> {
+        return this.repo.find(<any>{ _email: userEmail });
+    }
+
     public async findOneByHash(hash: string): Promise<Link> {
         return this.repo.findOne(<any>{ _hash: hash });
     }

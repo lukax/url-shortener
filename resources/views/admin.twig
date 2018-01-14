@@ -1,0 +1,88 @@
+{% extends 'layout.twig' %}
+
+{% block styles %}
+    <link href="https://fonts.googleapis.com/css?family=Signika:400,700" rel="stylesheet">
+    <style>
+            html {
+                display: flex;
+                height: 100%;
+            }
+            body {
+                margin: auto;
+                width: 100%;
+                padding: 0 .5em;
+            }
+            body, * {
+                font-family: Signika, sans-serif;
+                font-weight: 400;
+                color: rgb(0, 0, 0);
+                box-sizing: border-box;
+            }
+            body, button, input {
+                font-size: 30px;
+            }
+            #apptitle {
+                font-weight: 700;
+                font-size: 60px;
+                margin: 0 0 .25em;
+                text-align: center;
+            }
+            #urlform {
+                text-align: center;
+            }
+            #urlform > input{
+                display: inline-block;
+                width: 90%;
+                max-width: 600px;
+                padding: .45em;
+                margin: .5em;
+                border: 0;
+                border-radius: 0;
+                background-color: rgb(241, 232, 232);
+            }
+            #urlform > input:focus{
+                outline: 3px solid #80027f;
+            }
+            #urlform > button {
+                border-radius: 0;
+                border: 0;
+                padding: .45em 1em;
+                margin: .5em;
+                width: 90%;
+                max-width: 15ex;
+                color: rgba(255,255,255,.75);
+                background-color: #80027f;
+            }
+            #urlform > button:hover {
+                color: rgba(255,255,255,1);
+            }
+            #urlform > button:active {
+                color: rgba(255,255,255,.55);
+                transform: scale(.95);
+            }
+            footer {
+                font-size: 16px;
+            }
+        </style>
+{% endblock %}
+
+{% block body %}
+
+    <h1 id="apptitle">{{ title }}</h1>
+
+    <table>
+        {% for l in links %}
+            <tr>
+                <td>{{ l._title }}</td>
+                <td>{{ l._url }}</td>
+                <td><a href="/{{ l._hash }}">{{ l._hash }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
+
+{% block scripts %}
+
+
+{% endblock %}

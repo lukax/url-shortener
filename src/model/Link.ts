@@ -21,7 +21,6 @@ export class Link {
     @Column()
     private _cacheTime: number;
 
-
     @Column({length: 3000})
     private _ctaUrl: string;
 
@@ -30,6 +29,9 @@ export class Link {
 
     @Column()
     private _description: string;
+
+    @Column()
+    private _email: string;
 
     get id(): ObjectID {
         return this._id;
@@ -101,5 +103,13 @@ export class Link {
 
     set description(value: string) {
         this._description = value;
+    }
+
+    get email(): string {
+        return this._email;
+    }
+
+    set email(value: string) {
+        this._email = value;
     }
 }
