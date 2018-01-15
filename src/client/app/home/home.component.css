@@ -1,0 +1,57 @@
+:host {
+  display: block;
+  padding: 0 16px;
+}
+
+input {
+  width: 250px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0 0 0 8px;
+}
+
+
+#apptitle {
+  font-weight: 700;
+  font-size: 60px;
+  margin: 0 0 .25em;
+  text-align: center;
+}
+#urlform {
+  text-align: center;
+}
+#urlform > input{
+  display: inline-block;
+  width: 90%;
+  max-width: 600px;
+  padding: .45em;
+  margin: .5em;
+  border: 0;
+  border-radius: 0;
+  background-color: rgb(241, 232, 232);
+}
+#urlform > input:focus{
+  outline: 3px solid #80027f;
+}
+#urlform > button {
+  border-radius: 0;
+  border: 0;
+  padding: .45em 1em;
+  margin: .5em;
+  width: 90%;
+  max-width: 15ex;
+  color: rgba(255,255,255,.75);
+  background-color: #80027f;
+}
+#urlform > button:hover {
+  color: rgba(255,255,255,1);
+}
+#urlform > button:active {
+  color: rgba(255,255,255,.55);
+  transform: scale(.95);
+}
+footer {
+  font-size: 16px;
+}

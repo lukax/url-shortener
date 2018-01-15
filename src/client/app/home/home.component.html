@@ -1,0 +1,22 @@
+
+<h1 id="apptitle">{{ title }}</h1>
+
+<form id="urlform" style="margin: 0 auto; max-width: 900px" (submit)="shortUrl()">
+    <h5 style="margin: 10px; color: gray;">it's simple, first enter a...</h5>
+    <input type="url" name="url" id="mUrl" required placeholder="URL to short">
+    <br/>
+    <h5 style="margin: 10px; color: gray;">then give it a...</h5>
+    <input type="text" name="title" id="mTitle" required placeholder="nice attention grabbing header!" value="A nice attention grabbing header!">
+    <input type="text" name="description" id="mDescription" required placeholder="descriptive sentence for the CTA" value="A descriptive sentence for the Call To Action (CTA).">
+    <input type="text" name="ctaHeader" id="mCtaHeader" required placeholder="CTA button header" value="CONTACT US NOW!">
+    <input type="url" name="ctaUrl" id="mCtaUrl" required placeholder="Call To Action URL">
+    <br/>
+    <button name="shortit" type="submit">...short it!</button>
+
+    <br/>
+    <div style="margin: 35px 0;">
+        <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
+    </div>
+</form>
+
+
