@@ -8,4 +8,4 @@ import { AboutRoutingModule } from './admin-routing.module';
   declarations: [AdminComponent],
   exports: [AdminComponent]
 })
-export class AboutModule { }
+export class AdminModule { }

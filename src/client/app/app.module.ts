@@ -5,10 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { AboutModule } from './admin/admin.module';
+import { AdminModule } from './admin/admin.module';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
-import {AuthService} from "./auth/auth.service";
+import { AuthModule } from './auth/auth.module';
 
 
 @NgModule({
@@ -16,7 +16,8 @@ import {AuthService} from "./auth/auth.service";
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
-    AboutModule,
+    AdminModule,
+    AuthModule,
     HomeModule,
     SharedModule.forRoot()
   ],
@@ -25,8 +26,7 @@ import {AuthService} from "./auth/auth.service";
     {
       provide: APP_BASE_HREF,
       useValue: '<%= APP_BASE %>'
-    },
-    AuthService
+    }
   ],
   bootstrap: [AppComponent]
 

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Config } from './shared/config/env.config';
 import './operators';
+import {AuthService} from "./auth/auth.service";
 
 /**
  * This class represents the main application component.
@@ -12,7 +13,11 @@ import './operators';
   styleUrls: ['app.component.css'],
 })
 export class AppComponent {
-  constructor() {
+
+  constructor(private auth: AuthService) {
     console.log('Environment config', Config);
+
+    auth.handleAuthentication();
   }
+
 }
