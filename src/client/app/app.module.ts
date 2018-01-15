@@ -9,7 +9,6 @@ import { AboutModule } from './admin/admin.module';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
 import {AuthService} from "./auth/auth.service";
-import {CallbackModule} from './callback/callback.module';
 
 
 @NgModule({
@@ -19,7 +18,6 @@ import {CallbackModule} from './callback/callback.module';
     AppRoutingModule,
     AboutModule,
     HomeModule,
-    CallbackModule,
     SharedModule.forRoot()
   ],
   declarations: [AppComponent],

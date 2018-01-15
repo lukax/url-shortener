@@ -95,26 +95,26 @@ export class HomeComponent implements OnInit {
   }
 
   private login(callback: Function) {
-      const options = {
-          'focusInput': true,
-          'closable': true,
-          'callbackURL': '{{AUTH0_CALLBACK_URL}}',
-          'title': 'jeit.in',
-          'icon': 'http://jeit.in/wp-content/uploads/2017/11/logo-jeitin.jpg',
-          'primaryColor': '#80027f',
-          'responseType': 'token',
-          'autoclose': true,
-          'forceJSONP': true,
-          'popup': false,
-          'socialBigButtons': false,
-          'connections': ['facebook', 'twitter']
-      };
-      const lock = new Auth0LockPasswordless('{{AUTH0_CLIENT_ID}}', '{{AUTH0_DOMAIN}}');
-      lock.magiclink(options, function(error: any, email: string) {
-          if (!error) {
-              callback(email);
-          }
-      });
+      // const options = {
+      //     'focusInput': true,
+      //     'closable': true,
+      //     'callbackURL': '{{AUTH0_CALLBACK_URL}}',
+      //     'title': 'jeit.in',
+      //     'icon': 'http://jeit.in/wp-content/uploads/2017/11/logo-jeitin.jpg',
+      //     'primaryColor': '#80027f',
+      //     'responseType': 'token',
+      //     'autoclose': true,
+      //     'forceJSONP': true,
+      //     'popup': false,
+      //     'socialBigButtons': false,
+      //     'connections': ['facebook', 'twitter']
+      // };
+      // const lock = new Auth0LockPasswordless('{{AUTH0_CLIENT_ID}}', '{{AUTH0_DOMAIN}}');
+      // lock.magiclink(options, function(error: any, email: string) {
+      //     if (!error) {
+      //         callback(email);
+      //     }
+      // });
   }
 
 

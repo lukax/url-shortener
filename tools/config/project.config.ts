@@ -1,6 +1,7 @@
 import { join } from 'path';
 
 import { SeedConfig } from './seed.config';
+import {ExtendPackages} from "./seed.config.interfaces";
 // import { ExtendPackages } from './seed.config.interfaces';
 
 /**
@@ -24,6 +25,7 @@ export class ProjectConfig extends SeedConfig {
       ...this.NPM_DEPENDENCIES,
       // {src: 'jquery/dist/jquery.min.js', inject: 'libs'},
       // {src: 'lodash/lodash.min.js', inject: 'libs'},
+      {src: 'auth0-js/build/auth0.min.js', inject: 'libs'}
     ];
 
     // Add `local` third-party libraries to be injected/bundled.
