@@ -1,4 +1,21 @@
 <nav>
   <a [routerLink]="['/']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">HOME</a>
-  <a [routerLink]="['/about']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">ABOUT</a>
+  <a [routerLink]="['/admin']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">ADMIN</a>
+
+  <a
+    id="qsLoginBtn"
+    class="btn btn-primary btn-margin"
+    *ngIf="!auth.isAuthenticated()"
+    (click)="auth.login()">
+    Log In
+  </a>
+
+  <a
+    id="qsLogoutBtn"
+    class="btn btn-primary btn-margin"
+    *ngIf="auth.isAuthenticated()"
+    (click)="auth.logout()">
+    Log Out
+  </a>
+
 </nav>

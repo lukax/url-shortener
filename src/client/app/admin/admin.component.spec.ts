@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 
-import { AboutModule } from './about.module';
+import { AboutModule } from './admin.module';
 
 export function main() {
   describe('About component', () => {

@@ -20,7 +20,8 @@ ul {
   text-align: center;
 }
 #urlform {
-  text-align: center;
+  margin-top: 2em;
+  max-width: 900px;
 }
 #urlform > input{
   display: inline-block;
