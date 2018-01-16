@@ -14,20 +14,19 @@ ul {
 
 
 .link-generator {
-  box-shadow: 5px 5px 10px -8px #d8cdcd;
   max-width: 400px;
   margin-right: 15px;
   margin-left: -15px;
 }
 
 .continue-btn {
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .link-preview > iframe {
   top: 0;
-  height: 100vh;
   width: 100%;
+  height: 94vh;
 }
 
 .flex-grid {
@@ -51,4 +50,8 @@ ul {
 .create-link-form > mat-form-field {
   width: 100%;
   margin-top: 15px;
+}
+
+.mat-step-label {
+  font-size: 13px;
 }
