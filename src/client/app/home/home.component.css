@@ -42,3 +42,13 @@ ul {
     display: block;
   }
 }
+
+.create-link-form {
+  min-width: 300px;
+  max-width: 400px;
+  width: 100%;
+}
+.create-link-form > mat-form-field {
+  width: 100%;
+  margin-top: 15px;
+}
