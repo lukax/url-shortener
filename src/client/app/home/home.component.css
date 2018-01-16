@@ -4,7 +4,7 @@
 }
 
 input {
-  width: 250px;
+  width: 350px;
 }
 
 ul {
@@ -13,46 +13,32 @@ ul {
 }
 
 
-#apptitle {
-  font-weight: 700;
-  font-size: 60px;
-  margin: 0 0 .25em;
-  text-align: center;
+.link-generator {
+  box-shadow: 5px 5px 10px -8px #d8cdcd;
+  max-width: 400px;
+  margin-right: 15px;
+  margin-left: -15px;
 }
-#urlform {
-  margin-top: 2em;
-  max-width: 900px;
+
+.continue-btn {
+  margin-top: 30px;
 }
-#urlform > input{
-  display: inline-block;
-  width: 90%;
-  max-width: 600px;
-  padding: .45em;
-  margin: .5em;
-  border: 0;
-  border-radius: 0;
-  background-color: rgb(241, 232, 232);
+
+.link-preview > iframe {
+  top: 0;
+  height: 100vh;
+  width: 100%;
 }
-#urlform > input:focus{
-  outline: 3px solid #80027f;
+
+.flex-grid {
+  display: flex;
 }
-#urlform > button {
-  border-radius: 0;
-  border: 0;
-  padding: .45em 1em;
-  margin: .5em;
-  width: 90%;
-  max-width: 15ex;
-  color: rgba(255,255,255,.75);
-  background-color: #80027f;
+.col {
+  flex: 1;
 }
-#urlform > button:hover {
-  color: rgba(255,255,255,1);
-}
-#urlform > button:active {
-  color: rgba(255,255,255,.55);
-  transform: scale(.95);
-}
-footer {
-  font-size: 16px;
+
+@media (max-width: 820px) {
+  .flex-grid {
+    display: block;
+  }
 }

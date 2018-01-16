@@ -1,33 +1,89 @@
+<div class="flex-grid">
+  <div class="col link-generator">
+  <mat-horizontal-stepper linear="true">
+    <mat-step [stepControl]="brandFormGroup">
+      <form [formGroup]="brandFormGroup">
+        <ng-template matStepLabel>Brand</ng-template>
 
-<form id="urlform" (submit)="shortUrl()">
-    <h5 style="margin: 10px; color: gray;">it's simple, first enter a...</h5>
+        <h2>Setup your brand</h2>
+        <p>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</p>
+        <mat-form-field>
+          <input matInput placeholder="Name" formControlName="name" required>
+        </mat-form-field>
+        <br>
+        <div>
+          <button mat-raised-button color="primary" class="continue-btn">
+            Continue
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="ctaFormGroup">
+      <form [formGroup]="ctaFormGroup">
+        <ng-template matStepLabel>CTA</ng-template>
 
-    <input type="url" name="url" id="mUrl" [(ngModel)]="link.url"
-           required placeholder="URL to short">
+        <h2>Setup your CTA</h2>
+        <p>Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.</p>
+        <mat-form-field>
+          <input matInput placeholder="Message" formControlName="message" required>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <input matInput placeholder="Button Text" formControlName="buttonText" required>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+          <input matInput placeholder="Button URL" formControlName="buttonUrl" required>
+        </mat-form-field>
+        <br>
+        <div>
+          <button mat-raised-button color="primary" class="continue-btn">
+            Continue
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="linkFormGroup">
+      <form [formGroup]="linkFormGroup">
+        <ng-template matStepLabel>Link</ng-template>
 
-    <br/>
+        <h2>Choose a page to jeit.in</h2>
+        <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
+        <mat-form-field>
+          <input matInput placeholder="Page URL" formControlName="pageUrl" required>
+        </mat-form-field>
+        <br>
+        <div>
+          <button mat-raised-button color="primary" class="continue-btn">
+            Continue
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Share</ng-template>
 
-    <h5 style="margin: 10px; color: gray;">then give it a...</h5>
+      <h2>You just made a link!</h2>
+      <p>The unique jeit.in link below contains the page with your CTA inside. Only people who click on this link will see your message.</p>
 
-    <input type="text" name="title" id="mTitle" [(ngModel)]="link.title"
-           required placeholder="nice attention grabbing header!">
+      <br>
+      <div>
+        <button mat-raised-button color="primary" class="continue-btn">
+          Continue
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</div>
 
-    <input type="text" name="description" id="mDescription" [(ngModel)]="link.description"
-           required placeholder="descriptive sentence for the CTA">
+  <div class="col link-preview">
 
-    <input type="text" name="ctaHeader" id="mCtaHeader" [(ngModel)]="link.ctaHeader"
-           required placeholder="CTA button header">
-
-    <input type="url" name="ctaUrl" id="mCtaUrl" required [(ngModel)]="link.ctaUrl"
-           placeholder="Call To Action URL">
-
-    <br/>
-    <button name="shortit" type="submit">...short it!</button>
-
-    <br/>
-    <div style="margin: 35px 0;">
-        <a id="urlhash" style="word-wrap: break-word; white-space: pre;">&nbsp;</a>
-    </div>
-</form>
+      <iframe src="http://www.farmaki.com.br" frameborder="0" class="stretch" sandbox="allow-scripts allow-popups allow-pointer-lock allow-same-origin"></iframe>
+  </div>
 
 
+</div>

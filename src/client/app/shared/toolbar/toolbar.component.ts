@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {AuthService, UserProfile} from "../../auth/auth.service";
 
 /**
  * This class represents the toolbar component.
@@ -9,5 +10,17 @@ import { Component } from '@angular/core';
   templateUrl: 'toolbar.component.html',
   styleUrls: ['toolbar.component.css']
 })
-export class ToolbarComponent { }
+export class ToolbarComponent {
+
+  profile: UserProfile;
+
+  constructor(public auth: AuthService){
+
+  }
+
+  ngOnInit(): void {
+    this.auth.getProfile().subscribe(x => this.profile = x);
+
+  }
+}
 

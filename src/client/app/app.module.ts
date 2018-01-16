@@ -19,7 +19,7 @@ import { AuthModule } from './auth/auth.module';
     AdminModule,
     AuthModule,
     HomeModule,
-    SharedModule.forRoot()
+    SharedModule.forRoot(),
   ],
   declarations: [AppComponent],
   providers: [

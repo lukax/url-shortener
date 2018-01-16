@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NameListService } from '../shared/name-list/name-list.service';
 import {AuthService, UserProfile} from "../auth/auth.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -22,14 +23,28 @@ export class HomeComponent implements OnInit {
   };
   private profile: UserProfile;
 
-  constructor(public auth: AuthService) {}
+  brandFormGroup: FormGroup;
+  ctaFormGroup: FormGroup;
+  linkFormGroup: FormGroup;
+
+  constructor(private auth: AuthService,
+              private _formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    const urlform: any = document.getElementById('urlform');
-    this.applyUrlProtocol(urlform.url);
-    this.applyUrlProtocol(urlform.ctaUrl);
-
     this.auth.getProfile().subscribe(x => this.profile = x);
+
+
+    this.brandFormGroup = this._formBuilder.group({
+      name: ['', Validators.required]
+    });
+    this.ctaFormGroup = this._formBuilder.group({
+      message: ['', Validators.required],
+      buttonText: ['', Validators.required],
+      buttonUrl: ['', Validators.required],
+    });
+    this.linkFormGroup = this._formBuilder.group({
+      pageUrl: ['', Validators.required]
+    });
   }
 
 
@@ -72,26 +87,6 @@ export class HomeComponent implements OnInit {
 
   }
 
-  private applyUrlProtocol(formElement: HTMLFormElement) {
-    const protocol = 'http://';
-    formElement.onpaste = function(e) {
-        const text = e.clipboardData.getData('text');
-        if (/https?:\/\//.test(text)) {
-          e.preventDefault();
-          formElement.value = text;
-        }
-    };
-    formElement.onfocus = function() {
-        if (!formElement.value.trim()) {
-            formElement.value = protocol;
-        }
-    };
-    formElement.onblur = function() {
-        if (formElement.value.trim() === protocol) {
-            formElement.value = '';
-        }
-    };
-  }
 
 
 
