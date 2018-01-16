@@ -49,14 +49,14 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="linkFormGroup">
-      <form [formGroup]="linkFormGroup" class="create-link-form">
+      <form [formGroup]="linkFormGroup" class="create-link-form" (submit)="createLink()">
         <ng-template matStepLabel>Link</ng-template>
 
-        <h2>Choose a page to jeit.in</h2>
+        <h2>Choose a page to create a link</h2>
         <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
         <mat-form-field>
           <span matPrefix>http:// &nbsp;</span>
-          <input matInput type="url" placeholder="Page URL" formControlName="pageUrl" required>
+          <input matInput type="url" placeholder="Page URL" formControlName="pageUrl" required (change)="onPageUrlChange()">
           <mat-hint>Enter a link to an article</mat-hint>
         </mat-form-field>
         <br>
@@ -75,7 +75,7 @@
       <p>The unique jeit.in link below contains the page with your CTA inside. Only people who click on this link will see your message.</p>
 
       <mat-form-field>
-        <input matInput type="url" [(ngModel)]="link.url" readonly>
+        <input matInput type="url" [(ngModel)]="shortPageUrl" readonly>
         <span matSuffix>&nbsp; COPY</span>
       </mat-form-field>
 
@@ -92,7 +92,11 @@
 
   <div class="col link-preview">
 
-      <iframe src="http://www.farmaki.com.br" frameborder="0" class="stretch" sandbox="allow-scripts allow-popups allow-pointer-lock allow-same-origin"></iframe>
+      <iframe *ngIf="pageUrl" [src]="pageUrl" scrolling="no" frameborder="0" sandbox="allow-scripts allow-same-origin"
+              style="overflow: hidden;"></iframe>
+
+      <iframe *ngIf="!pageUrl" src="/assets/preview.html" scrolling="no" frameborder="0"
+              style="overflow: hidden;"></iframe>
   </div>
 
 
