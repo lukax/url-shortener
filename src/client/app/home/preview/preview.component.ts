@@ -17,8 +17,8 @@ import {Headers, Http} from '@angular/http';
 })
 export class PreviewComponent {
 
-  constructor() {}
+  constructor() {
 
-
+  }
 
 }

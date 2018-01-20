@@ -22,11 +22,8 @@ import { Component, OnInit } from '@angular/core';
     }
   `]
 })
-export class CallbackComponent implements OnInit {
+export class CallbackComponent {
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
 }

@@ -4,7 +4,7 @@
     "class-name": true,
     "curly": false,
     "eofline": true,
-    "import-spacing": true,
+    "import-spacing": false,
     "indent": [true, "spaces"],
     "max-line-length": [true, 140],
     "member-ordering": [true,
@@ -24,7 +24,7 @@
     ],
     "no-construct": true,
     "no-duplicate-variable": true,
-    "no-empty": true,
+    "no-empty": false,
     "no-empty-interface": true,
     "no-eval": true,
     "no-inferrable-types": [
@@ -68,14 +68,7 @@
       }
     ],
     "variable-name": false,
-    "whitespace": [
-      true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-separator",
-      "check-type"
-    ],
+    "whitespace": false,
 
     "angular-whitespace": [true, "check-semicolon", "check-interpolation"],
     "no-output-on-prefix": true,
@@ -91,6 +84,6 @@
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
     "directive-class-suffix": true,
-    "import-destructuring-spacing": true
+    "import-destructuring-spacing": false
   }
 }

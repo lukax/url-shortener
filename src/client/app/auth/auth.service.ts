@@ -16,6 +16,7 @@ export class AuthService {
     redirectUri: AUTH_CONFIG.callbackURL,
     scope: 'openid profile email'
   });
+
   private userProfileSubject: Subject<UserProfile> = new Subject<UserProfile>();
 
   constructor(public router: Router) {}
@@ -35,14 +36,6 @@ export class AuthService {
         alert(`Error: ${err.error}. Check the console for further details.`);
       }
     });
-  }
-
-  private setSession(authResult: any): void {
-    // Set the time that the access token will expire at
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
-    localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
-    localStorage.setItem('expires_at', expiresAt);
   }
 
   public logout(): void {
@@ -73,6 +66,14 @@ export class AuthService {
     }
 
     return this.userProfileSubject.asObservable();
+  }
+
+  private setSession(authResult: any): void {
+    // Set the time that the access token will expire at
+    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+    localStorage.setItem('access_token', authResult.accessToken);
+    localStorage.setItem('id_token', authResult.idToken);
+    localStorage.setItem('expires_at', expiresAt);
   }
 
 }

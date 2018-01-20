@@ -2,9 +2,5 @@
   "extends": "./tools/config/seed.tslint.json",
   "rules": {
     "quotemark": false
-  },
-  "typedef-whitespace": false,
-  "whitespace": false,
-  "angular-whitespace": false,
-  "no-trailing-whitespace": false
+  }
 }

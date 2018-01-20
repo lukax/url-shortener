@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService, UserProfile} from "../../auth/auth.service";
 
 /**
@@ -10,17 +10,17 @@ import {AuthService, UserProfile} from "../../auth/auth.service";
   templateUrl: 'toolbar.component.html',
   styleUrls: ['toolbar.component.css']
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements OnInit {
 
   profile: UserProfile;
 
-  constructor(public auth: AuthService){
+  constructor(public auth: AuthService) {
 
   }
 
   ngOnInit(): void {
     this.auth.getProfile().subscribe(x => this.profile = x);
-
   }
+
 }
 

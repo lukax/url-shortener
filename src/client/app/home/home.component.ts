@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
     const regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
     if(this.linkFormGroup &&
         this.linkFormGroup.value.pageUrl &&
-        regex.test('http://' + this.linkFormGroup.value.pageUrl)){
+        regex.test('http://' + this.linkFormGroup.value.pageUrl)) {
       return this._sanitization.bypassSecurityTrustResourceUrl('http://' + this.linkFormGroup.value.pageUrl);
     }
     return null;
