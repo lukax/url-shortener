@@ -4,7 +4,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { NameListService } from './name-list/name-list.service';
 
 import {
   MatAutocompleteModule,
@@ -108,7 +107,7 @@ export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [NameListService]
+      providers: []
     };
   }
 }

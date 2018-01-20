@@ -1,56 +1,46 @@
 import * as http from 'http';
 import * as express from 'express';
-import * as bodyParser from 'body-parser';
 import * as path from 'path';
-import * as compression from 'compression';
-import * as routes from './routes';
-
-import { Init } from './db/redis';
+import * as appIniter from './app';
 
 /**
  * Client Dir
  * @note `dev` default.
  */
-var _clientDir = '../../client/dev';
-var app = express();
+let _clientDir = '../../client/dev';
+const app = express();
 
 export function init(port: number, mode: string) {
 
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
-  app.use(bodyParser.text());
-  app.use(compression());
 
-  // DB Init
-  Init();
-
-  /**
-   * Dev Mode.
-   * @note Dev server will only give for you middleware.
-   */
   if (mode == 'dev') {
-
+    /**
+     * Dev Mode.
+     * @note Dev server will only give for you middleware.
+     */
     app.all('/*', function(req, res, next) {
       res.header('Access-Control-Allow-Origin', '*');
       res.header('Access-Control-Allow-Headers', 'X-Requested-With');
       next();
     });
 
-    routes.init(app);
+    /**
+     * Api Routes for `Development`.
+     */
+    appIniter.init(app);
 
     let root = path.resolve(process.cwd());
     let clientRoot = path.resolve(process.cwd(), './dist/client/dev');
     app.use(express.static(root));
     app.use(express.static(clientRoot));
 
-    var renderIndex = (req: express.Request, res: express.Response) => {
-      res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
-    };
-    app.get('/*', renderIndex);
-
     /**
-     * Api Routes for `Development`.
+     * Spa Res Sender.
      */
+    // const renderIndex = (req: express.Request, res: express.Response) => {
+    //   res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
+    // };
+    // app.get('/*', renderIndex);
   }
   else {
     /**
@@ -61,7 +51,7 @@ export function init(port: number, mode: string) {
     /**
      * Api Routes for `Production`.
      */
-    routes.init(app);
+    appIniter.init(app);
 
     /**
      * Client Dir
@@ -77,10 +67,8 @@ export function init(port: number, mode: string) {
 
     /**
      * Spa Res Sender.
-     * @param req {any}
-     * @param res {any}
      */
-    var renderIndex = function (req: express.Request, res: express.Response) {
+    const renderIndex = function (req: express.Request, res: express.Response) {
       res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
     };
 
@@ -95,9 +83,9 @@ export function init(port: number, mode: string) {
    */
   return new Promise<http.Server>((resolve, reject) => {
     let server = app.listen(port, () => {
-      var port = server.address().port;
+      const port = server.address().port;
       console.log('App is listening on port:' + port);
       resolve(server);
     });
   });
-};
+}

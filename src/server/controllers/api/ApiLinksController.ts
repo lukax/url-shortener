@@ -6,11 +6,13 @@ import { LinkService } from "../../services/LinkService";
 import { request } from 'http';
 import { log } from "util";
 import { URL } from "url";
-import { ensureLoggedIn } from 'connect-ensure-login';
+import {checkJwt} from "../../app.auth";
+import {LinkDto} from "../../../client/app/core/LinkDto";
 
 @Service()
 @JsonController('/api')
-export class ApiSampleController {
+//@UseBefore(checkJwt())
+export class ApiLinksController {
 
     @Inject()
     private links: LinkService;
@@ -20,27 +22,27 @@ export class ApiSampleController {
      * @param {string} name
      * @returns {Promise<any>}
      */
-    @Post('/urls')
-    async insertNewUrl(@Body() model: { title: string, url: string, description: string, ctaUrl: string, ctaHeader: string }): Promise<any> {
+    @Post('/links')
+    async insertNewLink(@Body() model: LinkDto): Promise<any> {
 
         log("InsertNewUrl " + JSON.stringify(model));
 
-        if(!model.title){
-            return 'no title!';
+        if(!model.name){
+            return 'Name is empty.';
         }
-        if(!model.description){
-            return 'no description!';
+        if(!model.message){
+            return 'Message is empty.';
         }
-        if(!model.ctaUrl){
-            return 'no cta url!';
+        if(!/^https?:\/\//i.test(model.buttonUrl)){
+            return 'Invalid Button URL.';
         }
-        if(!model.ctaHeader){
-            return 'no cta header!';
+        if(!model.buttonText){
+            return 'Button text is empty.';
         }
-        if (!/^https?:\/\//i.test(model.url)) {
-            return 'invalid url!';
+        if (!/^https?:\/\//i.test(model.pageUrl)) {
+            return 'Invalid Page URL.';
         }
-        const { origin, hostname, pathname, searchParams } = new URL(model.url);
+        const { origin, hostname, pathname, searchParams } = new URL(model.pageUrl);
         const path = decodeURIComponent(pathname);
 
         try{
@@ -49,7 +51,7 @@ export class ApiSampleController {
                 method: 'HEAD',
                 host: hostname,
                 path,
-                timeout: 5000 
+                timeout: 5000
                 }, ({ statusCode, headers }) => {
                 if (!headers || (statusCode == 200 && !/text\/html/i.test(headers['content-type']))){
                     reject(new Error('not a HTML page :('));
@@ -70,12 +72,12 @@ export class ApiSampleController {
         }
 
         const newLink = new Link();
-        newLink.hash = createHash('sha1').update(model.url + (+new Date())).digest('hex').substring(0, 5);
-        newLink.url = model.url;
-        newLink.title = model.title;
-        newLink.ctaHeader = model.ctaHeader;
-        newLink.ctaUrl = model.ctaUrl;
-        newLink.description = model.description;
+        newLink.hash = createHash('sha1').update(model.pageUrl + (+new Date())).digest('hex').substring(0, 5);
+        newLink.pageUrl = model.pageUrl;
+        newLink.name = model.name;
+        newLink.message = model.message;
+        newLink.buttonText = model.buttonText;
+        newLink.buttonUrl = model.buttonUrl;
         this.links.persist(newLink);
         return newLink.hash;
     }
@@ -84,10 +86,10 @@ export class ApiSampleController {
      * Simple Hello World from the API
      * @returns {Promise<any>}
      */
-    @Get('/urls')
-    async getAllUrls(): Promise<any> {
+    @Get('/links')
+    async getAllLinks(): Promise<any> {
         return this.links.getAll();
     }
 
-    
+
 }

@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NameListService } from '../shared/name-list/name-list.service';
 import {AuthService, UserProfile} from "../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-
-export interface Link {
-  pageUrl: string;
-  name: string;
-  message: string;
-  buttonText: string;
-  buttonUrl: string;
-}
+import {LinkDto} from "../core/LinkDto";
+import {AuthHttp} from "angular2-jwt";
+import {Headers, Http} from '@angular/http';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -23,16 +17,17 @@ export interface Link {
 })
 export class HomeComponent implements OnInit {
 
-  private profile: UserProfile;
-
   brandFormGroup: FormGroup;
   ctaFormGroup: FormGroup;
   linkFormGroup: FormGroup;
-
   pageUrl: SafeResourceUrl;
   shortPageUrl: string;
 
+  private profile: UserProfile;
+
   constructor(private _auth: AuthService,
+              private _authHttp: AuthHttp,
+              private _http: Http,
               private _formBuilder: FormBuilder,
               private _sanitization: DomSanitizer) {}
 
@@ -42,7 +37,7 @@ export class HomeComponent implements OnInit {
     this.pageUrl = "";
     this.shortPageUrl = "";
 
-    const link: Link = {
+    const link: LinkDto = {
       pageUrl: "",
       name: "",
       message: "",
@@ -54,11 +49,11 @@ export class HomeComponent implements OnInit {
 
 
   createLink() {
-      if (this._auth.isAuthenticated()) {
+      //if (this._auth.isAuthenticated()) {
           this.createLinkInternal();
-      } else {
-          this._auth.login();
-      }
+      //} else {
+      //    this._auth.login();
+      //}
   }
 
   onPageUrlChange() {
@@ -75,7 +70,7 @@ export class HomeComponent implements OnInit {
     return null;
   }
 
-  private buildForm(link: Link) {
+  private buildForm(link: LinkDto) {
     this.brandFormGroup = this._formBuilder.group({
       name: [link.name, Validators.required]
     });
@@ -92,32 +87,23 @@ export class HomeComponent implements OnInit {
   private createLinkInternal() {
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
-    const a = document.getElementById('urlhash');
-    a.removeAttribute('href');
-    a.innerText = '...';
-    a.style.color = 'black';
 
+    this.shortPageUrl = '...';
 
-    fetch('/api/urls', {
-        method: 'POST',
-        body: JSON.stringify(Object.assign({},this.brandFormGroup.value, this.ctaFormGroup.value, this.linkFormGroup.value)),
-        headers: headers
-    }).then(function(res) {
-        if (res.status === 200) {
-            res.json().then(function(json) {
-                a.setAttribute('href', json);
-                a.innerText = window.location.href + json;
+    this._http.post('/api/links',
+        JSON.stringify(Object.assign({},this.brandFormGroup.value, this.ctaFormGroup.value, this.linkFormGroup.value)),
+        { headers: headers })
+      .subscribe(res => {
+          if (res.status === 200) {
+            res.json().then((json: any) => {
+              this.shortPageUrl = 'https://urlftw.herokuapp.com/5ba10';
             });
-        } else {
-            a.removeAttribute('href');
-            a.innerText = 'invalid url :(';
-            a.style.color = 'red';
-        }
-    }).catch(function(err) {
-        a.removeAttribute('href');
-        a.innerText = 'connection error, please try again';
-        a.style.color = 'red';
-    });
+          } else {
+            this.shortPageUrl = 'error!';
+          }
+      }, err => {
+        this.shortPageUrl = 'connection error, please try again!';
+      });
 
   }
 

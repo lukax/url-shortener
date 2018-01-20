@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { NameListService } from '../shared/name-list/name-list.service';
+import {PreviewComponent} from "./preview/preview.component";
 
 @NgModule({
   imports: [
@@ -10,8 +10,8 @@ import { NameListService } from '../shared/name-list/name-list.service';
     SharedModule,
 
   ],
-  declarations: [HomeComponent],
-  exports: [HomeComponent],
-  providers: [NameListService]
+  declarations: [HomeComponent, PreviewComponent],
+  exports: [HomeComponent, PreviewComponent],
+  providers: []
 })
 export class HomeModule { }

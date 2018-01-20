@@ -16,8 +16,8 @@ export class LinkService {
         return this.repo.find();
     }
 
-    public async getAllByUser(userEmail: string): Promise<Link[]> {
-        return this.repo.find(<any>{ _email: userEmail });
+    public async getAllByUser(userId: string): Promise<Link[]> {
+        return this.repo.find({ userId: userId });
     }
 
     public async findOneByHash(hash: string): Promise<Link> {
@@ -28,26 +28,25 @@ export class LinkService {
         return this.repo.save(link);
     }
 
-    public async updateCache(link: Link, cacheContent: string){
-        link.cache = cacheContent;
-        link.cacheTime = +new Date();
+    public async updateCache(link: Link, pageCacheContent: string){
+        link.pageCache = pageCacheContent;
+        link.pageCacheTime = +new Date();
         this.repo.save(link);
     }
 
     public async getCacheReadyLink(link: Link): Promise<Link> {
-        const url = await this.repo.findOne(<any> { _url: link.url, _cache : { $exists: true } });
-        return url;
+        return await this.repo.findOne({ pageUrl: link.pageUrl, cache : { $exists: true } });
     }
 
     public async hasCacheForLink(link: Link): Promise<boolean> {
-        const url = await this.repo.findOne(<any> { _url: link.url, _cache : { $exists: true } });
-        return url != null && !this.isCacheExpired(url);
+        const result = await this.getCacheReadyLink(link);
+        return result != null && !this.isCacheExpired(result);
     }
 
     private isCacheExpired(url: Link): boolean {
-        const seconds = (+new Date() - url.cacheTime) / 1000;
+        const seconds = (+new Date() - url.pageCacheTime) / 1000;
         const maxTimeAliveSeconds = 60 * 60 * 24;
-        return url.cache == null || seconds > maxTimeAliveSeconds;
+        return url.pageCache == null || seconds > maxTimeAliveSeconds;
     }
 
 }

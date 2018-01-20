@@ -53,6 +53,14 @@ export class ProjectConfig extends SeedConfig {
 
     const additionalPackages: ExtendPackages[] = [
       {
+        name: 'angular2-jwt',
+        path: 'node_modules/angular2-jwt/angular2-jwt.js',
+      },
+      {
+        name: '@angular/http',
+        path: 'node_modules/@angular/http/bundles/http.umd.js'
+      },
+      {
         name: '@angular/material',
         path: 'node_modules/@angular/material/bundles/material.umd.js'
       },

@@ -1,13 +1,13 @@
 import {Inject, Service} from "typedi";
 import {Controller, Get, Render, HttpCode, Req, Res, Param, UseBefore} from "routing-controllers";
-import {ApiSampleController} from "../api/ApiSampleController";
+import {ApiLinksController} from "../api/ApiLinksController";
 import {Request, Response} from "express";
 import { LinkService } from "../../services/LinkService";
 import { Link } from "../../model/Link";
 import * as pTimeout from "p-timeout";
 import { URL } from "url";
 import * as puppeteer from "puppeteer";
-import blocked = require("../../../blocked.json");
+import blocked = require("../../blocked.json");
 import { IAppConfig } from "../../app.config";
 
 let browser: puppeteer.Browser;
@@ -20,30 +20,30 @@ export class HomeController {
     private links: LinkService;
 
     @Inject()
-    private api: ApiSampleController;
+    private api: ApiLinksController;
 
     constructor (@Inject('config') private config: IAppConfig) {}
 
-    /**
-     * Index action.
-     * @returns {any}
-     */
-    @Render('index')
-    @Get('/')
-    @HttpCode(200)
-    async indexAction(@Req() req: Request): Promise<any> {
-        const urls: Link[] = await this.links.getAll();
-        console.log('user' + JSON.stringify(req.user));
-        return {
-            port: this.config.host.port,
-            title: this.config.app.title,
-            urls: urls,
-            AUTH0_DOMAIN: this.config.auth.AUTH0_DOMAIN,
-            AUTH0_CLIENT_ID: this.config.auth.AUTH0_CLIENT_ID,
-            AUTH0_CALLBACK_URL: this.config.auth.AUTH0_CALLBACK_URL,
-            userEmail: req.user != null ? req.user.email : null
-        };
-    }
+    // /**
+    //  * Index action.
+    //  * @returns {any}
+    //  */
+    // @Render('index')
+    // @Get('/')
+    // @HttpCode(200)
+    // async indexAction(@Req() req: Request): Promise<any> {
+    //     const urls: Link[] = await this.links.getAll();
+    //     console.log('user' + JSON.stringify(req.user));
+    //     return {
+    //         port: this.config.host.port,
+    //         title: this.config.app.title,
+    //         urls: urls,
+    //         AUTH0_DOMAIN: this.config.auth.AUTH0_DOMAIN,
+    //         AUTH0_CLIENT_ID: this.config.auth.AUTH0_CLIENT_ID,
+    //         AUTH0_CALLBACK_URL: this.config.auth.AUTH0_CALLBACK_URL,
+    //         userEmail: req.user != null ? req.user.email : null
+    //     };
+    // }
 
     /**
      * ViewUrl action.
@@ -52,7 +52,7 @@ export class HomeController {
     @Render('viewUrl')
     @Get('/:hash')
     @HttpCode(200)
-    async viewUrlAction(@Param("hash") hash: string, @Req() req: Request, @Res() res: Response): Promise<any> {
+    async viewUrlAction(@Param("hash") hash: string, @Req() req: Request): Promise<any> {
         console.log("Loading url hash: " + hash);
         const link: Link = await this.links.findOneByHash(hash);
         if(!link) return null;
@@ -66,7 +66,7 @@ export class HomeController {
         // }
         // else {
         console.log(`access -> ${hash}. no cache`);
-        content = await this.runInBrowser(link.url, host);
+        content = await this.runInBrowser(link.pageUrl, host);
         this.links.updateCache(link, content);
         // }
 
@@ -143,7 +143,8 @@ export class HomeController {
             // Pause all media and stop buffering
             page.frames().forEach((frame) => {
                 frame.evaluate(() => {
-                    document.querySelectorAll('video, audio').forEach((m: any) => {
+                    let elements: any = document.querySelectorAll('video, audio');
+                    elements.forEach((m: any) => {
                         if (!m) return;
                         if (m.pause) m.pause();
                         //m.preload = 'none';

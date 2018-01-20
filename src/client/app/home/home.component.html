@@ -1,6 +1,26 @@
 <div class="flex-grid">
   <div class="col link-generator">
   <mat-horizontal-stepper linear="true">
+    <mat-step [stepControl]="linkFormGroup">
+      <form [formGroup]="linkFormGroup" class="create-link-form" (submit)="createLink()">
+        <ng-template matStepLabel>Link</ng-template>
+
+        <h2>Choose a page to create a link</h2>
+        <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
+        <mat-form-field>
+          <span matPrefix>http:// &nbsp;</span>
+          <input matInput type="url" placeholder="Page URL" formControlName="pageUrl" required (change)="onPageUrlChange()">
+          <mat-hint>Enter a link to an article</mat-hint>
+        </mat-form-field>
+        <br>
+        <div>
+          <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
+            Continue
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
+      </form>
+    </mat-step>
     <mat-step [stepControl]="brandFormGroup">
       <form [formGroup]="brandFormGroup" class="create-link-form">
         <ng-template matStepLabel>Brand</ng-template>
@@ -48,26 +68,6 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="linkFormGroup">
-      <form [formGroup]="linkFormGroup" class="create-link-form" (submit)="createLink()">
-        <ng-template matStepLabel>Link</ng-template>
-
-        <h2>Choose a page to create a link</h2>
-        <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
-        <mat-form-field>
-          <span matPrefix>http:// &nbsp;</span>
-          <input matInput type="url" placeholder="Page URL" formControlName="pageUrl" required (change)="onPageUrlChange()">
-          <mat-hint>Enter a link to an article</mat-hint>
-        </mat-form-field>
-        <br>
-        <div>
-          <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
-            Continue
-            <mat-icon>arrow_forward</mat-icon>
-          </button>
-        </div>
-      </form>
-    </mat-step>
     <mat-step>
       <ng-template matStepLabel>Share</ng-template>
 
@@ -95,8 +95,7 @@
       <iframe *ngIf="pageUrl" [src]="pageUrl" scrolling="no" frameborder="0" sandbox="allow-scripts allow-same-origin"
               style="overflow: hidden;"></iframe>
 
-      <iframe *ngIf="!pageUrl" src="/assets/preview.html" scrolling="no" frameborder="0"
-              style="overflow: hidden;"></iframe>
+      <sd-preview *ngIf="!pageUrl"></sd-preview>
   </div>
 
 
