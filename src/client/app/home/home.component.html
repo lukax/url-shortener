@@ -92,10 +92,10 @@
 
   <div class="col link-preview">
 
-      <iframe *ngIf="pageUrl" [src]="pageUrl" scrolling="no" frameborder="0" sandbox="allow-scripts allow-same-origin"
+      <iframe class="overlay" *ngIf="pageUrl" [src]="pageUrl" scrolling="no" frameborder="0" sandbox="allow-scripts allow-same-origin"
               style="overflow: hidden;"></iframe>
 
-      <sd-preview *ngIf="!pageUrl"></sd-preview>
+      <sd-preview ></sd-preview>
   </div>
 
 
