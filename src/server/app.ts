@@ -13,7 +13,6 @@ import * as compression from "compression";
 
 
 export function init(expressApp: Express){
-  console.log('asdf!');
   /**
    * Provide a configuration injectable.
    */
@@ -63,7 +62,7 @@ export function init(expressApp: Express){
    * This creates the default connection using appConfig
    */
   getConnectionManager().create(appConfig.database).connect().then(() => {
-    console.log('Connected!');
+    console.log('Connected to db!');
   });
 
   /**

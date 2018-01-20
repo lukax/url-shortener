@@ -5,9 +5,11 @@ import { createHash } from 'crypto';
 import { LinkService } from "../../services/LinkService";
 import { request } from 'http';
 import { log } from "util";
-import { URL } from "url";
+import url from "url";
 import {checkJwt} from "../../app.auth";
-import {LinkDto} from "../../../client/app/core/LinkDto";
+import {LinkCreatedDto, LinkDto} from "../../dtos/LinkCreateDto";
+import axios from 'axios';
+
 
 @Service()
 @JsonController('/api')
@@ -23,52 +25,15 @@ export class ApiLinksController {
      * @returns {Promise<any>}
      */
     @Post('/links')
-    async insertNewLink(@Body() model: LinkDto): Promise<any> {
+    async insertNewLink(@Body() model: LinkDto): Promise<LinkCreatedDto> {
 
         log("InsertNewUrl " + JSON.stringify(model));
 
-        if(!model.name){
-            return 'Name is empty.';
+        if(await this.isUrlInvalid(model.pageUrl)){
+          throw new NotFoundError(`Page URL does not contain a valid HTML page :(`);
         }
-        if(!model.message){
-            return 'Message is empty.';
-        }
-        if(!/^https?:\/\//i.test(model.buttonUrl)){
-            return 'Invalid Button URL.';
-        }
-        if(!model.buttonText){
-            return 'Button text is empty.';
-        }
-        if (!/^https?:\/\//i.test(model.pageUrl)) {
-            return 'Invalid Page URL.';
-        }
-        const { origin, hostname, pathname, searchParams } = new URL(model.pageUrl);
-        const path = decodeURIComponent(pathname);
-
-        try{
-            const res = await new Promise((resolve, reject) => {
-                const req = request({
-                method: 'HEAD',
-                host: hostname,
-                path,
-                timeout: 5000
-                }, ({ statusCode, headers }) => {
-                if (!headers || (statusCode == 200 && !/text\/html/i.test(headers['content-type']))){
-                    reject(new Error('not a HTML page :('));
-                } else {
-                    resolve();
-                }
-                });
-                req.on('error', reject);
-                req.end();
-            });
-        } catch(e){
-            if(new RegExp("not a HTML page").test(e)){
-                throw new NotFoundError(`URL is not a HTML page :(`); // message is optional
-            }
-            else {
-                throw new NotFoundError(`please try again`); // message is optional
-            }
+        if(await this.isUrlInvalid(model.buttonUrl)){
+          throw new NotFoundError(`Button URL does not contain a valid HTML page :(`);
         }
 
         const newLink = new Link();
@@ -79,7 +44,10 @@ export class ApiLinksController {
         newLink.buttonText = model.buttonText;
         newLink.buttonUrl = model.buttonUrl;
         this.links.persist(newLink);
-        return newLink.hash;
+
+        return {
+          hash: newLink.hash
+        };
     }
 
     /**
@@ -87,9 +55,22 @@ export class ApiLinksController {
      * @returns {Promise<any>}
      */
     @Get('/links')
-    async getAllLinks(): Promise<any> {
-        return this.links.getAll();
+    async getAllLinks(): Promise<LinkDto[]> {
+        return (await this.links.getAll());
     }
 
+    private async isUrlInvalid(url: string): Promise<boolean> {
+      try {
+        const res = await axios.head(url);
+
+        return res.status < 200 ||
+          res.status >= 400 ||
+          !/text\/html/i.test(res.headers['content-type']);
+      }
+      catch(e){
+        console.log(e);
+        return false;
+      }
+    }
 
 }

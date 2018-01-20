@@ -8,7 +8,6 @@
         <h2>Choose a page to create a link</h2>
         <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
         <mat-form-field>
-          <span matPrefix>http:// &nbsp;</span>
           <input matInput type="url" placeholder="Page URL" formControlName="pageUrl" required (change)="onPageUrlChange()">
           <mat-hint>Enter a link to an article</mat-hint>
         </mat-form-field>
@@ -55,7 +54,6 @@
         </mat-form-field>
         <br>
         <mat-form-field>
-          <span matPrefix>http:// &nbsp;</span>
           <input matInput type="url" placeholder="Button URL" formControlName="buttonUrl" required>
           <mat-hint>Where will your button go?</mat-hint>
         </mat-form-field>
