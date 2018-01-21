@@ -40,12 +40,8 @@ export class ViewLinkDto {
   buttonUrl: string;
   pageUrl: string;
 
-  id(): ObjectID {
-    return ObjectID.createFromHexString(this._id);
-  }
-
   public static toDto(link: Link): ViewLinkDto {
-    if(link){
+    if(link) {
       const dto = new ViewLinkDto();
       dto._id = link._id.toHexString();
       dto.hash = link.hash;
@@ -57,5 +53,10 @@ export class ViewLinkDto {
     }
     return null;
   }
+
+  id(): ObjectID {
+    return ObjectID.createFromHexString(this._id);
+  }
+
 
 }

@@ -15,12 +15,12 @@ export class LinkService {
 
     public async findAll(): Promise<ViewLinkDto[]> {
         const links = await this.repo.find();
-        return links.map(ViewLinkDto.toDto);
+        return links.map(ViewLinkDto.toDto).filter(x => x != null);
     }
 
     public async findAllByUser(userId: string): Promise<ViewLinkDto[]> {
         const links = await this.repo.find({ userId: userId });
-        return links.map(ViewLinkDto.toDto);
+        return links.map(ViewLinkDto.toDto).filter(x => x != null);
     }
 
     public async findOneByHash(hash: string): Promise<ViewLinkDto> {
@@ -38,13 +38,13 @@ export class LinkService {
       link.message = model.message;
       link.hash = this._createUrlHash(link);
 
-      if(await this._isUrlInvalid(link.pageUrl)){
+      if(await this._isUrlInvalid(link.pageUrl)) {
         throw new Error(`Page URL does not contain a valid HTML page :(`);
       }
-      if(await this._isUrlInvalid(link.buttonUrl)){
+      if(await this._isUrlInvalid(link.buttonUrl)) {
         throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
-      if((await this.findOneByHash(link.hash)) != null){
+      if((await this.findOneByHash(link.hash)) != null) {
         throw new Error("Could not save link, hash already exists. ");
       }
 
@@ -55,13 +55,13 @@ export class LinkService {
 
     public async update(model: CreateLinkDto, hash: string): Promise<boolean> {
 
-      if(await this._isUrlInvalid(model.pageUrl)){
+      if(await this._isUrlInvalid(model.pageUrl)) {
         throw new Error(`Page URL does not contain a valid HTML page :(`);
       }
-      if(await this._isUrlInvalid(model.buttonUrl)){
+      if(await this._isUrlInvalid(model.buttonUrl)) {
         throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
-      if((await this.findOneByHash(hash)) == null){
+      if((await this.findOneByHash(hash)) == null) {
         throw new Error("Could not save link, hash does not exists");
       }
 
@@ -87,8 +87,7 @@ export class LinkService {
         return res.status < 200 ||
           res.status >= 400 ||
           !/text\/html/i.test(res.headers['content-type']);
-      }
-      catch(e){
+      } catch(e) {
         console.log(e.message);
         return false;
       }

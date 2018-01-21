@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {AuthService, UserProfile} from "../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {LinkDto} from "../core/LinkDto";
+import {LinkCreatedDto, LinkCreateDto} from "../core/LinkDto";
 import {AuthHttp} from "angular2-jwt";
 import {Headers, Http} from '@angular/http';
 
@@ -22,9 +22,10 @@ export class HomeComponent implements OnInit {
   linkFormGroup: FormGroup;
   pageUrl: SafeResourceUrl;
   shortPageUrl: string;
+  shortUrlPrefix = 'http://localhost:3000/';
 
   private profile: UserProfile;
-  private readonly URL_REGEXP = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+  private readonly URL_REGEXP = new RegExp(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/);
 
   constructor(private _auth: AuthService,
               private _authHttp: AuthHttp,
@@ -35,17 +36,10 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this._auth.getProfile().subscribe(x => this.profile = x);
 
-    this.pageUrl = "";
-    this.shortPageUrl = "";
+    this.pageUrl = '';
+    this.shortPageUrl = '';
 
-    const link: LinkDto = {
-      pageUrl: "",
-      name: "",
-      message: "",
-      buttonText: "",
-      buttonUrl: "",
-    };
-    this.buildForm(link);
+    this.buildForm(new LinkCreateDto());
   }
 
 
@@ -58,30 +52,29 @@ export class HomeComponent implements OnInit {
   }
 
   onPageUrlChange() {
-    this.pageUrl = this.getPageUrl();
+    if(this.linkFormGroup && this.linkFormGroup.value.pageUrl) {
+      this.pageUrl = this.sanitizeUrl(this.linkFormGroup.value.pageUrl);
+    }
   }
 
-  getPageUrl() {
-    const regex = /(http|https):\/\/(\w+:{0,1}\w*)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
-    if(this.linkFormGroup &&
-        this.linkFormGroup.value.pageUrl &&
-        regex.test('http://' + this.linkFormGroup.value.pageUrl)) {
-      return this._sanitization.bypassSecurityTrustResourceUrl('http://' + this.linkFormGroup.value.pageUrl);
+  sanitizeUrl(url: string) {
+    if(this.URL_REGEXP.test(url)) {
+      return this._sanitization.bypassSecurityTrustResourceUrl(this.linkenizer(this.linkFormGroup.value.pageUrl));
     }
     return null;
   }
 
-  private buildForm(link: LinkDto) {
+  private buildForm(link: LinkCreateDto) {
     this.brandFormGroup = this._formBuilder.group({
       name: [link.name, Validators.required]
     });
     this.ctaFormGroup = this._formBuilder.group({
       message: [link.message, Validators.required],
       buttonText: [link.buttonText, Validators.required],
-      buttonUrl: [link.buttonUrl, Validators.compose([Validators.required, Validators.pattern(this.URL_REGEXP)])]
+      buttonUrl: [link.buttonUrl, [Validators.required, Validators.pattern(this.URL_REGEXP)]]
     });
     this.linkFormGroup = this._formBuilder.group({
-      pageUrl: [link.pageUrl, Validators.compose([Validators.required, Validators.pattern(this.URL_REGEXP)])]
+      pageUrl: [link.pageUrl, [Validators.required, Validators.pattern(this.URL_REGEXP)]]
     });
   }
 
@@ -90,25 +83,28 @@ export class HomeComponent implements OnInit {
     headers.set('Content-Type', 'application/json');
 
     this.shortPageUrl = '...';
-
-    this._http.post('/api/links',
-        JSON.stringify(Object.assign({},this.brandFormGroup.value, this.ctaFormGroup.value, this.linkFormGroup.value)),
+    const link = new LinkCreateDto();
+    link.name = this.brandFormGroup.value.name;
+    link.message = this.ctaFormGroup.value.message;
+    link.buttonText = this.ctaFormGroup.value.buttonText;
+    link.buttonUrl = this.linkenizer(this.ctaFormGroup.value.buttonUrl);
+    link.pageUrl = this.linkenizer(this.linkFormGroup.value.pageUrl);
+    this._http.post('/api/links', JSON.stringify(link),
         { headers: headers })
-      .subscribe(res => {
-          if (res.status === 200) {
-            res.json().then((json: any) => {
-              this.shortPageUrl = 'https://urlftw.herokuapp.com/5ba10';
-            });
-          } else {
-            this.shortPageUrl = 'error!';
-          }
+      .map(res => res.json())
+      .subscribe((res: LinkCreatedDto) => {
+        this.shortPageUrl = this.shortUrlPrefix + res.hash;
       }, err => {
-        this.shortPageUrl = 'connection error, please try again!';
+        this.shortPageUrl = 'error, please try again!';
       });
 
   }
 
-
+  private linkenizer(link: string): string {
+    return (link != null)
+      ? (link.indexOf('://') === -1) ? 'http://' + link : link
+      : null;
+  }
 
 
 }

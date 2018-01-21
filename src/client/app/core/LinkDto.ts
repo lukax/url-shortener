@@ -1,13 +1,11 @@
-export interface LinkDto {
+export class LinkCreateDto {
+  name = '';
+  message = '';
+  buttonText = '';
+  buttonUrl = '';
+  pageUrl = '';
+}
 
-  name: string;
-
-  message: string;
-
-  buttonText: string;
-
-  buttonUrl: string;
-
-  pageUrl: string;
-
+export class LinkCreatedDto {
+  hash: string;
 }

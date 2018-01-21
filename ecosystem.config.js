@@ -4,8 +4,6 @@ module.exports = {
    * http://pm2.keymetrics.io/docs/usage/application-declaration/
    */
   apps : [
-
-    // First application
     {
       name      : 'API',
       script    : 'app.server.dev.js',
@@ -15,9 +13,9 @@ module.exports = {
       env_production : {
         NODE_ENV: 'dev'
       },
-      "watch": ["src/server"],
-      "ignore_watch" : ["node_modules"],
-      "watch_options": {
+      watch: ["src/server"],
+      ignore_watch : ["node_modules"],
+      watch_options: {
         "followSymlinks": false
       }
     }

@@ -67,21 +67,23 @@
       </form>
     </mat-step>
     <mat-step>
-      <ng-template matStepLabel>Share</ng-template>
+      <div class="create-link-form">
+        <ng-template matStepLabel>Share</ng-template>
 
-      <h2>Share this link!</h2>
-      <p>Anyone clicking on this link will see the page with your message inside.</p>
+        <h2>Share this link!</h2>
+        <p>Anyone clicking on this link will see the page with your message inside.</p>
 
-      <mat-form-field>
-        <input matInput [(ngModel)]="shortPageUrl" readonly>
-      </mat-form-field>
+        <mat-form-field>
+          <input matInput [(ngModel)]="shortPageUrl" readonly>
+        </mat-form-field>
 
-      <br>
-      <div>
-        <button mat-raised-button color="primary" class="continue-btn">
-          Continue
-          <mat-icon>arrow_forward</mat-icon>
-        </button>
+        <br>
+        <div>
+          <button mat-raised-button color="primary" class="continue-btn">
+            Continue
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </div>
       </div>
     </mat-step>
   </mat-horizontal-stepper>
