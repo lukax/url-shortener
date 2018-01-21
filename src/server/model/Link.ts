@@ -1,4 +1,4 @@
-import {Column, Entity, PrimaryGeneratedColumn, ObjectID, ObjectIdColumn} from "typeorm";
+import {Column, Entity, ObjectID, ObjectIdColumn} from "typeorm";
 
 @Entity()
 export class Link {
@@ -9,19 +9,13 @@ export class Link {
     @Column()
     public name: string;
 
-    @Column({length: 3000})
+    @Column()
     public pageUrl: string;
 
-    @Column({length: 6})
+    @Column()
     public hash: string;
 
     @Column()
-    public pageCache: string;
-
-    @Column()
-    public pageCacheTime: number;
-
-    @Column({length: 3000})
     public buttonUrl: string;
 
     @Column()
@@ -33,5 +27,5 @@ export class Link {
     @Column()
     public userId: string;
 
-
 }
+

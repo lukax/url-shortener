@@ -2,51 +2,96 @@ import {OrmRepository} from "typeorm-typedi-extensions";
 import {Service} from "typedi";
 import { LinkRepository } from "../repository/LinkRepository";
 import { Link } from "../model/Link";
+import {randomBytes} from "crypto";
+import axios from "axios";
+import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../dtos/LinkCreateDto";
+import {ObjectID} from "typeorm";
 
-/**
- * Default service for the users.
- */
 @Service()
 export class LinkService {
 
     @OrmRepository(Link)
     private repo: LinkRepository;
 
-    public async getAll(): Promise<Link[]> {
-        return this.repo.find();
+    public async findAll(): Promise<ViewLinkDto[]> {
+        const links = await this.repo.find();
+        return links.map(ViewLinkDto.toDto);
     }
 
-    public async getAllByUser(userId: string): Promise<Link[]> {
-        return this.repo.find({ userId: userId });
+    public async findAllByUser(userId: string): Promise<ViewLinkDto[]> {
+        const links = await this.repo.find({ userId: userId });
+        return links.map(ViewLinkDto.toDto);
     }
 
-    public async findOneByHash(hash: string): Promise<Link> {
-        return this.repo.findOne(<any>{ _hash: hash });
+    public async findOneByHash(hash: string): Promise<ViewLinkDto> {
+        const x = await this.repo.findOne(<any>{ _hash: hash });
+        return ViewLinkDto.toDto(x);
     }
 
-    public async persist(link: Link): Promise<any> {
-        return this.repo.save(link);
+    public async create(model: CreateLinkDto): Promise<CreateLinkResultDto> {
+
+      let link = new Link();
+      link.pageUrl = model.pageUrl;
+      link.buttonText = model.buttonText;
+      link.buttonUrl = model.buttonUrl;
+      link.name = model.name;
+      link.message = model.message;
+      link.hash = this._createUrlHash(link);
+
+      if(await this._isUrlInvalid(link.pageUrl)){
+        throw new Error(`Page URL does not contain a valid HTML page :(`);
+      }
+      if(await this._isUrlInvalid(link.buttonUrl)){
+        throw new Error(`Button URL does not contain a valid HTML page :(`);
+      }
+      if((await this.findOneByHash(link.hash)) != null){
+        throw new Error("Could not save link, hash already exists. ");
+      }
+
+      link = await this.repo.save(link);
+
+      return { hash: link.hash };
     }
 
-    public async updateCache(link: Link, pageCacheContent: string){
-        link.pageCache = pageCacheContent;
-        link.pageCacheTime = +new Date();
-        this.repo.save(link);
+    public async update(model: CreateLinkDto, hash: string): Promise<boolean> {
+
+      if(await this._isUrlInvalid(model.pageUrl)){
+        throw new Error(`Page URL does not contain a valid HTML page :(`);
+      }
+      if(await this._isUrlInvalid(model.buttonUrl)){
+        throw new Error(`Button URL does not contain a valid HTML page :(`);
+      }
+      if((await this.findOneByHash(hash)) == null){
+        throw new Error("Could not save link, hash does not exists");
+      }
+
+      const result = await this.repo.updateOne({ hash: hash }, {
+        pageUrl: model.pageUrl,
+        name: model.name,
+        message: model.message,
+        buttonText: model.buttonText,
+        buttonUrl: model.buttonUrl,
+      });
+
+      return result.matchedCount > 0;
     }
 
-    public async getCacheReadyLink(link: Link): Promise<Link> {
-        return await this.repo.findOne({ pageUrl: link.pageUrl, cache : { $exists: true } });
+    private _createUrlHash(link: Link): string {
+      return randomBytes(3).toString('hex').substring(0, 5);
     }
 
-    public async hasCacheForLink(link: Link): Promise<boolean> {
-        const result = await this.getCacheReadyLink(link);
-        return result != null && !this.isCacheExpired(result);
-    }
+    private async _isUrlInvalid(url: string): Promise<boolean> {
+      try {
+        const res = await axios.head(url, {timeout: 5000 });
 
-    private isCacheExpired(url: Link): boolean {
-        const seconds = (+new Date() - url.pageCacheTime) / 1000;
-        const maxTimeAliveSeconds = 60 * 60 * 24;
-        return url.pageCache == null || seconds > maxTimeAliveSeconds;
+        return res.status < 200 ||
+          res.status >= 400 ||
+          !/text\/html/i.test(res.headers['content-type']);
+      }
+      catch(e){
+        console.log(e.message);
+        return false;
+      }
     }
 
 }

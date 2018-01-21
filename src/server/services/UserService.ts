@@ -3,9 +3,6 @@ import {OrmRepository} from "typeorm-typedi-extensions";
 import {Service} from "typedi";
 import {UserRepository} from "../repository/UserRepository";
 
-/**
- * Default service for the users.
- */
 @Service()
 export class UserService {
 

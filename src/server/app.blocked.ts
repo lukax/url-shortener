@@ -1,4 +1,5 @@
-[
+
+const BLOCKED_URLS = [
   "google-analytics.com",
   "api.mixpanel.com",
   "stats.g.doubleclick.net",
@@ -27,4 +28,8 @@
   "doubleclick.net/pixel",
   "cx.atdmt.com",
   "sb.scorecardresearch.com"
-]
+];
+
+const BLOCKED_REGEXP = new RegExp('(' + BLOCKED_URLS.join('|') + ')', 'i');
+
+export {BLOCKED_URLS, BLOCKED_REGEXP};
