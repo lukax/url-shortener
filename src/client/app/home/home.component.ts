@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   shortPageUrl: string;
 
   private profile: UserProfile;
+  private readonly URL_REGEXP = new RegExp(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
 
   constructor(private _auth: AuthService,
               private _authHttp: AuthHttp,
@@ -77,10 +78,10 @@ export class HomeComponent implements OnInit {
     this.ctaFormGroup = this._formBuilder.group({
       message: [link.message, Validators.required],
       buttonText: [link.buttonText, Validators.required],
-      buttonUrl: [link.buttonUrl, Validators.required],
+      buttonUrl: [link.buttonUrl, Validators.compose([Validators.required, Validators.pattern(this.URL_REGEXP)])]
     });
     this.linkFormGroup = this._formBuilder.group({
-      pageUrl: [link.pageUrl, Validators.required]
+      pageUrl: [link.pageUrl, Validators.compose([Validators.required, Validators.pattern(this.URL_REGEXP)])]
     });
   }
 

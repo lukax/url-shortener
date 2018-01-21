@@ -45,13 +45,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
  */
 
 const MATERIAL_COMPONENTS = [
-
-
-  FormsModule,
-  ReactiveFormsModule,
-
   BrowserAnimationsModule,
-
   MatAutocompleteModule,
   MatButtonModule,
   MatButtonToggleModule,
@@ -83,7 +77,6 @@ const MATERIAL_COMPONENTS = [
   MatToolbarModule,
   MatTooltipModule,
   MatStepperModule,
-
 ];
 
 @NgModule({
@@ -91,14 +84,18 @@ const MATERIAL_COMPONENTS = [
     CommonModule,
     RouterModule,
 
+    FormsModule,
+    ReactiveFormsModule,
+
     ...MATERIAL_COMPONENTS,
   ],
   declarations: [ToolbarComponent],
   exports: [
     ToolbarComponent,
     CommonModule,
+
     FormsModule,
-    RouterModule,
+    ReactiveFormsModule,
 
     ...MATERIAL_COMPONENTS,
   ],

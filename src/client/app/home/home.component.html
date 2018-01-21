@@ -2,13 +2,13 @@
   <div class="col link-generator">
   <mat-horizontal-stepper linear="true">
     <mat-step [stepControl]="linkFormGroup">
-      <form [formGroup]="linkFormGroup" class="create-link-form" (submit)="createLink()">
+      <form [formGroup]="linkFormGroup" class="create-link-form">
         <ng-template matStepLabel>Link</ng-template>
 
         <h2>Choose a page to create a link</h2>
         <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
         <mat-form-field>
-          <input matInput type="url" placeholder="Page URL" formControlName="pageUrl" required (change)="onPageUrlChange()">
+          <input matInput placeholder="Page URL" formControlName="pageUrl" (change)="onPageUrlChange()">
           <mat-hint>Enter a link to an article</mat-hint>
         </mat-form-field>
         <br>
@@ -27,7 +27,7 @@
         <h2>Setup your brand</h2>
         <p>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</p>
         <mat-form-field>
-          <input matInput type="text" placeholder="Name" formControlName="name" required>
+          <input matInput placeholder="Name" formControlName="name">
           <mat-hint>A nice attention grabbing header!</mat-hint>
         </mat-form-field>
         <br>
@@ -38,23 +38,23 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="ctaFormGroup">
-      <form [formGroup]="ctaFormGroup" class="create-link-form">
+      <form [formGroup]="ctaFormGroup" class="create-link-form" (submit)="createLink()">
         <ng-template matStepLabel>CTA</ng-template>
 
         <h2>Setup your CTA</h2>
         <p>Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.</p>
         <mat-form-field>
-          <input matInput type="text" placeholder="Message" formControlName="message" required>
+          <input matInput placeholder="Message" formControlName="message">
           <mat-hint>A descriptive sentence for the Call To Action (CTA)</mat-hint>
         </mat-form-field>
         <br>
         <mat-form-field>
-          <input matInput type="text" placeholder="Button Text" formControlName="buttonText" required>
+          <input matInput placeholder="Button Text" formControlName="buttonText">
           <mat-hint>What will your button say?</mat-hint>
         </mat-form-field>
         <br>
         <mat-form-field>
-          <input matInput type="url" placeholder="Button URL" formControlName="buttonUrl" required>
+          <input matInput placeholder="Button URL" formControlName="buttonUrl">
           <mat-hint>Where will your button go?</mat-hint>
         </mat-form-field>
         <br>
@@ -69,12 +69,11 @@
     <mat-step>
       <ng-template matStepLabel>Share</ng-template>
 
-      <h2>You just made a link!</h2>
-      <p>The unique jeit.in link below contains the page with your CTA inside. Only people who click on this link will see your message.</p>
+      <h2>Share this link!</h2>
+      <p>Anyone clicking on this link will see the page with your message inside.</p>
 
       <mat-form-field>
-        <input matInput type="url" [(ngModel)]="shortPageUrl" readonly>
-        <span matSuffix>&nbsp; COPY</span>
+        <input matInput [(ngModel)]="shortPageUrl" readonly>
       </mat-form-field>
 
       <br>
