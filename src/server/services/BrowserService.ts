@@ -60,7 +60,7 @@ export class BrowserService {
       console.log('⬇️ Fetching ' + pageURL);
       await Promise.race([
         responsePromise,
-        page.goto(pageURL, { waitUntil: 'networkidle0', timeout: 10 * 1000 })
+        page.goto(pageURL, { waitUntil: 'networkidle2', timeout: 15 * 1000 })
       ]);
 
       // Pause all media and stop buffering

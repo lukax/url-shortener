@@ -50,6 +50,7 @@ export class ViewLinkDto {
       dto.buttonUrl = link.buttonUrl;
       dto.name = link.name;
       dto.message = link.message;
+      return dto;
     }
     return null;
   }

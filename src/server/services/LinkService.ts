@@ -30,6 +30,13 @@ export class LinkService {
 
     public async create(model: CreateLinkDto): Promise<CreateLinkResultDto> {
 
+      if(await this._isUrlInvalid(model.pageUrl)) {
+        throw new Error(`Page URL does not contain a valid HTML page :(`);
+      }
+      if(await this._isUrlInvalid(model.buttonUrl)) {
+        throw new Error(`Button URL does not contain a valid HTML page :(`);
+      }
+
       let link = new Link();
       link.pageUrl = model.pageUrl;
       link.buttonText = model.buttonText;
@@ -38,12 +45,6 @@ export class LinkService {
       link.message = model.message;
       link.hash = this._createUrlHash(link);
 
-      if(await this._isUrlInvalid(link.pageUrl)) {
-        throw new Error(`Page URL does not contain a valid HTML page :(`);
-      }
-      if(await this._isUrlInvalid(link.buttonUrl)) {
-        throw new Error(`Button URL does not contain a valid HTML page :(`);
-      }
       if((await this.findOneByHash(link.hash)) != null) {
         throw new Error("Could not save link, hash already exists. ");
       }
@@ -61,19 +62,21 @@ export class LinkService {
       if(await this._isUrlInvalid(model.buttonUrl)) {
         throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
-      if((await this.findOneByHash(hash)) == null) {
-        throw new Error("Could not save link, hash does not exists");
+
+      let link = await this.findOneByHash(hash);
+      if(link == null) {
+        throw new Error("Hash not found");
       }
 
-      const result = await this.repo.updateOne({ hash: hash }, {
-        pageUrl: model.pageUrl,
-        name: model.name,
-        message: model.message,
-        buttonText: model.buttonText,
-        buttonUrl: model.buttonUrl,
-      });
+      link.pageUrl = model.pageUrl;
+      link.buttonText = model.buttonText;
+      link.buttonUrl = model.buttonUrl;
+      link.name = model.name;
+      link.message = model.message;
 
-      return result.matchedCount > 0;
+      const result = await this.repo.save(link);
+
+      return result != null;
     }
 
     private _createUrlHash(link: Link): string {

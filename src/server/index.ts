@@ -34,12 +34,12 @@ export function init(port: number, mode: string) {
     app.use(express.static(path.resolve(process.cwd(), './dist/client/dev')));
 
     /**
-     * Spa Res Sender.
+     * Spa Res Sender
      */
-    // const renderIndex = (req: express.Request, res: express.Response) => {
-    //   res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
-    // };
-    // app.get('/*', renderIndex);
+    const renderIndex = (req: express.Request, res: express.Response) => {
+      res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
+    };
+    app.get('/*', renderIndex);
   } else {
     /**
      * Prod Mode.

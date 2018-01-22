@@ -18,7 +18,7 @@ export class HomeController {
     constructor (@Inject('config') private config: IAppConfig) {}
 
     @Render('viewUrl')
-    @Get('/:hash([a-z0-9]{5})') // match 5 digit hex string
+    @Get('/:hash([a-z0-9]{5})') // match 5 digit hex string!
     @HttpCode(200)
     async viewUrlAction(@Param("hash") hash: string, @Req() req: Request): Promise<any> {
         console.log("Loading url hash: " + hash);
