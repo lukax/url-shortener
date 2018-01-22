@@ -1,3 +1,5 @@
+@import '~@angular/material/prebuilt-themes/pink-bluegrey.css';
+
 /* Reset */
 html, body, div {
   border: 0;

@@ -1,5 +1,5 @@
 :host {
-  background-color: #80027f;
+  background-color: #3f50b5;
   color: rgba(255, 255, 255, 0.87);
   border: 0 solid #e1e1e1;
   display: block;
@@ -19,7 +19,7 @@ nav a {
 }
 
 nav a.router-link-active {
-  color: #80027f;
+  color: #3f50b5;
   color: rgba(249, 249, 249, 0.87);
 }
 
