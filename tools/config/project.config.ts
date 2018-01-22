@@ -53,6 +53,10 @@ export class ProjectConfig extends SeedConfig {
 
     const additionalPackages: ExtendPackages[] = [
       {
+        name: 'jquery',
+        path: 'node_modules/jquery/dist/jquery.js',
+      },
+      {
         name: 'angular2-jwt',
         path: 'node_modules/angular2-jwt/angular2-jwt.js',
       },

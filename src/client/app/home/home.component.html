@@ -1,6 +1,6 @@
 <div class="flex-grid">
   <div class="col link-generator">
-  <mat-horizontal-stepper linear="true">
+  <mat-horizontal-stepper linear="false" #formStepper="matHorizontalStepper">
     <mat-step [stepControl]="linkFormGroup">
       <form [formGroup]="linkFormGroup" class="create-link-form">
         <ng-template matStepLabel>Link</ng-template>
@@ -38,7 +38,7 @@
       </form>
     </mat-step>
     <mat-step [stepControl]="ctaFormGroup">
-      <form [formGroup]="ctaFormGroup" class="create-link-form" (submit)="createLink()">
+      <form [formGroup]="ctaFormGroup" class="create-link-form" (submit)="onCtaFormGroupSubmit()">
         <ng-template matStepLabel>CTA</ng-template>
 
         <h2>Setup your CTA</h2>
@@ -59,11 +59,16 @@
         </mat-form-field>
         <br>
         <div>
-          <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
+          <button mat-raised-button color="primary" class="continue-btn">
             Continue
-            <mat-icon>arrow_forward</mat-icon>
+            <mat-icon *ngIf="!isLoading">arrow_forward</mat-icon>
+            <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="isLoading"></mat-progress-spinner>
           </button>
+          <h5>
+            {{submitError}}
+          </h5>
         </div>
+
       </form>
     </mat-step>
     <mat-step>
@@ -74,17 +79,16 @@
         <p>Anyone clicking on this link will see the page with your message inside.</p>
 
         <mat-form-field>
-          <input matInput [(ngModel)]="shortPageUrl" readonly>
+          <input matInput [(ngModel)]="shortPageUrl" readonly (click)="onShortUrlClick($event)" autofocus>
         </mat-form-field>
 
+        <a mat-raised-button color="accent" class="continue-btn" [href]="shortPageUrl" target="_blank" *ngIf="shortPageUrl">
+          VISIT LINK
+          <mat-icon>open_in_new</mat-icon>
+        </a>
         <br>
-        <div>
-          <button mat-raised-button color="primary" class="continue-btn">
-            Continue
-            <mat-icon>arrow_forward</mat-icon>
-          </button>
-        </div>
       </div>
+
     </mat-step>
   </mat-horizontal-stepper>
 </div>
