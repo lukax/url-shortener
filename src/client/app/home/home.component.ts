@@ -95,7 +95,6 @@ export class HomeComponent implements OnInit {
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
 
-    this.shortPageUrl = '...';
     const link = new LinkCreateDto();
     link.name = this.brandFormGroup.value.name;
     link.message = this.ctaFormGroup.value.message;

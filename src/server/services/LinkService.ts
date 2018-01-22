@@ -24,7 +24,7 @@ export class LinkService {
     }
 
     public async findOneByHash(hash: string): Promise<ViewLinkDto> {
-        const x = await this.repo.findOne(<any>{ _hash: hash });
+        const x = await this.repo.findOne({ hash: hash });
         return ViewLinkDto.toDto(x);
     }
 

@@ -13,7 +13,7 @@ const app = express();
 export function init(port: number, mode: string) {
 
 
-  if (mode == 'dev') {
+  if (mode === 'dev') {
     /**
      * Dev Mode.
      * @note Dev server will only give for you middleware.
@@ -29,10 +29,9 @@ export function init(port: number, mode: string) {
      */
     appIniter.init(app);
 
-    let root = path.resolve(process.cwd());
-    let clientRoot = path.resolve(process.cwd(), './dist/client/dev');
-    app.use(express.static(root));
-    app.use(express.static(clientRoot));
+    console.log('cwd ' + process.cwd());
+    app.use(express.static(path.resolve(process.cwd())));
+    app.use(express.static(path.resolve(process.cwd(), './dist/client/dev')));
 
     /**
      * Spa Res Sender.
@@ -41,8 +40,7 @@ export function init(port: number, mode: string) {
     //   res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
     // };
     // app.get('/*', renderIndex);
-  }
-  else {
+  } else {
     /**
      * Prod Mode.
      * @note Prod mod will give you static + middleware.
@@ -82,7 +80,7 @@ export function init(port: number, mode: string) {
    * Server with gzip compression.
    */
   return new Promise<http.Server>((resolve, reject) => {
-    let server = app.listen(port, () => {
+    const server = app.listen(port, () => {
       const port = server.address().port;
       console.log('App is listening on port:' + port);
       resolve(server);
