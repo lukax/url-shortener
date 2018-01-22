@@ -11,6 +11,11 @@ import {ExtendPackages} from "./seed.config.interfaces";
 export class ProjectConfig extends SeedConfig {
 
   PROJECT_TASKS_DIR = join(process.cwd(), this.TOOLS_DIR, 'tasks', 'project');
+  FONTS_DEST = `${this.APP_DEST}/fonts`;
+  FONTS_SRC = [
+    'node_modules/font-awesome/fonts/**'
+  ];
+  ENABLE_SCSS = 1;
 
   constructor() {
     super();
@@ -29,6 +34,9 @@ export class ProjectConfig extends SeedConfig {
 
       /* Select a pre-built Material theme */
       {src: '@angular/material/prebuilt-themes/indigo-pink.css', inject: true},
+      {src: 'font-awesome/css/font-awesome.min.css', inject: true},
+      {src: '@ngx-share/button/styles/share-buttons/', inject: true},
+      {src: '@ngx-share/button/styles/themes/default/default-theme', inject: true},
       /* Polyfill for unsupported browsers */
       //{src: 'web-animations-js/web-animations.min.js', inject: 'shims'},
       /* For some gestures */
@@ -52,6 +60,18 @@ export class ProjectConfig extends SeedConfig {
     ];
 
     const additionalPackages: ExtendPackages[] = [
+      {
+        name: '@ngx-share/button',
+        path: 'node_modules/@ngx-share/button/bundles/ngx-share-button.umd.js'
+      },
+      {
+        name: '@ngx-share/buttons',
+        path: 'node_modules/@ngx-share/buttons/bundles/ngx-share-buttons.umd.js'
+      },
+      {
+        name: '@ngx-share/core',
+        path: 'node_modules/@ngx-share/core/bundles/ngx-share-core.umd.js'
+      },
       {
         name: 'jquery',
         path: 'node_modules/jquery/dist/jquery.js',
