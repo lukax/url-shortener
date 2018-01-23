@@ -1,8 +1,8 @@
-/*@import '/node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
-@import '~font-awesome/css/font-awesome.min.css';
-@import '~@ngx-share/button/styles/share-buttons';
-@import '~@ngx-share/button/styles/themes/default/default-theme';
-*/
+@import '/node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import '/node_modules/font-awesome/css/font-awesome.min.css';
+@import "/node_modules/@ngx-share/button/styles/share-buttons.css";
+@import "/node_modules/@ngx-share/button/styles/themes/default/default-theme.css";
+
 
 /* Reset */
 html, body, div {

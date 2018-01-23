@@ -1,28 +1,9 @@
+<mat-toolbar color="primary">
 
-<nav>
-  <a class="link-brand">jeit.in</a>
+  <strong>jeit.in</strong>
 
-  <a [routerLink]="['/']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Create link</a>
-  <a [routerLink]="['/admin']" [routerLinkActive]="['router-link-active']" [routerLinkActiveOptions]="{exact:true}">Dashboard</a>
+  <span class="example-spacer"></span>
+  <mat-icon class="example-icon">more_vert</mat-icon>
+</mat-toolbar>
 
-  <a
-    id="qsLoginBtn"
-    class="btn btn-primary btn-margin link-right"
-    *ngIf="!auth.isAuthenticated()"
-    (click)="auth.login()">
-    Log in
-  </a>
-
-  <a
-    id="qsLogoutBtn"
-    class="btn btn-primary btn-margin link-right"
-    *ngIf="auth.isAuthenticated()"
-    (click)="auth.logout()">
-    <label><i class="glyphicon glyphicon-user"></i> {{ profile?.nickname }}</label>
-  </a>
-
-
-
-
-</nav>
 

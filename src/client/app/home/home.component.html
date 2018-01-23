@@ -1,105 +1,118 @@
-<div class="flex-grid">
-  <div class="col link-generator">
-  <mat-horizontal-stepper linear="false" #formStepper="matHorizontalStepper">
-    <mat-step [stepControl]="linkFormGroup">
-      <form [formGroup]="linkFormGroup" class="create-link-form">
-        <ng-template matStepLabel>Link</ng-template>
+<mat-sidenav-container class="example-container">
+  <mat-sidenav mode="side" opened="true">
 
-        <h2>Choose a page to create a link</h2>
-        <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
-        <mat-form-field>
-          <input matInput placeholder="Page URL" formControlName="pageUrl" (change)="onPageUrlChange()">
-          <mat-hint>Enter a link to an article</mat-hint>
-        </mat-form-field>
-        <br>
-        <div>
+
+    <mat-horizontal-stepper linear="false" #formStepper="matHorizontalStepper">
+      <mat-step [stepControl]="linkFormGroup">
+        <form [formGroup]="linkFormGroup" class="create-link-form">
+          <ng-template matStepLabel>Link</ng-template>
+
+          <h2>Choose a page to create a link</h2>
+          <p>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</p>
+          <mat-form-field>
+            <input matInput placeholder="Page URL" formControlName="pageUrl" (change)="onPageUrlChange()">
+            <mat-hint>Enter a link to an article</mat-hint>
+          </mat-form-field>
+          <br>
+          <div>
+            <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
+              Continue
+              <mat-icon>arrow_forward</mat-icon>
+            </button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="brandFormGroup">
+        <form [formGroup]="brandFormGroup" class="create-link-form">
+          <ng-template matStepLabel>Brand</ng-template>
+
+          <h2>Setup your brand</h2>
+          <p>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</p>
+          <mat-form-field>
+            <input matInput placeholder="Name" formControlName="name">
+            <mat-hint>A nice attention grabbing header!</mat-hint>
+          </mat-form-field>
+          <br>
           <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
             Continue
             <mat-icon>arrow_forward</mat-icon>
           </button>
+        </form>
+      </mat-step>
+      <mat-step [stepControl]="ctaFormGroup">
+        <form [formGroup]="ctaFormGroup" class="create-link-form" (submit)="onCtaFormGroupSubmit()">
+          <ng-template matStepLabel>CTA</ng-template>
+
+          <h2>Setup your CTA</h2>
+          <p>Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.</p>
+          <mat-form-field>
+            <input matInput placeholder="Message" formControlName="message">
+            <mat-hint>A descriptive sentence for the Call To Action (CTA)</mat-hint>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <input matInput placeholder="Button Text" formControlName="buttonText">
+            <mat-hint>What will your button say?</mat-hint>
+          </mat-form-field>
+          <br>
+          <mat-form-field>
+            <input matInput placeholder="Button URL" formControlName="buttonUrl">
+            <mat-hint>Where will your button go?</mat-hint>
+          </mat-form-field>
+          <br>
+          <div>
+            <button mat-raised-button color="primary" class="continue-btn">
+              Continue
+              <mat-icon *ngIf="!isLoading">arrow_forward</mat-icon>
+              <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="isLoading"></mat-progress-spinner>
+            </button>
+            <h5>
+              {{ submitError }}
+            </h5>
+          </div>
+
+        </form>
+      </mat-step>
+      <mat-step>
+        <div class="create-link-form">
+          <ng-template matStepLabel>Share</ng-template>
+
+          <h2>Share this link!</h2>
+          <p>Anyone clicking on this link will see the page with your message inside.</p>
+
+          <mat-form-field>
+            <input matInput [(ngModel)]="shortPageUrl" readonly (click)="onShortUrlClick($event)" autofocus>
+          </mat-form-field>
+
+          <div *ngIf="!shortPageUrl">
+
+            <a mat-raised-button color="primary" class="visit-btn" [href]="shortPageUrl" target="_blank">
+              VISIT LINK
+              <mat-icon>open_in_new</mat-icon>
+            </a>
+
+            <share-button [button]="'copy'" [showText]="true" [size]="4" [url]="shortPageUrl"></share-button>
+
+            <share-buttons class="share-btns" [include]="['facebook','twitter','whatsapp','email','linkedin','pinterest','telegram','google']"
+                           [show]="8" [size]="4" [url]="shortPageUrl"></share-buttons>
+
+          </div>
+
         </div>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="brandFormGroup">
-      <form [formGroup]="brandFormGroup" class="create-link-form">
-        <ng-template matStepLabel>Brand</ng-template>
 
-        <h2>Setup your brand</h2>
-        <p>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</p>
-        <mat-form-field>
-          <input matInput placeholder="Name" formControlName="name">
-          <mat-hint>A nice attention grabbing header!</mat-hint>
-        </mat-form-field>
-        <br>
-        <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
-          Continue
-          <mat-icon>arrow_forward</mat-icon>
-        </button>
-      </form>
-    </mat-step>
-    <mat-step [stepControl]="ctaFormGroup">
-      <form [formGroup]="ctaFormGroup" class="create-link-form" (submit)="onCtaFormGroupSubmit()">
-        <ng-template matStepLabel>CTA</ng-template>
+      </mat-step>
+    </mat-horizontal-stepper>
 
-        <h2>Setup your CTA</h2>
-        <p>Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.</p>
-        <mat-form-field>
-          <input matInput placeholder="Message" formControlName="message">
-          <mat-hint>A descriptive sentence for the Call To Action (CTA)</mat-hint>
-        </mat-form-field>
-        <br>
-        <mat-form-field>
-          <input matInput placeholder="Button Text" formControlName="buttonText">
-          <mat-hint>What will your button say?</mat-hint>
-        </mat-form-field>
-        <br>
-        <mat-form-field>
-          <input matInput placeholder="Button URL" formControlName="buttonUrl">
-          <mat-hint>Where will your button go?</mat-hint>
-        </mat-form-field>
-        <br>
-        <div>
-          <button mat-raised-button color="primary" class="continue-btn">
-            Continue
-            <mat-icon *ngIf="!isLoading">arrow_forward</mat-icon>
-            <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="isLoading"></mat-progress-spinner>
-          </button>
-          <h5>
-            {{ submitError }}
-          </h5>
-        </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
 
-      </form>
-    </mat-step>
-    <mat-step>
-      <div class="create-link-form">
-        <ng-template matStepLabel>Share</ng-template>
-
-        <h2>Share this link!</h2>
-        <p>Anyone clicking on this link will see the page with your message inside.</p>
-
-        <mat-form-field>
-          <input matInput [(ngModel)]="shortPageUrl" readonly (click)="onShortUrlClick($event)" autofocus>
-        </mat-form-field>
-
-        <a mat-raised-button color="accent" class="continue-btn" [href]="shortPageUrl" target="_blank" *ngIf="shortPageUrl">
-          VISIT LINK
-          <mat-icon>open_in_new</mat-icon>
-        </a>
-        <br>
-      </div>
-
-    </mat-step>
-  </mat-horizontal-stepper>
-</div>
-
-  <div class="col link-preview">
-
+    <div class="link-preview hidden-on-mobile">
       <iframe class="overlay" *ngIf="pageUrl" [src]="pageUrl" scrolling="no" frameborder="0" sandbox="allow-scripts allow-same-origin"
               style="overflow: hidden;"></iframe>
 
       <sd-preview ></sd-preview>
-  </div>
+    </div>
 
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
-</div>

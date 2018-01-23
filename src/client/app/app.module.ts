@@ -9,6 +9,7 @@ import { AdminModule } from './admin/admin.module';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
+import {ShareModule as SocialShareModule} from "@ngx-share/core";
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     HomeModule,
     SharedModule.forRoot(),
+    SocialShareModule.forRoot()
   ],
   declarations: [AppComponent],
   providers: [
