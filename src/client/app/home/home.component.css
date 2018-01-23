@@ -38,15 +38,14 @@
 }
 
 .visit-btn {
-  margin-bottom: 60px;
-  width: 100%;
+  margin-bottom: 50px;
 }
 .share-btns {
   margin-top: 40px;
 }
 .continue-btn {
   margin-top: 40px;
-  width: 100%;
+  /*width: 100%;*/
 }
 .continue-btn mat-progress-spinner {
   display: inline-block;
@@ -82,9 +81,5 @@
 .create-link-form > mat-form-field {
   margin-top: 18px;
   width: 100%;
-  font-size: 18px;
-}
-
-.mat-step-label {
-  font-size: 12px;
+  font-size: 17px;
 }

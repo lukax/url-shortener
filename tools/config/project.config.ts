@@ -36,7 +36,7 @@ export class ProjectConfig extends SeedConfig {
       {src: '@angular/material/prebuilt-themes/indigo-pink.css', inject: true},
       {src: 'font-awesome/css/font-awesome.min.css', inject: true},
       {src: '@ngx-share/button/styles/share-buttons.css', inject: true},
-      {src: '@ngx-share/button/styles/themes/default/default-theme.css', inject: true},
+      {src: '@ngx-share/button/styles/themes/material/material-dark-theme.css', inject: true},
       /* Polyfill for unsupported browsers */
       //{src: 'web-animations-js/web-animations.min.js', inject: 'shims'},
       /* For some gestures */
