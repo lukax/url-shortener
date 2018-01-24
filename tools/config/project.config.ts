@@ -33,7 +33,7 @@ export class ProjectConfig extends SeedConfig {
       {src: 'auth0-js/build/auth0.min.js', inject: 'libs'},
 
       /* Select a pre-built Material theme */
-      {src: '@angular/material/prebuilt-themes/indigo-pink.css', inject: true},
+      {src: '@angular/material/prebuilt-themes/deeppurple-amber.css', inject: true},
       {src: 'font-awesome/css/font-awesome.min.css', inject: true},
       {src: '@ngx-share/button/styles/share-buttons.css', inject: true},
       {src: '@ngx-share/button/styles/themes/material/material-dark-theme.css', inject: true},

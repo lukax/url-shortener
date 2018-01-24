@@ -44,6 +44,7 @@
   float: left !important;
   width: 60% !important;
   max-width: 500px;
+  padding-right: 20px;
 }
 .cta-wrapper .details-wrapper h2 {
   font-weight: 600 !important;
@@ -62,7 +63,7 @@
   min-width: 80px;
 }
 .cta-wrapper .blue-cta-button {
-  width: 38%;
+  width: 37%;
   background-color: #80317f !important;
   /*letter-spacing: 0.1em !important;*/
   border-radius: 2px !important;

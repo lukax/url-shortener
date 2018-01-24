@@ -40,9 +40,17 @@
 .visit-btn {
   margin-bottom: 50px;
 }
-.share-btns {
+
+
+.share-btns share-button {
+  margin-left: -1px;
+  margin-top: -15px;
+}
+.share-btns share-buttons {
+  margin-left: -1px;
   margin-top: 40px;
 }
+
 .continue-btn {
   margin-top: 40px;
   /*width: 100%;*/
