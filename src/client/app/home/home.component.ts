@@ -26,8 +26,9 @@ export class HomeComponent implements OnInit {
   shortPageUrl: string;
   shortUrlPrefix = 'http://localhost:3000/';
   isLoading = false;
-  @ViewChild('formStepper') formStepper: MatStepper;
   submitError: string;
+
+  @ViewChild('formStepper') formStepper: MatStepper;
 
   private profile: UserProfile;
   private readonly URL_REGEXP = new RegExp(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/);
@@ -70,6 +71,16 @@ export class HomeComponent implements OnInit {
     $($event.srcElement).select();
   }
 
+  getLink(): LinkCreateDto {
+    const link = new LinkCreateDto();
+    link.name = this.brandFormGroup.value.name;
+    link.message = this.ctaFormGroup.value.message;
+    link.buttonText = this.ctaFormGroup.value.buttonText;
+    link.buttonUrl = this._linkenizer(this.ctaFormGroup.value.buttonUrl);
+    link.pageUrl = this._linkenizer(this.linkFormGroup.value.pageUrl);
+    return link;
+  }
+
   private _sanitizeUrl(url: string) {
     if (this.URL_REGEXP.test(url)) {
       return this._sanitization.bypassSecurityTrustResourceUrl(this._linkenizer(this.linkFormGroup.value.pageUrl));
@@ -95,14 +106,7 @@ export class HomeComponent implements OnInit {
     const headers = new Headers();
     headers.set('Content-Type', 'application/json');
 
-    const link = new LinkCreateDto();
-    link.name = this.brandFormGroup.value.name;
-    link.message = this.ctaFormGroup.value.message;
-    link.buttonText = this.ctaFormGroup.value.buttonText;
-    link.buttonUrl = this._linkenizer(this.ctaFormGroup.value.buttonUrl);
-    link.pageUrl = this._linkenizer(this.linkFormGroup.value.pageUrl);
-
-    const result = await this._http.post('/api/links', JSON.stringify(link),
+    const result = await this._http.post('/api/links', JSON.stringify(this.getLink()),
       { headers: headers })
       .map(res => res.json())
       .toPromise();

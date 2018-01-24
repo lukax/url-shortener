@@ -77,7 +77,7 @@
             <input matInput [(ngModel)]="shortPageUrl" readonly (click)="onShortUrlClick($event)" autofocus>
           </mat-form-field>
 
-          <div *ngIf="!shortPageUrl">
+          <div>
 
             <!--<a mat-raised-button color="primary" class="visit-btn" [href]="shortPageUrl" target="_blank">-->
               <!--VISIT LINK-->
@@ -105,6 +105,8 @@
 
       <sd-preview></sd-preview>
     </div>
+
+    <sd-cta-std-button [cta]="getLink()"></sd-cta-std-button>
 
   </mat-sidenav-content>
 </mat-sidenav-container>

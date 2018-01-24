@@ -39,6 +39,4 @@ export class ApiLinksController {
       return await this.links.update(model, hash);
     }
 
-
-
 }
