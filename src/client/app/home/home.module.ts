@@ -1,10 +1,12 @@
-import { NgModule } from '@angular/core';
-import { HomeComponent } from './home.component';
+import {NgModule, Optional, SkipSelf} from '@angular/core';
+import { CreateLinkComponent } from './components/link-create/link-create.component';
 import { HomeRoutingModule } from './home-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import {PreviewComponent} from "./preview/preview.component";
+import {LinkPreviewComponent} from "./components/link-preview/link-preview.component";
 import {ShareButtonsModule} from "@ngx-share/buttons";
-import {CtaStdButtonComponent} from "./cta-std-button/cta-std-button.component";
+import {CtaStdButtonComponent} from "./components/cta-std-button/cta-std-button.component";
+import {SAMPLE_PROVIDERS} from "./services";
+import {SampleModule} from "../ngrx/ngrx.module";
 
 @NgModule({
   imports: [
@@ -14,15 +16,24 @@ import {CtaStdButtonComponent} from "./cta-std-button/cta-std-button.component";
     ShareButtonsModule
   ],
   declarations: [
-    HomeComponent,
-    PreviewComponent,
+    CreateLinkComponent,
+    LinkPreviewComponent,
     CtaStdButtonComponent,
+  ],
+  providers: [
+    ...SAMPLE_PROVIDERS
   ],
   exports: [
-    HomeComponent,
-    PreviewComponent,
+    CreateLinkComponent,
+    LinkPreviewComponent,
     CtaStdButtonComponent,
   ],
-  providers: []
 })
-export class HomeModule { }
+export class HomeModule {
+
+  constructor(@Optional() @SkipSelf() parentModule: SampleModule) {
+    if (parentModule) {
+      throw new Error('HomeModule already loaded; Import in root module only.');
+    }
+  }
+}

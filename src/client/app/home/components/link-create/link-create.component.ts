@@ -1,8 +1,8 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AuthService, UserProfile} from "../auth/auth.service";
+import {AuthService, UserProfile} from "../../../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {LinkCreatedDto, LinkCreateDto} from "../core/LinkDto";
+import {LinkCreatedDto, LinkCreateDto} from "../../../core/entities";
 import {AuthHttp} from "angular2-jwt";
 import {Headers, Http} from '@angular/http';
 import * as $ from 'jquery';
@@ -13,11 +13,11 @@ import {MatStepper} from "@angular/material";
  */
 @Component({
   moduleId: module.id,
-  selector: 'sd-home',
-  templateUrl: 'home.component.html',
-  styleUrls: ['home.component.css'],
+  selector: 'sd-link-create',
+  templateUrl: 'link-create.component.html',
+  styleUrls: ['link-create.component.css'],
 })
-export class HomeComponent implements OnInit {
+export class CreateLinkComponent implements OnInit {
 
   brandFormGroup: FormGroup;
   ctaFormGroup: FormGroup;
@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit {
       //if (this._auth.isAuthenticated()) {
         this.isLoading = true;
         try {
+          this._auth.login();
           await this._createLinkInternal();
           this.formStepper.next();
         } catch(e) {
