@@ -1,1 +1,1 @@
-export * from './name-list.action';
+export * from './link-create.action';

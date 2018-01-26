@@ -1,14 +1,15 @@
 import { Action } from '@ngrx/store';
 import { type } from '../../core/index';
+import {CreateLinkDto} from "../../../../../dist/tmp/app/core/LinkDto";
 
 /**
  * Each action should be namespaced
  * this allows the interior to have similar typed names as other actions
  * however still allow index exports
  */
-export namespace NameList {
+export namespace LinkCreate {
   // Category to uniquely identify the actions
-  export const CATEGORY: string = 'NameList';
+  export const CATEGORY: string = 'LinkCreate';
 
   /**
    * For each action type in an action group, make a simple
@@ -49,7 +50,7 @@ export namespace NameList {
   export class InitializedAction implements Action {
     type = ActionTypes.INITIALIZED;
 
-    constructor(public payload: Array<string>) { }
+    constructor(public currentCreateLink: CreateLinkDto) { }
   }
 
   export class InitFailedAction implements Action {

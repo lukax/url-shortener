@@ -147,6 +147,59 @@ export class ProjectConfig extends SeedConfig {
       {
         name: '@angular/cdk/table',
         path: 'node_modules/@angular/cdk/bundles/cdk-table.umd.js'
+      },
+
+      {
+        name: 'lodash',
+        path: 'node_modules/lodash/lodash.js',
+        packageMeta: {
+          main: 'index.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: '@ngrx/core',
+        path: 'node_modules/@ngrx/core/bundles/core.umd.js'
+      },
+      {
+        name: '@ngrx/store',
+        path: 'node_modules/@ngrx/store/bundles/store.umd.js'
+      },
+      {
+        name: '@ngrx/effects',
+        path: 'node_modules/@ngrx/effects/bundles/effects.umd.js'
+      },
+      {
+        name: '@ngrx/effects/testing',
+        path: 'node_modules/@ngrx/effects/testing/index.js'
+      },
+      {
+        name: '@ngrx/store-devtools',
+        path: 'node_modules/@ngrx/store-devtools/bundles/store-devtools.umd.js'
+      },
+      {
+        name: '@ngx-translate/core',
+        path: 'node_modules/@ngrx/store-devtools/bundles/store-devtools.umd.js'
+      },
+      {
+        name: '@ngx-translate/http-loader',
+        path: 'node_modules/@ngx-translate/store-devtools/bundles/store-devtools.umd.js'
+      },
+      {
+        name: 'angulartics2',
+        path: 'node_modules/angulartics2/bundles/core.umd.js'
+      },
+      {
+        name: 'ngrx-store-freeze',
+        path: 'node_modules/ngrx-store-freeze/dist/index.js'
+      },
+      {
+        name: 'ngrx-store-localstorage',
+        path: 'node_modules/ngrx-store-localstorage/dist/index.js'
+      },
+      {
+        name: 'deep-freeze-strict',
+        path: 'node_modules/deep-freeze-strict/index.js'
       }
     ];
 

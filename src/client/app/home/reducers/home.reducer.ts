@@ -1,20 +1,20 @@
 import { IHomeState, sampleInitialState } from '../states/index';
-import { NameList } from '../actions/index';
+import { LinkCreate } from '../actions/index';
 
 export function reducer(
   state: IHomeState = sampleInitialState,
   // could support multiple state actions via union type here
   // ie: NameList.Actions | Other.Actions
   // the seed's example just has one set of actions: NameList.Actions
-  action: NameList.Actions
+  action: LinkCreate.Actions
 ): IHomeState {
   switch (action.type) {
-    case NameList.ActionTypes.INITIALIZED:
+    case LinkCreate.ActionTypes.INITIALIZED:
       return (<any>Object).assign({}, state, {
         names: action.payload
       });
 
-    case NameList.ActionTypes.NAME_ADDED:
+    case LinkCreate.ActionTypes.NAME_ADDED:
       return (<any>Object).assign({}, state, {
         names: [...state.names, action.payload]
       });

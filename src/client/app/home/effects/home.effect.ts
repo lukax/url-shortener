@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 
 // module
 import { LinkService } from '../services/link.service';
-import { NameList } from '../actions/index';
+import { LinkCreate } from '../actions/index';
 
 @Injectable()
 export class HomeEffects {
@@ -18,23 +18,22 @@ export class HomeEffects {
    * the effect immediately on startup.
    */
   @Effect() init$: Observable<Action> = this.actions$
-    .ofType(NameList.ActionTypes.INIT)
-    .startWith(new NameList.InitAction)
-    .switchMap(() => this.nameListService.getNames())
+    .ofType(LinkCreate.ActionTypes.INIT)
+    .startWith(new LinkCreate.InitAction)
+    .switchMap(() => this.nameListService.getCurrentCreateLink())
     .map(payload => {
-      let names = payload;
-      return new NameList.InitializedAction(names);
+      return new LinkCreate.InitializedAction(payload);
     })
     // nothing reacting to failure at moment but you could if you want (here for example)
-    .catch(() => Observable.of(new NameList.InitFailedAction()));
+    .catch(() => Observable.of(new LinkCreate.InitFailedAction()));
 
   @Effect() add$: Observable<Action> = this.actions$
-    .ofType(NameList.ActionTypes.ADD)
+    .ofType(LinkCreate.ActionTypes.ADD)
     .map(action => {
       let name = action.payload;
       // analytics
-      this.nameListService.track(NameList.ActionTypes.NAME_ADDED, { label: name });
-      return new NameList.NameAddedAction(name);
+      this.nameListService.track(LinkCreate.ActionTypes.NAME_ADDED, { label: name });
+      return new LinkCreate.NameAddedAction(name);
     });
 
   constructor(

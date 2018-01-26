@@ -8,19 +8,24 @@ import { Observable } from 'rxjs/Observable';
 // app
 
 // module
-import { NameList } from '../actions/index';
+import { LinkCreate } from '../actions/index';
+import {CreateLinkDto} from "../../../../../dist/tmp/app/core/LinkDto";
+import "rxjs/add/observable/of";
+import {Analytics, AnalyticsService} from "../../modules/analytics/services";
 
 @Injectable()
-export class LinkService {
+export class LinkService extends Analytics {
 
   constructor(
+    public analytics: AnalyticsService,
     private http: Http
   ) {
-    //this.category = NameList.CATEGORY;
+    super(analytics);
+    this.category = LinkCreate.CATEGORY;
   }
 
-  // getNames(): Observable<Array<string>> {
-  //   return this.http.get(`${Config.IS_MOBILE_NATIVE() ? '/' : ''}assets/data.json`)
-  //     .map(res => res.json());
-  // }
+  getCurrentCreateLink(): Observable<CreateLinkDto> {
+    return Observable.of(new CreateLinkDto())
+  }
+
 }
