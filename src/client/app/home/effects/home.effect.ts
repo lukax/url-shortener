@@ -1,12 +1,7 @@
-// angular
 import { Injectable } from '@angular/core';
-
-// libs
-import { Store, Action } from '@ngrx/store';
+import {Action, Store} from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
-
-// module
 import { LinkService } from '../services/link.service';
 import { LinkCreate } from '../actions/index';
 
@@ -27,14 +22,14 @@ export class HomeEffects {
     // nothing reacting to failure at moment but you could if you want (here for example)
     .catch(() => Observable.of(new LinkCreate.InitFailedAction()));
 
-  @Effect() add$: Observable<Action> = this.actions$
-    .ofType(LinkCreate.ActionTypes.ADD)
-    .map(action => {
-      let name = action.payload;
-      // analytics
-      this.nameListService.track(LinkCreate.ActionTypes.NAME_ADDED, { label: name });
-      return new LinkCreate.NameAddedAction(name);
-    });
+  // @Effect() add$: Observable<LinkCreate.Actions> = this.actions$
+  //   .ofType(LinkCreate.ActionTypes.ADD)
+  //   .map(action => {
+  //     let name = action.payload;
+  //     // analytics
+  //     this.nameListService.track(LinkCreate.ActionTypes.NAME_ADDED, { label: name });
+  //     return new LinkCreate.NameAddedAction(name);
+  //   });
 
   constructor(
     private store: Store<any>,

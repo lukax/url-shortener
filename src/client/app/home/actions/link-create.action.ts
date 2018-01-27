@@ -1,6 +1,5 @@
 import { Action } from '@ngrx/store';
-import { type } from '../../core/index';
-import {CreateLinkDto} from "../../../../../dist/tmp/app/core/LinkDto";
+import {LinkCreateDto, type} from '../../core/index';
 
 /**
  * Each action should be namespaced
@@ -19,7 +18,7 @@ export namespace LinkCreate {
    * literal types and runs a simple check to guarantee all
    * action types in the application are unique.
    */
-  export interface INameListActions {
+  export interface IHomeActions {
     INIT: string;
     INITIALIZED: string;
     INIT_FAILED: string;
@@ -27,7 +26,7 @@ export namespace LinkCreate {
     NAME_ADDED: string;
   }
 
-  export const ActionTypes: INameListActions = {
+  export const ActionTypes: IHomeActions = {
     INIT: type(`${CATEGORY} Init`),
     INITIALIZED: type(`${CATEGORY} Initialized`),
     INIT_FAILED: type(`${CATEGORY} Init Failed`),
@@ -50,7 +49,7 @@ export namespace LinkCreate {
   export class InitializedAction implements Action {
     type = ActionTypes.INITIALIZED;
 
-    constructor(public currentCreateLink: CreateLinkDto) { }
+    constructor(public currentCreateLink: LinkCreateDto) { }
   }
 
   export class InitFailedAction implements Action {

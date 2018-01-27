@@ -5,8 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import {LinkPreviewComponent} from "./components/link-preview/link-preview.component";
 import {ShareButtonsModule} from "@ngx-share/buttons";
 import {CtaStdButtonComponent} from "./components/cta-std-button/cta-std-button.component";
-import {SAMPLE_PROVIDERS} from "./services";
-import {SampleModule} from "../ngrx/ngrx.module";
+import {SAMPLE_PROVIDERS} from "./services/index";
 
 @NgModule({
   imports: [
@@ -31,7 +30,7 @@ import {SampleModule} from "../ngrx/ngrx.module";
 })
 export class HomeModule {
 
-  constructor(@Optional() @SkipSelf() parentModule: SampleModule) {
+  constructor(@Optional() @SkipSelf() parentModule: HomeModule) {
     if (parentModule) {
       throw new Error('HomeModule already loaded; Import in root module only.');
     }

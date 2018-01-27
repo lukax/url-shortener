@@ -151,15 +151,7 @@ export class ProjectConfig extends SeedConfig {
 
       {
         name: 'lodash',
-        path: 'node_modules/lodash/lodash.js',
-        packageMeta: {
-          main: 'index.js',
-          defaultExtension: 'js'
-        }
-      },
-      {
-        name: '@ngrx/core',
-        path: 'node_modules/@ngrx/core/bundles/core.umd.js'
+        path: 'node_modules/lodash/lodash.js'
       },
       {
         name: '@ngrx/store',
@@ -168,6 +160,10 @@ export class ProjectConfig extends SeedConfig {
       {
         name: '@ngrx/effects',
         path: 'node_modules/@ngrx/effects/bundles/effects.umd.js'
+      },
+      {
+        name: '@ngrx/db',
+        path: 'node_modules/@ngrx/db/bundles/db.umd.js'
       },
       {
         name: '@ngrx/effects/testing',
@@ -187,19 +183,23 @@ export class ProjectConfig extends SeedConfig {
       },
       {
         name: 'angulartics2',
-        path: 'node_modules/angulartics2/bundles/core.umd.js'
+        path: 'node_modules/angulartics2/bundles',
+        packageMeta: {
+          main: 'core.umd.js',
+          defaultExtension: 'umd.js'
+        }
       },
       {
         name: 'ngrx-store-freeze',
-        path: 'node_modules/ngrx-store-freeze/dist/index.js'
-      },
-      {
-        name: 'ngrx-store-localstorage',
-        path: 'node_modules/ngrx-store-localstorage/dist/index.js'
+        path: 'node_modules/ngrx-store-freeze/bundles/ngrx-store-freeze.umd.js'
       },
       {
         name: 'deep-freeze-strict',
-        path: 'node_modules/deep-freeze-strict/index.js'
+        path: 'node_modules/deep-freeze-strict',
+        packageMeta: {
+          main: 'index.js',
+          defaultExtension: 'js'
+        }
       }
     ];
 

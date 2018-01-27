@@ -9,9 +9,9 @@ import { Observable } from 'rxjs/Observable';
 
 // module
 import { LinkCreate } from '../actions/index';
-import {CreateLinkDto} from "../../../../../dist/tmp/app/core/LinkDto";
 import "rxjs/add/observable/of";
-import {Analytics, AnalyticsService} from "../../modules/analytics/services";
+import {Analytics, AnalyticsService} from "../../modules/analytics/services/index";
+import {LinkCreateDto} from "../../core/index";
 
 @Injectable()
 export class LinkService extends Analytics {
@@ -24,8 +24,8 @@ export class LinkService extends Analytics {
     this.category = LinkCreate.CATEGORY;
   }
 
-  getCurrentCreateLink(): Observable<CreateLinkDto> {
-    return Observable.of(new CreateLinkDto())
+  getCurrentCreateLink(): Observable<LinkCreateDto> {
+    return Observable.of(new LinkCreateDto())
   }
 
 }
