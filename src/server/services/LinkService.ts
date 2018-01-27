@@ -4,7 +4,7 @@ import { LinkRepository } from "../repository/LinkRepository";
 import { Link } from "../model/Link";
 import {randomBytes} from "crypto";
 import axios from "axios";
-import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../dtos/LinkCreateDto";
+import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../dtos/CreateLinkDto";
 import {ObjectID} from "typeorm";
 
 @Service()
@@ -30,10 +30,10 @@ export class LinkService {
 
     public async create(model: CreateLinkDto): Promise<CreateLinkResultDto> {
 
-      if(await this._isUrlInvalid(model.pageUrl)) {
+      if(await this.isUrlInvalid(model.pageUrl)) {
         throw new Error(`Page URL does not contain a valid HTML page :(`);
       }
-      if(await this._isUrlInvalid(model.buttonUrl)) {
+      if(await this.isUrlInvalid(model.buttonUrl)) {
         throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
 
@@ -56,10 +56,10 @@ export class LinkService {
 
     public async update(model: CreateLinkDto, hash: string): Promise<boolean> {
 
-      if(await this._isUrlInvalid(model.pageUrl)) {
+      if(await this.isUrlInvalid(model.pageUrl)) {
         throw new Error(`Page URL does not contain a valid HTML page :(`);
       }
-      if(await this._isUrlInvalid(model.buttonUrl)) {
+      if(await this.isUrlInvalid(model.buttonUrl)) {
         throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
 
@@ -79,11 +79,7 @@ export class LinkService {
       return result != null;
     }
 
-    private _createUrlHash(link: Link): string {
-      return randomBytes(3).toString('hex').substring(0, 5);
-    }
-
-    private async _isUrlInvalid(url: string): Promise<boolean> {
+    async isUrlInvalid(url: string): Promise<boolean> {
       try {
         const res = await axios.head(url, {timeout: 5000 });
 
@@ -94,6 +90,10 @@ export class LinkService {
         console.log(e.message);
         return false;
       }
+    }
+
+    private _createUrlHash(link: Link): string {
+      return randomBytes(3).toString('hex').substring(0, 5);
     }
 
 }

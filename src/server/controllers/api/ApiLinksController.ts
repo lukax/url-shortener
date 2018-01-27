@@ -2,7 +2,8 @@ import {JsonController, Get, Post, Body, NotFoundError, UseBefore, Put, Param} f
 import { Inject, Service } from "typedi";
 import { LinkService } from "../../services/LinkService";
 import { log } from "util";
-import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../../dtos/LinkCreateDto";
+import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../../dtos/CreateLinkDto";
+import {VerifyUrlDto, VerifyUrlResultDto} from "../../dtos/VerifyUrlDto";
 
 
 @Service()
@@ -37,6 +38,18 @@ export class ApiLinksController {
       }
 
       return await this.links.update(model, hash);
+    }
+
+    @Post('/verify/url')
+    async verifyUrl(@Body() model: VerifyUrlDto): Promise<VerifyUrlResultDto> {
+
+      log("verify url - " + JSON.stringify(model));
+
+      const isInvalid = await this.links.isUrlInvalid(model.url);
+      return <VerifyUrlResultDto>{
+        isInvalid: isInvalid,
+        message: 'Url not supported'
+      };
     }
 
 }

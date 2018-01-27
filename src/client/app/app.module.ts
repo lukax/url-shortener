@@ -3,21 +3,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
-
+import { routes} from './app.routes';
 import { AdminModule } from './admin/admin.module';
 import { HomeModule } from './home/home.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import {ShareModule as SocialShareModule} from "@ngx-share/core";
 import {StoreModule} from "@ngrx/store";
-import {EffectsModule} from "@ngrx/effects";
-import {metaReducers, reducers, schema} from "./ngrx/index";
-import {HomeEffects} from "./home/effects/index";
 import {StoreDevtoolsModule} from "@ngrx/store-devtools";
 import {AnalyticsModule} from "./modules/analytics/index";
 import {RouterModule} from "@angular/router";
 import {DBModule} from "@ngrx/db";
+import {RouterStateSerializer, StoreRouterConnectingModule} from "@ngrx/router-store";
+import {reducers, schema} from "./app.reducer";
+import {EffectsModule} from "@ngrx/effects";
+import {CustomRouterStateSerializer} from "./shared/utils";
 
 let DEV_IMPORTS: any[] = [];
 
@@ -33,9 +33,7 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
      *
      * See: https://github.com/zalmoxisus/redux-devtools-extension
      */
-    StoreDevtoolsModule.instrument({
-      name: 'jeit.in',
-    }),
+    StoreDevtoolsModule.instrument({ name: 'jeit.in', maxAge: 25 })
   ];
 }
 
@@ -43,55 +41,28 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
   imports: [
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule,
-    AdminModule,
-    AuthModule,
-    HomeModule,
     SharedModule.forRoot(),
     SocialShareModule.forRoot(),
     AnalyticsModule,
 
-    /**
-     * StoreModule.forRoot is imported once in the root module, accepting a reducer
-     * function or object map of reducer functions. If passed an object of
-     * reducers, combineReducers will be run creating your application
-     * meta-reducer. This returns all providers for an @ngrx/store
-     * based application.
-     */
-    StoreModule.forRoot(reducers, { metaReducers }),
-    /**
-     * EffectsModule.forRoot() is imported once in the root module and
-     * sets up the effects class to be initialized immediately when the
-     * application starts.
-     *
-     * See: https://github.com/ngrx/platform/blob/master/docs/effects/api.md#forroot
-     */
-    EffectsModule.forRoot([HomeEffects]),
-    /**
-     * `provideDB` sets up @ngrx/db with the provided schema and makes the Database
-     * service available.
-     */
+    RouterModule.forRoot(routes),
+    StoreModule.forRoot(reducers),
+    StoreRouterConnectingModule,
+    EffectsModule.forRoot([]),
+    ...DEV_IMPORTS,
     DBModule.provideDB(schema),
-    /**
-     * @ngrx/router-store keeps router state up-to-date in the store.
-     */
-    // StoreRouterConnectingModule.forRoot({
-    //   /*
-    //     They stateKey defines the name of the state used by the router-store reducer.
-    //     This matches the key defined in the map of reducers
-    //   */
-    //   stateKey: 'router',
-    // }),
 
-
-    ...DEV_IMPORTS
+    AdminModule,
+    AuthModule,
+    HomeModule,
   ],
   declarations: [AppComponent],
   providers: [
     {
       provide: APP_BASE_HREF,
       useValue: '<%= APP_BASE %>'
-    }
+    },
+    { provide: RouterStateSerializer, useClass: CustomRouterStateSerializer },
   ],
   bootstrap: [AppComponent]
 

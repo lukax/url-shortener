@@ -13,7 +13,7 @@
 }
 .example-container {
   height: 94vh;
-  max-height: 800px;
+  /*max-height: 800px;*/
 }
 
 .flex-grid {

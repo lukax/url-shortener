@@ -59,5 +59,4 @@ export class ViewLinkDto {
     return ObjectID.createFromHexString(this._id);
   }
 
-
 }

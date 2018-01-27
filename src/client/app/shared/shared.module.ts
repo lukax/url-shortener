@@ -4,100 +4,22 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ToolbarComponent } from './toolbar/toolbar.component';
+import {MaterialModule} from "../material/material.module";
 
-import {
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-  MatStepperModule,
-} from '@angular/material';
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-
-/**
- * Do not specify providers for modules that might be imported by a lazy loaded module.
- */
-
-const MATERIAL_COMPONENTS = [
-  BrowserAnimationsModule,
-  MatAutocompleteModule,
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatChipsModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatExpansionModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressBarModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatRippleModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatSliderModule,
-  MatSlideToggleModule,
-  MatSnackBarModule,
-  MatSortModule,
-  MatTableModule,
-  MatTabsModule,
-  MatToolbarModule,
-  MatTooltipModule,
-  MatStepperModule,
-];
 
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule,
-
-    FormsModule,
-    ReactiveFormsModule,
-
-    ...MATERIAL_COMPONENTS,
+    MaterialModule,
   ],
   declarations: [ToolbarComponent],
   exports: [
     ToolbarComponent,
     CommonModule,
+    MaterialModule,
 
     FormsModule,
     ReactiveFormsModule,
-
-    ...MATERIAL_COMPONENTS,
   ],
 })
 export class SharedModule {

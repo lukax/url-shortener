@@ -166,6 +166,10 @@ export class ProjectConfig extends SeedConfig {
         path: 'node_modules/@ngrx/db/bundles/db.umd.js'
       },
       {
+        name: '@ngrx/router-store',
+        path: 'node_modules/@ngrx/router-store/bundles/router-store.umd.js'
+      },
+      {
         name: '@ngrx/effects/testing',
         path: 'node_modules/@ngrx/effects/testing/index.js'
       },
@@ -200,7 +204,15 @@ export class ProjectConfig extends SeedConfig {
           main: 'index.js',
           defaultExtension: 'js'
         }
-      }
+      },
+      {
+        name: 'ngrx-forms',
+        path: 'node_modules/ngrx-forms/bundles/forms.umd.js'
+      },
+      {
+        name: 'ngrx-forms/validation',
+        path: 'node_modules/ngrx-forms/bundles/forms-validation.umd.js'
+      },
     ];
 
     this.addPackagesBundles(additionalPackages);

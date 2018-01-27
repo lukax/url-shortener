@@ -1,6 +1,6 @@
 import { LinkService } from './link.service';
 
-export const SAMPLE_PROVIDERS: any[] = [
+export const SERVICE_PROVIDERS: any[] = [
   LinkService
 ];
 

@@ -1,18 +1,29 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
-import { CreateLinkComponent } from './components/link-create/link-create.component';
-import { HomeRoutingModule } from './home-routing.module';
+import { CreateLinkComponent } from './link-create/link-create.component';
 import { SharedModule } from '../shared/shared.module';
-import {LinkPreviewComponent} from "./components/link-preview/link-preview.component";
+import {LinkPreviewComponent} from "./link-preview/link-preview.component";
 import {ShareButtonsModule} from "@ngx-share/buttons";
-import {CtaStdButtonComponent} from "./components/cta-std-button/cta-std-button.component";
-import {SAMPLE_PROVIDERS} from "./services/index";
+import {CtaStdButtonComponent} from "./cta-std-button/cta-std-button.component";
+import {SERVICE_PROVIDERS} from "./services/index";
+import {NgrxFormsModule} from "ngrx-forms";
+import {RouterModule} from "@angular/router";
+import {StoreModule} from "@ngrx/store";
+import {reducer} from "./link-create/link-create.reducer";
+import {EffectsModule} from "@ngrx/effects";
+import {HomeEffects} from "./link-create/link-create.effects";
 
 @NgModule({
   imports: [
-    HomeRoutingModule,
     SharedModule,
+    ShareButtonsModule,
+    NgrxFormsModule,
+    RouterModule.forChild([
+      { path: '', component: CreateLinkComponent }
+    ]),
 
-    ShareButtonsModule
+    StoreModule.forFeature('linkCreate', reducer),
+    EffectsModule.forFeature([HomeEffects]),
+
   ],
   declarations: [
     CreateLinkComponent,
@@ -20,7 +31,7 @@ import {SAMPLE_PROVIDERS} from "./services/index";
     CtaStdButtonComponent,
   ],
   providers: [
-    ...SAMPLE_PROVIDERS
+    ...SERVICE_PROVIDERS
   ],
   exports: [
     CreateLinkComponent,

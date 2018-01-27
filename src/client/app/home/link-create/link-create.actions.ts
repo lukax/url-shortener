@@ -1,5 +1,6 @@
 import { Action } from '@ngrx/store';
-import {LinkCreateDto, type} from '../../core/index';
+import {CreateLinkDto, CreateLinkResultDto} from "../../shared/entities";
+import {type} from "../../shared/type";
 
 /**
  * Each action should be namespaced
@@ -8,7 +9,7 @@ import {LinkCreateDto, type} from '../../core/index';
  */
 export namespace LinkCreate {
   // Category to uniquely identify the actions
-  export const CATEGORY: string = 'LinkCreate';
+  export const CATEGORY = 'LinkCreate';
 
   /**
    * For each action type in an action group, make a simple
@@ -24,12 +25,15 @@ export namespace LinkCreate {
     INIT_FAILED: string;
 
     CHOOSE_PAGE_LINK: string;
-    CHOOSE_PAGE_LINK_SUCCESS: string;
 
     SETUP_BRAND: string;
     SETUP_CTA: string;
     SETUP_CTA_SUCCESS: string;
+    SETUP_CTA_FAILED: string;
 
+    SET_PAGE_URL_PREVIEW: string;
+
+    GOTO_SECTION: string;
   }
 
   export const ActionTypes: IHomeActions = {
@@ -38,10 +42,16 @@ export namespace LinkCreate {
     INIT_FAILED: type(`${CATEGORY} Init Failed`),
 
     CHOOSE_PAGE_LINK: type(`${CATEGORY} Choose page link`),
-    CHOOSE_PAGE_LINK_SUCCESS: type(`${CATEGORY} Choose page link`),
+
     SETUP_BRAND: type(`${CATEGORY} Setup brand`),
+
     SETUP_CTA: type(`${CATEGORY} Setup CTA`),
     SETUP_CTA_SUCCESS: type(`${CATEGORY} Setup CTA success`),
+    SETUP_CTA_FAILED: type(`${CATEGORY} Setup CTA fail`),
+
+    SET_PAGE_URL_PREVIEW: type(`${CATEGORY} Set page url preview`),
+
+    GOTO_SECTION: type(`${CATEGORY} Goto section`),
   };
 
   /**
@@ -58,7 +68,7 @@ export namespace LinkCreate {
 
   export class InitializedAction implements Action {
     type = ActionTypes.INITIALIZED;
-    constructor(public payload: LinkCreateDto) { }
+    constructor(public payload: CreateLinkDto) { }
   }
 
   export class InitFailedAction implements Action {
@@ -68,38 +78,55 @@ export namespace LinkCreate {
 
   export class ChoosePageLinkAction implements Action {
     type = ActionTypes.CHOOSE_PAGE_LINK;
-    constructor(public payload: LinkCreateDto) { }
-  }
-
-  export class ChoosePageLinkSuccessAction implements Action {
-    type = ActionTypes.CHOOSE_PAGE_LINK_SUCCESS;
-    constructor(public payload: LinkCreateDto) { }
+    constructor(public payload: CreateLinkDto) { }
   }
 
   export class SetupBrandAction implements Action {
     type = ActionTypes.SETUP_BRAND;
-    constructor(public payload: LinkCreateDto) { }
+    constructor(public payload: CreateLinkDto) { }
   }
 
   export class SetupCtaAction implements Action {
     type = ActionTypes.SETUP_CTA;
-    constructor(public payload: LinkCreateDto) { }
+    constructor(public payload: CreateLinkDto) { }
   }
 
   export class SetupCtaSuccessAction implements Action {
     type = ActionTypes.SETUP_CTA_SUCCESS;
-    constructor(public payload: LinkCreateDto) { }
+    constructor(public payload: CreateLinkResultDto) { }
+  }
+
+  export class SetupCtaFailedAction implements Action {
+    type = ActionTypes.SETUP_CTA_FAILED;
+    constructor(public payload: string) { }
+  }
+
+  export class SetPageUrlPreviewAction implements Action {
+    type = ActionTypes.SET_PAGE_URL_PREVIEW;
+    constructor(public payload: CreateLinkDto) { }
+  }
+
+  export class GotoSectionAction implements Action {
+    type = ActionTypes.GOTO_SECTION;
+    constructor(public payload: 'choose-link' | 'setup-brand' | 'setup-cta' | 'share-link') { }
   }
 
   /**
    * Export a type alias of all actions in this action group
    * so that reducers can easily compose action types
    */
+  // interface ActionWithPayload extends Action {
+  //   type: string;
+  //   payload: any;
+  // }
+
   export type Actions
     = InitAction
     | InitializedAction
     | InitFailedAction
     | ChoosePageLinkAction
     | SetupBrandAction
-    | SetupCtaAction;
+    | SetupCtaAction
+    | SetupCtaSuccessAction
+    | SetPageUrlPreviewAction;
 }
