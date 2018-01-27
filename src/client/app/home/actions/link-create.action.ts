@@ -22,16 +22,26 @@ export namespace LinkCreate {
     INIT: string;
     INITIALIZED: string;
     INIT_FAILED: string;
-    ADD: string;
-    NAME_ADDED: string;
+
+    CHOOSE_PAGE_LINK: string;
+    CHOOSE_PAGE_LINK_SUCCESS: string;
+
+    SETUP_BRAND: string;
+    SETUP_CTA: string;
+    SETUP_CTA_SUCCESS: string;
+
   }
 
   export const ActionTypes: IHomeActions = {
     INIT: type(`${CATEGORY} Init`),
     INITIALIZED: type(`${CATEGORY} Initialized`),
     INIT_FAILED: type(`${CATEGORY} Init Failed`),
-    ADD: type(`${CATEGORY} Add`),
-    NAME_ADDED: type(`${CATEGORY} Name Added`)
+
+    CHOOSE_PAGE_LINK: type(`${CATEGORY} Choose page link`),
+    CHOOSE_PAGE_LINK_SUCCESS: type(`${CATEGORY} Choose page link`),
+    SETUP_BRAND: type(`${CATEGORY} Setup brand`),
+    SETUP_CTA: type(`${CATEGORY} Setup CTA`),
+    SETUP_CTA_SUCCESS: type(`${CATEGORY} Setup CTA success`),
   };
 
   /**
@@ -48,8 +58,7 @@ export namespace LinkCreate {
 
   export class InitializedAction implements Action {
     type = ActionTypes.INITIALIZED;
-
-    constructor(public currentCreateLink: LinkCreateDto) { }
+    constructor(public payload: LinkCreateDto) { }
   }
 
   export class InitFailedAction implements Action {
@@ -57,16 +66,29 @@ export namespace LinkCreate {
     payload: string = null;
   }
 
-  export class AddAction implements Action {
-    type = ActionTypes.ADD;
-
-    constructor(public payload: string) { }
+  export class ChoosePageLinkAction implements Action {
+    type = ActionTypes.CHOOSE_PAGE_LINK;
+    constructor(public payload: LinkCreateDto) { }
   }
 
-  export class NameAddedAction implements Action {
-    type = ActionTypes.NAME_ADDED;
+  export class ChoosePageLinkSuccessAction implements Action {
+    type = ActionTypes.CHOOSE_PAGE_LINK_SUCCESS;
+    constructor(public payload: LinkCreateDto) { }
+  }
 
-    constructor(public payload: string) { }
+  export class SetupBrandAction implements Action {
+    type = ActionTypes.SETUP_BRAND;
+    constructor(public payload: LinkCreateDto) { }
+  }
+
+  export class SetupCtaAction implements Action {
+    type = ActionTypes.SETUP_CTA;
+    constructor(public payload: LinkCreateDto) { }
+  }
+
+  export class SetupCtaSuccessAction implements Action {
+    type = ActionTypes.SETUP_CTA_SUCCESS;
+    constructor(public payload: LinkCreateDto) { }
   }
 
   /**
@@ -77,6 +99,7 @@ export namespace LinkCreate {
     = InitAction
     | InitializedAction
     | InitFailedAction
-    | AddAction
-    | NameAddedAction;
+    | ChoosePageLinkAction
+    | SetupBrandAction
+    | SetupCtaAction;
 }

@@ -17,10 +17,24 @@ export function reducer(
   action: LinkCreate.Actions
 ): IHomeState {
   switch (action.type) {
-    // case LinkCreate.ActionTypes.INITIALIZED:
-    //   return (<any>Object).assign({}, state, {
-    //     link: action.payload
-    //   });
+    case LinkCreate.ActionTypes.INITIALIZED:
+      return Object.assign({}, state, {
+        linkCreate: action.payload
+      });
+
+    case LinkCreate.ActionTypes.CHOOSE_PAGE_LINK:
+      return Object.assign({}, state, {
+        linkCreate: Object.assign(state.linkCreate, {}, action.payload, {loading: true})
+      });
+
+    case LinkCreate.ActionTypes.CHOOSE_PAGE_LINK_SUCCESS:
+    case LinkCreate.ActionTypes.SETUP_BRAND:
+    case LinkCreate.ActionTypes.SETUP_CTA_SUCCESS:
+      return Object.assign({}, state, {
+        linkCreate: Object.assign(state.linkCreate, {}, action.payload, {loading: false})
+      });
+
+
     //
     // case LinkCreate.ActionTypes.NAME_ADDED:
     //   return (<any>Object).assign({}, state, {
@@ -32,4 +46,4 @@ export function reducer(
   }
 }
 
-export const getLinkCreate =(state: IHomeState) => state.linkCreate;
+export const getLinkCreate = (state: IHomeState) => state.linkCreate;

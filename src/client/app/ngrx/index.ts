@@ -10,7 +10,7 @@ import { DBSchema } from '@ngrx/db';
  * our top level state interface is just a map of keys to inner state types.
  */
 export interface IAppState {
-  linkCreate: fromHome.IHomeState;
+  home: fromHome.IHomeState;
 }
 
 /**
@@ -21,12 +21,12 @@ export interface IAppState {
  * the result from right to left.
  */
 export const reducers = {
-  linkCreate: fromHome.reducer
+  home: fromHome.reducer
 };
 
 
-export function getLinkCreate(state$: Store<IAppState>): Observable<fromHome.IHomeState> {
-  return state$.select(s => s.linkCreate);
+export function getHome(state$: Store<IAppState>): Observable<fromHome.IHomeState> {
+  return state$.select(s => s.home);
 }
 
 // console.log all actions

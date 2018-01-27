@@ -4,7 +4,7 @@
 
     <mat-vertical-stepper linear="false" #formStepper="matVerticalStepper">
       <mat-step [stepControl]="linkFormGroup">
-        <form [formGroup]="linkFormGroup" class="create-link-form">
+        <form [formGroup]="linkFormGroup" class="create-link-form" (submit)="onChooseLinkSubmit()">
           <ng-template matStepLabel>Choose a page to create a link</ng-template>
 
           <small>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</small>
@@ -14,14 +14,15 @@
           </mat-form-field>
           <br>
           <div>
-            <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
+            <button mat-raised-button color="primary" class="continue-btn">
               CONTINUE
+              <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="isLoading"></mat-progress-spinner>
             </button>
           </div>
         </form>
       </mat-step>
       <mat-step [stepControl]="brandFormGroup">
-        <form [formGroup]="brandFormGroup" class="create-link-form">
+        <form [formGroup]="brandFormGroup" class="create-link-form" (submit)="onSetupBrandSubmit()">
           <ng-template matStepLabel>Setup your brand</ng-template>
 
           <small>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</small>
@@ -30,13 +31,14 @@
             <mat-hint>A nice attention grabbing header!</mat-hint>
           </mat-form-field>
           <br>
-          <button mat-raised-button color="primary" class="continue-btn" matStepperNext>
+          <button mat-raised-button color="primary" class="continue-btn">
             CONTINUE
+            <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="isLoading"></mat-progress-spinner>
           </button>
         </form>
       </mat-step>
       <mat-step [stepControl]="ctaFormGroup">
-        <form [formGroup]="ctaFormGroup" class="create-link-form" (submit)="onCtaFormGroupSubmit()">
+        <form [formGroup]="ctaFormGroup" class="create-link-form" (submit)="onSetupCtaSubmit()">
           <ng-template matStepLabel>Setup your CTA</ng-template>
 
           <small>Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.</small>

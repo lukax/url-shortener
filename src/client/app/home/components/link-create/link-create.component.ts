@@ -7,6 +7,9 @@ import {AuthHttp} from "angular2-jwt";
 import {Headers, Http} from '@angular/http';
 import * as $ from 'jquery';
 import {MatStepper} from "@angular/material";
+import {Store} from "@ngrx/store";
+import {IAppState} from "../../../ngrx";
+import {LinkCreate} from "../../actions";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -37,30 +40,51 @@ export class CreateLinkComponent implements OnInit {
               private _authHttp: AuthHttp,
               private _http: Http,
               private _formBuilder: FormBuilder,
-              private _sanitization: DomSanitizer) {}
+              private _sanitization: DomSanitizer,
+              private _store: Store<IAppState>) {}
 
   ngOnInit() {
     this._auth.getProfile().subscribe(x => this.profile = x);
 
-    this._buildForm(new LinkCreateDto());
+    this._store.select(x => x.home).subscribe(
+      x => {
+        this._buildForm(x.linkCreate);
+      });
   }
 
 
-  async onCtaFormGroupSubmit() {
-      //if (this._auth.isAuthenticated()) {
-        this.isLoading = true;
-        try {
-          this._auth.login();
-          await this._createLinkInternal();
-          this.formStepper.next();
-        } catch(e) {
-          this.submitError = 'An error has occurred, please try again later';
-        }
-        this.isLoading = false;
-        //} else {
-      //    this._auth.login();
-      //}
+  onChooseLinkSubmit() {
+    this._store.dispatch(new LinkCreate.ChoosePageLinkAction(<LinkCreateDto>{
+      pageUrl: this._linkenizer(this.linkFormGroup.value.pageUrl)
+    }));
   }
+  onSetupBrandSubmit() {
+    this._store.dispatch(new LinkCreate.SetupBrandAction(<LinkCreateDto>{
+      name: this.brandFormGroup.value.name
+    }));
+  }
+  onSetupCtaSubmit() {
+    this._store.dispatch(new LinkCreate.SetupCtaAction(<LinkCreateDto> {
+      message: this.ctaFormGroup.value.message,
+      buttonText: this.ctaFormGroup.value.buttonText,
+      buttonUrl: this._linkenizer(this.ctaFormGroup.value.buttonUrl),
+    }));
+
+    //if (this._auth.isAuthenticated()) {
+    // this.isLoading = true;
+    // try {
+    //   this._auth.login();
+    //   await this._createLinkInternal();
+    //   this.formStepper.next();
+    // } catch(e) {
+    //   this.submitError = 'An error has occurred, please try again later';
+    // }
+    // this.isLoading = false;
+    //} else {
+    //    this._auth.login();
+    //}
+  }
+
 
   onPageUrlChange() {
     if(this.linkFormGroup && this.linkFormGroup.value.pageUrl) {
