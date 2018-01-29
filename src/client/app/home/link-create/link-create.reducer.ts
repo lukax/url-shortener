@@ -31,7 +31,10 @@ export function reducer(_s: any, _a: any) {
       return formGroupReducerWithUpdate(s, a);
     },
     shortPageUrl(s = '', a: LinkCreate.SetupCtaSuccessAction) {
-      return a.payload;
+      if(a.type === LinkCreate.ActionTypes.SETUP_CTA_SUCCESS) {
+        return a.payload;
+      }
+      return s;
     }
     // searchResults(s: string[] = [], a: Action) {
     //   if (a.type === SetSearchResultAction.TYPE) {

@@ -11,6 +11,6 @@ export class VerifyUrlDto {
 }
 
 export class VerifyUrlResultDto {
-  isInvalid: boolean;
+  isValid: boolean;
   message: string;
 }

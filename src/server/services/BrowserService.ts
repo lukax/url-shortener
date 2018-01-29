@@ -9,7 +9,7 @@ export class BrowserService {
 
   browser: puppeteer.Browser;
 
-  async getContentOfPage(pageURL: string, hostURL: string) : Promise<any>{
+  async getContentOfPage(pageURL: string, hostURL: string): Promise<any> {
     let content: string;
     let page: puppeteer.Page;
 
@@ -33,10 +33,10 @@ export class BrowserService {
         const otherResources = /^(manifest|other)$/i.test(resourceType);
         // Abort requests that exceeds 15 seconds
         // Also abort if more than 100 requests
-        if (seconds > 15 || reqCount > 100 || false){
+        if (seconds > 15 || reqCount > 100 || false) {
           console.log(`❌⏳ ${method} ${shortURL}`);
           request.abort();
-        } else if (BLOCKED_REGEXP.test(url) || otherResources){
+        } else if (BLOCKED_REGEXP.test(url) || otherResources) {
           console.log(`❌ ${method} ${shortURL}`);
           request.abort();
         } else {
@@ -50,7 +50,7 @@ export class BrowserService {
       const responsePromise = new Promise((_, reject) => { responseReject = reject; });
       page.on('response', ({ headers }) => {
         const location = headers['location'];
-        if (location && location.includes(hostURL)){
+        if (location && location.includes(hostURL)) {
           responseReject(new Error('Possible infinite redirects detected.'));
         }
       });
@@ -66,7 +66,7 @@ export class BrowserService {
       // Pause all media and stop buffering
       page.frames().forEach((frame) => {
         frame.evaluate(() => {
-          let elements: any = document.querySelectorAll('video, audio');
+          const elements: any = document.querySelectorAll('video, audio');
           elements.forEach((m: any) => {
             if (!m) return;
             if (m.pause) m.pause();
@@ -98,7 +98,7 @@ export class BrowserService {
 
         const { origin, pathname } = location;
         // Inject <base> for loading relative resources
-        if (!doc.querySelector('base')){
+        if (!doc.querySelector('base')) {
           const base = document.createElement('base');
           base.href = origin + pathname;
           doc.querySelector('head').appendChild(base);
@@ -109,16 +109,16 @@ export class BrowserService {
         absEls.forEach((el: any) => {
           let href = el.getAttribute('href');
           let src = el.getAttribute('src');
-          let r = new RegExp('^(?:[a-z]+:)?//', 'i');
-          if (src && !r.test(src.trim())){
+          const r = new RegExp('^(?:[a-z]+:)?//', 'i');
+          if (src && !r.test(src.trim())) {
             src = src.trim();
-            if(!(/^\/[^/]/i.test(src))){
+            if(!(/^\/[^/]/i.test(src))) {
               src = '/' + src;
             }
             el.src = origin + src;
-          } else if (href && !r.test(href.trim())){
+          } else if (href && !r.test(href.trim())) {
             href = href.trim();
-            if(!(/^\/[^/]/i.test(href))){
+            if(!(/^\/[^/]/i.test(href))) {
               href = '/' + href;
             }
             el.href = origin + href;
@@ -139,7 +139,7 @@ export class BrowserService {
       page.frames().forEach((frame) => {
         frame.evaluate(() => {
           // Clear all timer intervals https://stackoverflow.com/a/6843415/20838
-          for (var i = 1; i < 99999; i++) window.clearInterval(i);
+          for (let i = 1; i < 99999; i++) window.clearInterval(i);
           // Disable all XHR requests
           XMLHttpRequest.prototype.send = (_: any)=>_;
           // Disable all RAFs
@@ -150,8 +150,7 @@ export class BrowserService {
       page.removeAllListeners();
       //await page.deleteCookie((await page.cookies()).map(x => { name: x.name,  }));
       await page.close();
-    }
-    catch (e) {
+    } catch (e) {
       if (page) {
         console.error(e);
         console.log('💔 Force close ' + pageURL);
@@ -166,7 +165,7 @@ export class BrowserService {
       content = null;
 
       // Handle websocket not opened error
-      if (/not opened/i.test(message) && this.browser){
+      if (/not opened/i.test(message) && this.browser) {
         console.error('🕸 Web socket failed');
         try {
           this.browser.close();
@@ -182,14 +181,14 @@ export class BrowserService {
   }
 
   private async initBrowser(): Promise<any> {
-    if(!this.browser){
+    if(!this.browser) {
       this.browser = await puppeteer.launch({
         ignoreHTTPSErrors: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-      })
+      });
     }
   }
 
-  private truncate(str: string, len: number) { return  str.length > len ? str.slice(0, len) + '…' : str };
+  private truncate(str: string, len: number) { return  str.length > len ? str.slice(0, len) + '…' : str; }
 
 }

@@ -11,7 +11,7 @@ export interface CreateLinkResultDto {
 }
 
 export interface VerifyUrlResultDto {
-  isInvalid: boolean;
+  isValid: boolean;
   message: string;
 }
 

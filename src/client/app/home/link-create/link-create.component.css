@@ -95,3 +95,13 @@
   width: 100%;
   font-size: 17px;
 }
+
+
+.input-spinner {
+  float: right;
+  margin-top: -20px;
+}
+
+.sb-material-dark .sb-wrapper.sb-copy {
+  background-color: #653ab8;
+}

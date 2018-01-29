@@ -64,10 +64,12 @@ const MATERIAL_COMPONENTS = [
     CustomErrorStateMatcherDirective,
   ],
   exports: [
-    ...MATERIAL_COMPONENTS
+    ...MATERIAL_COMPONENTS,
+    NgrxMatSelectValueAccessor,
+    CustomErrorStateMatcherDirective
   ],
   providers: [
-    { provide: MAT_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'always' } }
+    //{ provide: MAT_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'always' } }
   ]
 })
 export class MaterialModule { }

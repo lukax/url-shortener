@@ -30,10 +30,10 @@ export class LinkService {
 
     public async create(model: CreateLinkDto): Promise<CreateLinkResultDto> {
 
-      if(await this.isUrlInvalid(model.pageUrl)) {
+      if(await this.isUrlValid(model.pageUrl)) {
         throw new Error(`Page URL does not contain a valid HTML page :(`);
       }
-      if(await this.isUrlInvalid(model.buttonUrl)) {
+      if(await this.isUrlValid(model.buttonUrl)) {
         throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
 
@@ -56,14 +56,14 @@ export class LinkService {
 
     public async update(model: CreateLinkDto, hash: string): Promise<boolean> {
 
-      if(await this.isUrlInvalid(model.pageUrl)) {
+      if(await this.isUrlValid(model.pageUrl)) {
         throw new Error(`Page URL does not contain a valid HTML page :(`);
       }
-      if(await this.isUrlInvalid(model.buttonUrl)) {
+      if(await this.isUrlValid(model.buttonUrl)) {
         throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
 
-      let link = await this.findOneByHash(hash);
+      const link = await this.findOneByHash(hash);
       if(link == null) {
         throw new Error("Hash not found");
       }
@@ -79,15 +79,16 @@ export class LinkService {
       return result != null;
     }
 
-    async isUrlInvalid(url: string): Promise<boolean> {
+    async isUrlValid(url: string): Promise<boolean> {
       try {
         const res = await axios.head(url, {timeout: 5000 });
 
-        return res.status < 200 ||
-          res.status >= 400 ||
-          !/text\/html/i.test(res.headers['content-type']);
+        const isValid = res.status >= 200 && res.status < 400 && /text\/html/i.test(res.headers['content-type']);
+        console.log(`isUrlValid: ${isValid}, status=${res.status}, content-type=${res.headers['content-type']}`);
+
+        return isValid;
       } catch(e) {
-        console.log(e.message);
+        console.log(`isUrlValid: error ${e.message}`);
         return false;
       }
     }

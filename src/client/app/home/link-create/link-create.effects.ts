@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { LinkService } from '../services/link.service';
@@ -55,48 +55,49 @@ export class HomeEffects {
           )
         );
 
-  // @Effect() verifyPageUrl$: Observable<LinkCreate.Actions> = this.store
-  //   .select(s => s.linkCreateForm)
-  //   .filter(fs => !!fs.value.pageUrl)
-  //   .distinct(fs => fs.value)
-  //   .switchMap(fs =>
-  //     Observable.timer(300)
-  //       .map(() => new StartAsyncValidationAction(
-  //         fs.controls.searchTerm.id,
-  //         'exists',
-  //       ))
-  //       .concat(
-  //         this.linkService.verifyUrl( fs.value.url )
-  //           .flatMap((resp) => {
-  //             if (!resp.isInvalid) {
-  //               return [
-  //                 new LinkCreate.SetPageUrlPreviewAction(fs.value),
-  //                 new ClearAsyncErrorAction(
-  //                   fs.controls.pageUrl.id,
-  //                   'exists',
-  //                 ),
-  //               ];
-  //             }
-  //
-  //             return [
-  //               new LinkCreate.SetPageUrlPreviewAction(null),
-  //               new SetAsyncErrorAction(
-  //                 fs.controls.pageUrl.id,
-  //                 'exists',
-  //                 fs.value.pageUrl,
-  //               ),
-  //             ];
-  //           })
-  //           .catch(resp => [
-  //             new LinkCreate.SetPageUrlPreviewAction(null),
-  //             new SetAsyncErrorAction(
-  //               fs.controls.pageUrl.id,
-  //               'exists',
-  //               fs.value.pageUrl,
-  //             ),
-  //           ])
-  //       )
-  //   );
+  @Effect() verifyPageUrl$: Observable<Action> = this.store
+    .select(s => s.linkCreate.formState)
+    .filter(fs => !!fs.value.pageUrl)
+    .distinct(fs => fs.value)
+    .switchMap(fs =>
+      Observable.timer(300)
+        .map(() => new StartAsyncValidationAction(
+          fs.controls.pageUrl.id,
+          'exists',
+        ))
+        .concat(
+          this.linkService.verifyUrl( fs.value.pageUrl )
+
+            .flatMap((resp) => {
+              if (resp.isValid) {
+                return [
+                  new LinkCreate.SetPageUrlPreviewAction(fs.value),
+                  new ClearAsyncErrorAction(
+                    fs.controls.pageUrl.id,
+                    'exists',
+                  ),
+                ];
+              }
+              return [
+                new LinkCreate.SetPageUrlPreviewAction(null),
+                new SetAsyncErrorAction(
+                  fs.controls.pageUrl.id,
+                  'exists',
+                  fs.value.pageUrl,
+                ),
+              ];
+            })
+
+            .catch(resp => [
+              new LinkCreate.SetPageUrlPreviewAction(null),
+              new SetAsyncErrorAction(
+                fs.controls.pageUrl.id,
+                'exists',
+                fs.value.pageUrl,
+              ),
+            ])
+        )
+    );
 
   constructor(
     private store: Store<any>,

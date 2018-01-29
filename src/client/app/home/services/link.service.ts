@@ -1,27 +1,19 @@
-// angular
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-
-// libs
 import { Observable } from 'rxjs/Observable';
-
-// app
-
-// module
-import "rxjs/add/observable/of";
 import {Analytics, AnalyticsService} from "../../modules/analytics/services/index";
 import {AuthHttp} from "angular2-jwt";
 import {VerifyUrlDto} from "../../../../server/dtos/VerifyUrlDto";
 import {LinkCreate} from "../link-create/link-create.actions";
 import {CreateLinkDto, CreateLinkResultDto, VerifyUrlResultDto} from "../../shared/entities";
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class LinkService extends Analytics {
 
   constructor(
     public analytics: AnalyticsService,
-    private http: AuthHttp,
-
+    private http: HttpClient,
   ) {
     super(analytics);
     this.category = LinkCreate.CATEGORY;
@@ -32,18 +24,16 @@ export class LinkService extends Analytics {
   }
 
   verifyUrl(url: string): Observable<VerifyUrlResultDto> {
-    return this.http.post(`/api/verify/url`, <VerifyUrlDto>{
+    return this.http.post<VerifyUrlResultDto>(`/api/verify/url`, <VerifyUrlDto>{
         url: this.linkenizer(url)
-      })
-      .map(res => res.json());
+      });
   }
 
   createLink(model: CreateLinkDto): Observable<CreateLinkResultDto> {
-    return this.http.post(`/api/links`, Object.assign({}, model, {
+    return this.http.post<CreateLinkResultDto>(`/api/links`, Object.assign({}, model, <CreateLinkDto>{
         pageUrl: this.linkenizer(model.pageUrl),
         buttonUrl: this.linkenizer(model.buttonUrl)
-      }))
-      .map(res => res.json());
+      }));
   }
 
   linkenizer(link: string): string {

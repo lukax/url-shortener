@@ -22,7 +22,7 @@ export class ApiLinksController {
     @Post('/links')
     async insertLink(@Body() model: CreateLinkDto): Promise<CreateLinkResultDto> {
 
-        log("insert link - " + JSON.stringify(model));
+        log("💥 insert link - " + JSON.stringify(model));
 
         return await this.links.create(model);
     }
@@ -30,10 +30,10 @@ export class ApiLinksController {
     @Put('/links/:hash')
     async editLink(@Param("hash") hash: string, @Body() model: CreateLinkDto): Promise<boolean> {
 
-      log("edit link - " + JSON.stringify(model));
+      log("💥 edit link - " + JSON.stringify(model));
 
       const l = await this.links.findOneByHash(hash);
-      if(l == null){
+      if(l == null) {
         throw new NotFoundError(`Link not found`);
       }
 
@@ -43,11 +43,11 @@ export class ApiLinksController {
     @Post('/verify/url')
     async verifyUrl(@Body() model: VerifyUrlDto): Promise<VerifyUrlResultDto> {
 
-      log("verify url - " + JSON.stringify(model));
+      log("💥 verify url - " + JSON.stringify(model));
 
-      const isInvalid = await this.links.isUrlInvalid(model.url);
+      const isValid = await this.links.isUrlValid(model.url);
       return <VerifyUrlResultDto>{
-        isInvalid: isInvalid,
+        isValid: isValid,
         message: 'Url not supported'
       };
     }

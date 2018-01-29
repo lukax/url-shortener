@@ -4,14 +4,24 @@
 
     <mat-vertical-stepper linear="false" #formStepper="matVerticalStepper">
       <mat-step>
-        <form class="create-link-form" novalidate [ngrxFormState]="(formState$ | async)" (submit)="onChooseLinkSubmit()">
+        <form class="create-link-form" 
+              [ngrxFormState]="(formState$ | async)" (submit)="onChooseLinkSubmit()">
           <ng-template matStepLabel>Choose a page to create a link</ng-template>
 
           <small>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</small>
           <mat-form-field>
-            <input type="text" matInput placeholder="Page URL" [ngrxFormControlState]="(formState$ | async).controls.pageUrl">
+            <input matInput placeholder="Page URL" [ngrxFormControlState]="(formState$ | async).controls.pageUrl">
             <mat-hint>Enter a link to an article</mat-hint>
+            <mat-error *ngIf="(formState$ | async).errors._pageUrl?.required">
+              A page URL is required
+            </mat-error>
+            <mat-error *ngIf="(formState$ | async).errors._pageUrl?.$exists">
+              This page URL is not supported :(
+            </mat-error>
+            <mat-progress-spinner class="input-spinner" mode="indeterminate" color="primary" diameter="20" span *ngIf="(formState$ | async).isValidationPending"></mat-progress-spinner>
           </mat-form-field>
+
+
           <br>
           <div>
             <button mat-raised-button color="primary" class="continue-btn">
@@ -22,12 +32,13 @@
         </form>
       </mat-step>
       <mat-step>
-        <form class="create-link-form" novalidate [ngrxFormState]="(formState$ | async)" (submit)="onSetupBrandSubmit()">
+        <form class="create-link-form" 
+              [ngrxFormState]="(formState$ | async)" (submit)="onSetupBrandSubmit()">
           <ng-template matStepLabel>Setup your brand</ng-template>
 
           <small>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</small>
           <mat-form-field>
-            <input type="text" matInput placeholder="Name" [ngrxFormControlState]="(formState$ | async).controls.name">
+            <input matInput placeholder="Name" [ngrxFormControlState]="(formState$ | async).controls.name">
             <mat-hint>A nice attention grabbing header!</mat-hint>
           </mat-form-field>
           <br>
@@ -38,22 +49,23 @@
         </form>
       </mat-step>
       <mat-step>
-        <form class="create-link-form" novalidate [ngrxFormState]="(formState$ | async)" (submit)="onSetupCtaSubmit()">
+        <form class="create-link-form"
+              [ngrxFormState]="(formState$ | async)" (submit)="onSetupCtaSubmit()">
           <ng-template matStepLabel>Setup your CTA</ng-template>
 
           <small>Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.</small>
           <mat-form-field>
-            <input type="text" matInput placeholder="Message" [ngrxFormControlState]="(formState$ | async).controls.message">
+            <input matInput placeholder="Message" [ngrxFormControlState]="(formState$ | async).controls.message">
             <mat-hint>A descriptive sentence for the Call To Action (CTA)</mat-hint>
           </mat-form-field>
           <br>
           <mat-form-field>
-            <input type="text" matInput placeholder="Button Text" [ngrxFormControlState]="(formState$ | async).controls.buttonText">
+            <input matInput placeholder="Button Text" [ngrxFormControlState]="(formState$ | async).controls.buttonText">
             <mat-hint>What will your button say?</mat-hint>
           </mat-form-field>
           <br>
           <mat-form-field>
-            <input type="text" matInput placeholder="Button URL" [ngrxFormControlState]="(formState$ | async).controls.buttonUrl">
+            <input matInput placeholder="Button URL" [ngrxFormControlState]="(formState$ | async).controls.buttonUrl">
             <mat-hint>Where will your button go?</mat-hint>
           </mat-form-field>
           <br>
@@ -76,10 +88,10 @@
           <small>Anyone clicking on this link will see the page with your message inside.</small>
 
           <mat-form-field>
-            <input type="text" matInput [(ngModel)]="shortPageUrl" readonly (click)="onShortUrlClick($event)" autofocus>
+            <input matInput [(ngModel)]="shortPageUrl" readonly (click)="onShortUrlClick($event)" autofocus>
           </mat-form-field>
 
-          <div class="share-btns">
+          <div class="share-btns copy-link-btn-color">
 
             <!--<a mat-raised-button color="primary" class="visit-btn" [href]="shortPageUrl" target="_blank">-->
               <!--VISIT LINK-->
