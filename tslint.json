@@ -1,6 +1,7 @@
 {
   "extends": "./tools/config/seed.tslint.json",
   "rules": {
-    "quotemark": false
+    "quotemark": false,
+    "no-trailing-whitespace": false
   }
 }

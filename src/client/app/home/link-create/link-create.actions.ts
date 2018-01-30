@@ -24,16 +24,14 @@ export namespace LinkCreate {
     INITIALIZED: string;
     INIT_FAILED: string;
 
-    CHOOSE_PAGE_LINK: string;
-
-    SETUP_BRAND: string;
-    SETUP_CTA: string;
-    SETUP_CTA_SUCCESS: string;
-    SETUP_CTA_FAILED: string;
+    SUBMIT_PAGE_URL: string;
+    SUBMIT_SETUP_BRAND: string;
+    SUBMIT_SETUP_CTA: string;
+    SUBMIT_SETUP_CTA_RESULT: string;
 
     SET_PAGE_URL_PREVIEW: string;
 
-    GOTO_SECTION: string;
+    SELECT_STEP: string;
   }
 
   export const ActionTypes: IHomeActions = {
@@ -41,17 +39,14 @@ export namespace LinkCreate {
     INITIALIZED: type(`${CATEGORY} Initialized`),
     INIT_FAILED: type(`${CATEGORY} Init Failed`),
 
-    CHOOSE_PAGE_LINK: type(`${CATEGORY} Choose page link`),
+    SUBMIT_PAGE_URL: type(`${CATEGORY} SUBMIT_PAGE_URL`),
+    SUBMIT_SETUP_BRAND: type(`${CATEGORY} SUBMIT_SETUP_BRAND`),
+    SUBMIT_SETUP_CTA: type(`${CATEGORY} SUBMIT_SETUP_CTA`),
+    SUBMIT_SETUP_CTA_RESULT: type(`${CATEGORY} SUBMIT_SETUP_CTA_RESULT`),
 
-    SETUP_BRAND: type(`${CATEGORY} Setup brand`),
+    SET_PAGE_URL_PREVIEW: type(`${CATEGORY} SET_PAGE_URL_PREVIEW`),
 
-    SETUP_CTA: type(`${CATEGORY} Setup CTA`),
-    SETUP_CTA_SUCCESS: type(`${CATEGORY} Setup CTA success`),
-    SETUP_CTA_FAILED: type(`${CATEGORY} Setup CTA fail`),
-
-    SET_PAGE_URL_PREVIEW: type(`${CATEGORY} Set page url preview`),
-
-    GOTO_SECTION: type(`${CATEGORY} Goto section`),
+    SELECT_STEP: type(`${CATEGORY} SELECT_STEP`),
   };
 
   /**
@@ -76,29 +71,24 @@ export namespace LinkCreate {
     payload: string = null;
   }
 
-  export class ChoosePageLinkAction implements Action {
-    type = ActionTypes.CHOOSE_PAGE_LINK;
+  export class SubmitPageUrlAction implements Action {
+    type = ActionTypes.SUBMIT_PAGE_URL;
     constructor(public payload: CreateLinkDto) { }
   }
 
-  export class SetupBrandAction implements Action {
-    type = ActionTypes.SETUP_BRAND;
+  export class SubmitSetupBrandAction implements Action {
+    type = ActionTypes.SUBMIT_SETUP_BRAND;
     constructor(public payload: CreateLinkDto) { }
   }
 
-  export class SetupCtaAction implements Action {
-    type = ActionTypes.SETUP_CTA;
+  export class SubmitSetupCtaAction implements Action {
+    type = ActionTypes.SUBMIT_SETUP_CTA;
     constructor(public payload: CreateLinkDto) { }
   }
 
-  export class SetupCtaSuccessAction implements Action {
-    type = ActionTypes.SETUP_CTA_SUCCESS;
+  export class SubmitSetupCtaResultAction implements Action {
+    type = ActionTypes.SUBMIT_SETUP_CTA_RESULT;
     constructor(public payload: CreateLinkResultDto) { }
-  }
-
-  export class SetupCtaFailedAction implements Action {
-    type = ActionTypes.SETUP_CTA_FAILED;
-    constructor(public payload: string) { }
   }
 
   export class SetPageUrlPreviewAction implements Action {
@@ -106,8 +96,8 @@ export namespace LinkCreate {
     constructor(public payload: CreateLinkDto) { }
   }
 
-  export class GotoSectionAction implements Action {
-    type = ActionTypes.GOTO_SECTION;
+  export class SelectStepAction implements Action {
+    type = ActionTypes.SELECT_STEP;
     constructor(public payload: 'choose-link' | 'setup-brand' | 'setup-cta' | 'share-link') { }
   }
 
@@ -124,9 +114,10 @@ export namespace LinkCreate {
     = InitAction
     | InitializedAction
     | InitFailedAction
-    | ChoosePageLinkAction
-    | SetupBrandAction
-    | SetupCtaAction
-    | SetupCtaSuccessAction
-    | SetPageUrlPreviewAction;
+    | SubmitPageUrlAction
+    | SubmitSetupBrandAction
+    | SubmitSetupCtaAction
+    | SubmitSetupCtaResultAction
+    | SetPageUrlPreviewAction
+    | SelectStepAction;
 }

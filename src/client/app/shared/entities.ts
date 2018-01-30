@@ -1,13 +1,14 @@
 export class CreateLinkDto {
-  name = '';
-  message = '';
-  buttonText = '';
-  buttonUrl = '';
-  pageUrl = '';
+  name? = '';
+  message? = '';
+  buttonText? = '';
+  buttonUrl? = '';
+  pageUrl? = '';
 }
 
 export interface CreateLinkResultDto {
-  hash: string;
+  hash?: string;
+  error?: string;
 }
 
 export interface VerifyUrlResultDto {

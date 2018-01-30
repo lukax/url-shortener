@@ -15,3 +15,5 @@ export class CustomRouterStateSerializer
     return { url, queryParams };
   }
 }
+
+export const URL_REGEXP = new RegExp(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/);

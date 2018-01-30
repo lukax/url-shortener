@@ -1,0 +1,37 @@
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ActionsSubject } from '@ngrx/store';
+import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
+
+import {CreateLinkDto} from "../../shared/entities";
+
+@Component({
+  selector: 'sd-steps-setup-brand',
+  template: `
+    <form class="create-link-form" [ngrxFormState]="formState" (submit)="onSetupBrandSubmit()">
+      <mat-form-field>
+        <input matInput placeholder="Name" [ngrxFormControlState]="formState.controls.name">
+        <mat-hint>A nice attention grabbing header!</mat-hint>
+      </mat-form-field>
+      <br>
+      <button mat-raised-button color="primary" class="continue-btn">
+        CONTINUE
+        <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="formState.controls.isLoading"></mat-progress-spinner>
+      </button>
+    </form>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class StepsSetupBrandComponent {
+  @Input() formState: FormGroupState<CreateLinkDto>;
+  submittedValue: CreateLinkDto;
+
+  constructor(private actionsSubject: ActionsSubject) { }
+
+  submit() {
+    if (this.formState.isInvalid) {
+      return;
+    }
+
+    this.submittedValue = this.formState.value;
+  }
+}

@@ -9,7 +9,10 @@ import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
 import {FormGroupState} from "ngrx-forms";
 import {LinkService} from '../index';
-import {State} from "./link-create.reducer";
+import {
+  getChooseLinkForm, State, getSetupBrandForm, getSetupCtaForm, getShortPageUrl,
+  getCta
+} from "./link-create.reducer";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -28,8 +31,11 @@ export class CreateLinkComponent implements OnInit {
   isLoading = false;
   submitError: string;
 
-
-  formState$: Observable<FormGroupState<CreateLinkDto>>;
+  chooseLinkForm$: Observable<FormGroupState<CreateLinkDto>>;
+  setupBrandForm$: Observable<FormGroupState<CreateLinkDto>>;
+  setupCtaForm$: Observable<FormGroupState<CreateLinkDto>>;
+  shortPageUrl$: Observable<string>;
+  cta$: Observable<CreateLinkDto>;
 
   @ViewChild('formStepper') formStepper: MatStepper;
 
@@ -38,14 +44,18 @@ export class CreateLinkComponent implements OnInit {
   constructor(private _auth: AuthService,
               private _formBuilder: FormBuilder,
               private _sanitization: DomSanitizer,
-              private _store: Store<State>) {}
+              private _store: Store<State>) {
+
+    this.chooseLinkForm$ = this._store.select(getChooseLinkForm);
+    this.setupBrandForm$ = this._store.select(getSetupBrandForm);
+    this.setupCtaForm$ = this._store.select(getSetupCtaForm);
+    this.shortPageUrl$ = this._store.select(getShortPageUrl);
+    this.cta$ = this._store.select(getCta);
+  }
 
   ngOnInit() {
     this._auth.getProfile().subscribe(x => this.profile = x);
-
-    this.formState$ = this._store.select(x => x.linkCreate.formState);
   }
-
 
   onChooseLinkSubmit() {
     // this._store.dispatch(new LinkCreate.ChoosePageLinkAction(<LinkCreateDto>{
@@ -77,10 +87,6 @@ export class CreateLinkComponent implements OnInit {
     //} else {
     //    this._auth.login();
     //}
-  }
-
-  onShortUrlClick($event: MouseEvent) {
-    $($event.srcElement).select();
   }
 
   // getLink(): LinkCreateDto {

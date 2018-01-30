@@ -4,109 +4,26 @@
 
     <mat-vertical-stepper linear="false" #formStepper="matVerticalStepper">
       <mat-step>
-        <form class="create-link-form" 
-              [ngrxFormState]="(formState$ | async)" (submit)="onChooseLinkSubmit()">
-          <ng-template matStepLabel>Choose a page to create a link</ng-template>
-
-          <small>You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.</small>
-          <mat-form-field>
-            <input matInput placeholder="Page URL" [ngrxFormControlState]="(formState$ | async).controls.pageUrl">
-            <mat-hint>Enter a link to an article</mat-hint>
-            <mat-error *ngIf="(formState$ | async).errors._pageUrl?.required">
-              A page URL is required
-            </mat-error>
-            <mat-error *ngIf="(formState$ | async).errors._pageUrl?.$exists">
-              This page URL is not supported :(
-            </mat-error>
-            <mat-progress-spinner class="input-spinner" mode="indeterminate" color="primary" diameter="20" span *ngIf="(formState$ | async).isValidationPending"></mat-progress-spinner>
-          </mat-form-field>
-
-
-          <br>
-          <div>
-            <button mat-raised-button color="primary" class="continue-btn">
-              CONTINUE
-              <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="(formState$ | async).controls.isLoading"></mat-progress-spinner>
-            </button>
-          </div>
-        </form>
+        <ng-template matStepLabel>Choose a page to create a link</ng-template>
+        <small>You can display your call-to-action on any web page. This is usually an
+          article that you'd like to share with your audience.</small>
+        <sd-steps-choose-link [formState]="chooseLinkForm$ | async"></sd-steps-choose-link>
       </mat-step>
       <mat-step>
-        <form class="create-link-form" 
-              [ngrxFormState]="(formState$ | async)" (submit)="onSetupBrandSubmit()">
-          <ng-template matStepLabel>Setup your brand</ng-template>
-
-          <small>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</small>
-          <mat-form-field>
-            <input matInput placeholder="Name" [ngrxFormControlState]="(formState$ | async).controls.name">
-            <mat-hint>A nice attention grabbing header!</mat-hint>
-          </mat-form-field>
-          <br>
-          <button mat-raised-button color="primary" class="continue-btn">
-            CONTINUE
-            <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="(formState$ | async).controls.isLoading"></mat-progress-spinner>
-          </button>
-        </form>
+        <ng-template matStepLabel>Setup your brand</ng-template>
+        <small>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</small>
+        <sd-steps-setup-brand [formState]="setupBrandForm$ | async"></sd-steps-setup-brand>
       </mat-step>
       <mat-step>
-        <form class="create-link-form"
-              [ngrxFormState]="(formState$ | async)" (submit)="onSetupCtaSubmit()">
-          <ng-template matStepLabel>Setup your CTA</ng-template>
-
-          <small>Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.</small>
-          <mat-form-field>
-            <input matInput placeholder="Message" [ngrxFormControlState]="(formState$ | async).controls.message">
-            <mat-hint>A descriptive sentence for the Call To Action (CTA)</mat-hint>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Button Text" [ngrxFormControlState]="(formState$ | async).controls.buttonText">
-            <mat-hint>What will your button say?</mat-hint>
-          </mat-form-field>
-          <br>
-          <mat-form-field>
-            <input matInput placeholder="Button URL" [ngrxFormControlState]="(formState$ | async).controls.buttonUrl">
-            <mat-hint>Where will your button go?</mat-hint>
-          </mat-form-field>
-          <br>
-          <div>
-            <button mat-raised-button color="primary" class="continue-btn">
-              CONTINUE
-              <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="(formState$ | async).controls.isLoading"></mat-progress-spinner>
-            </button>
-            <h5>
-              {{ submitError }}
-            </h5>
-          </div>
-
-        </form>
+        <ng-template matStepLabel>Setup your CTA</ng-template>
+        <small>Every jeit.in link contains a call-to-action. This should include a short
+          message and a button linking to your landing page.</small>
+        <sd-steps-setup-cta [formState]="setupCtaForm$ | async"></sd-steps-setup-cta>
       </mat-step>
       <mat-step>
-        <div class="create-link-form">
-          <ng-template matStepLabel>Share your link!</ng-template>
-
-          <small>Anyone clicking on this link will see the page with your message inside.</small>
-
-          <mat-form-field>
-            <input matInput [(ngModel)]="shortPageUrl" readonly (click)="onShortUrlClick($event)" autofocus>
-          </mat-form-field>
-
-          <div class="share-btns copy-link-btn-color">
-
-            <!--<a mat-raised-button color="primary" class="visit-btn" [href]="shortPageUrl" target="_blank">-->
-              <!--VISIT LINK-->
-              <!--<mat-icon>open_in_new</mat-icon>-->
-            <!--</a>-->
-
-            <share-button theme="material-dark" [button]="'copy'" [showText]="true" [size]="4" [url]="shortPageUrl"></share-button>
-            <br><br>
-            <share-buttons theme="material-dark" [include]="['facebook','twitter','whatsapp','email','linkedin','pinterest','telegram','google']"
-                           [show]="8" [size]="4" [url]="shortPageUrl"></share-buttons>
-
-          </div>
-
-        </div>
-
+        <ng-template matStepLabel>Share your link!</ng-template>
+        <small>Anyone clicking on this link will see the page with your message inside.</small>
+        <sd-steps-share-link [shortPageUrl]="shortPageUrl$ | async"></sd-steps-share-link>
       </mat-step>
     </mat-vertical-stepper>
 
@@ -120,7 +37,7 @@
       <sd-link-preview></sd-link-preview>
     </div>
 
-    <sd-cta-std-button [cta]="(formState$ | async).value"></sd-cta-std-button>
+    <sd-cta-std-button [cta]="cta$ | async"></sd-cta-std-button>
 
   </mat-sidenav-content>
 </mat-sidenav-container>

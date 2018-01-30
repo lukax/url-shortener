@@ -1,4 +1,5 @@
 import {Component, Input} from "@angular/core";
+import {CreateLinkDto} from "../../shared/entities";
 
 @Component({
   moduleId: module.id,
@@ -9,12 +10,7 @@ import {Component, Input} from "@angular/core";
 export class CtaStdButtonComponent {
 
   @Input()
-  cta = {
-    name: 'A nice attention grabbing header!',
-    message: 'A descriptive sentence for the Call To Action (CTA)',
-    buttonUrl: '',
-    buttonText: 'CONTACT US NOW!',
-  };
+  cta: CreateLinkDto = {};
 
   constructor() {
 

@@ -11,6 +11,10 @@ import {StoreModule} from "@ngrx/store";
 import {reducer} from "./link-create/link-create.reducer";
 import {EffectsModule} from "@ngrx/effects";
 import {HomeEffects} from "./link-create/link-create.effects";
+import {StepsChooseLinkComponent} from "./link-create-steps/steps-choose-link.component";
+import {StepsSetupBrandComponent} from "./link-create-steps/steps-setup-brand.component";
+import {StepsSetupCtaComponent} from "./link-create-steps/steps-setup-cta.component";
+import {StepsShareLinkComponent} from "./link-create-steps/steps-share-link.component";
 
 @NgModule({
   imports: [
@@ -29,6 +33,11 @@ import {HomeEffects} from "./link-create/link-create.effects";
     CreateLinkComponent,
     LinkPreviewComponent,
     CtaStdButtonComponent,
+
+    StepsChooseLinkComponent,
+    StepsSetupBrandComponent,
+    StepsSetupCtaComponent,
+    StepsShareLinkComponent
   ],
   providers: [
     ...SERVICE_PROVIDERS

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { LinkService } from '../services/link.service';
 import {ClearAsyncErrorAction, SetAsyncErrorAction, StartAsyncValidationAction} from "ngrx-forms";
 import {LinkCreate} from './link-create.actions';
+import {getChooseLinkForm, State} from "./link-create.reducer";
 
 @Injectable()
 export class HomeEffects {
@@ -24,39 +25,39 @@ export class HomeEffects {
     .catch(() => Observable.of(new LinkCreate.InitFailedAction()));
 
   @Effect() choosePageLink$: Observable<LinkCreate.Actions> = this.actions$
-    .ofType(LinkCreate.ActionTypes.CHOOSE_PAGE_LINK)
-    .map((action: LinkCreate.ChoosePageLinkAction) => {
+    .ofType(LinkCreate.ActionTypes.SUBMIT_PAGE_URL)
+    .map((action: LinkCreate.SubmitPageUrlAction) => {
       // analytics
-      this.linkService.track(LinkCreate.ActionTypes.CHOOSE_PAGE_LINK, { label: JSON.stringify(action.payload) });
-      return new LinkCreate.GotoSectionAction('setup-brand');
+      this.linkService.track(LinkCreate.ActionTypes.SUBMIT_PAGE_URL, { label: JSON.stringify(action.payload) });
+      return new LinkCreate.SelectStepAction('setup-brand');
     });
 
   @Effect() setupCta$: Observable<LinkCreate.Actions> = this.actions$
-    .ofType(LinkCreate.ActionTypes.SETUP_CTA)
+    .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
     .switchMap(
-      (action: LinkCreate.SetupCtaAction) =>
+      (action: LinkCreate.SubmitSetupCtaAction) =>
 
         Observable.timer(300)
           .concat(() =>
             this.linkService.createLink(action.payload)
               .flatMap(createLinkResult => {
-                this.linkService.track(LinkCreate.ActionTypes.SETUP_CTA_SUCCESS, { label: JSON.stringify(createLinkResult) });
+                this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(createLinkResult) });
                 return [
-                  new LinkCreate.SetupCtaSuccessAction(createLinkResult),
-                  new LinkCreate.GotoSectionAction('share-link'),
+                  new LinkCreate.SubmitSetupCtaResultAction(createLinkResult),
+                  new LinkCreate.SelectStepAction('share-link'),
                 ];
               })
               .catch(err => {
-                this.linkService.track(LinkCreate.ActionTypes.SETUP_CTA_FAILED, { label: 'fail' });
+                this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: 'fail' });
                 return [
-                  new LinkCreate.SetupCtaFailedAction(err.message),
+                  new LinkCreate.SubmitSetupCtaResultAction({ error: err.message }),
                 ];
               })
           )
         );
 
   @Effect() verifyPageUrl$: Observable<Action> = this.store
-    .select(s => s.linkCreate.formState)
+    .select(getChooseLinkForm)
     .filter(fs => !!fs.value.pageUrl)
     .distinct(fs => fs.value)
     .switchMap(fs =>
@@ -100,7 +101,7 @@ export class HomeEffects {
     );
 
   constructor(
-    private store: Store<any>,
+    private store: Store<State>,
     private actions$: Actions,
     private linkService: LinkService
   ) { }
