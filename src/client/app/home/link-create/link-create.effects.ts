@@ -32,11 +32,18 @@ export class HomeEffects {
       return new LinkCreate.SelectStepAction('setup-brand');
     });
 
+  @Effect() setupBrand$: Observable<LinkCreate.Actions> = this.actions$
+    .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND)
+    .map((action: LinkCreate.SubmitPageUrlAction) => {
+      // analytics
+      this.linkService.track(LinkCreate.ActionTypes.SUBMIT_PAGE_URL, { label: JSON.stringify(action.payload) });
+      return new LinkCreate.SelectStepAction('setup-cta');
+    });
+
   @Effect() setupCta$: Observable<LinkCreate.Actions> = this.actions$
     .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
     .switchMap(
       (action: LinkCreate.SubmitSetupCtaAction) =>
-
         Observable.timer(300)
           .concat(() =>
             this.linkService.createLink(action.payload)

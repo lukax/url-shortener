@@ -3,11 +3,12 @@ import { ActionsSubject } from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
 import {CreateLinkDto} from "../../shared/entities";
+import {LinkCreate} from "../link-create/link-create.actions";
 
 @Component({
   selector: 'sd-steps-setup-cta',
   template: `
-    <form class="create-link-form" [ngrxFormState]="formState" (submit)="onSetupCtaSubmit()">
+    <form class="create-link-form" [ngrxFormState]="formState" (submit)="submit()">
       <mat-form-field>
         <input matInput placeholder="Message" [ngrxFormControlState]="formState.controls.message">
         <mat-hint>A descriptive sentence for the Call To Action (CTA)</mat-hint>
@@ -49,5 +50,6 @@ export class StepsSetupCtaComponent {
     }
 
     this.submittedValue = this.formState.value;
+    this.actionsSubject.next(new LinkCreate.SubmitSetupCtaAction(this.submittedValue));
   }
 }

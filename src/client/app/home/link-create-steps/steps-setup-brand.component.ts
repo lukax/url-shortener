@@ -3,11 +3,12 @@ import { ActionsSubject } from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
 import {CreateLinkDto} from "../../shared/entities";
+import {LinkCreate} from "../link-create/link-create.actions";
 
 @Component({
   selector: 'sd-steps-setup-brand',
   template: `
-    <form class="create-link-form" [ngrxFormState]="formState" (submit)="onSetupBrandSubmit()">
+    <form class="create-link-form" [ngrxFormState]="formState" (submit)="submit()">
       <mat-form-field>
         <input matInput placeholder="Name" [ngrxFormControlState]="formState.controls.name">
         <mat-hint>A nice attention grabbing header!</mat-hint>
@@ -33,5 +34,6 @@ export class StepsSetupBrandComponent {
     }
 
     this.submittedValue = this.formState.value;
+    this.actionsSubject.next(new LinkCreate.SubmitSetupBrandAction(this.submittedValue));
   }
 }

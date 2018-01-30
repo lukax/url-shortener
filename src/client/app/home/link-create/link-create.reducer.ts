@@ -12,7 +12,8 @@ export interface State extends RootState {
     setupBrandForm: FormGroupState<CreateLinkDto>,
     setupCtaForm: FormGroupState<CreateLinkDto>
     shortPageUrl: string,
-    cta: CreateLinkDto
+    cta: CreateLinkDto,
+    stepper: LinkCreate.StepperTypes
   };
 }
 
@@ -33,6 +34,7 @@ const CTA_INITIAL_STATE = {
   buttonUrl: '',
   buttonText: 'CONTACT US NOW!',
 };
+const STEPPER_INITIAL_STATE: LinkCreate.StepperTypes = 'choose-link';
 
 const chooseLinkFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
   pageUrl: validate([required,pattern(URL_REGEXP)]),
@@ -72,8 +74,13 @@ export function reducer(_s: any, _a: any) {
         default:
           return s;
       }
+    },
+    stepper(s = STEPPER_INITIAL_STATE, a: LinkCreate.Actions) {
+      if(a.type === LinkCreate.ActionTypes.SELECT_STEP) {
+        return a.payload;
+      }
+      return s;
     }
-
     // searchResults(s: string[] = [], a: Action) {
     //   if (a.type === SetSearchResultAction.TYPE) {
     //     return (a as SetSearchResultAction).results;
@@ -90,3 +97,4 @@ export const getSetupBrandForm = (state: State) => state.linkCreate.setupBrandFo
 export const getSetupCtaForm = (state: State) => state.linkCreate.setupCtaForm;
 export const getShortPageUrl = (state: State) => state.linkCreate.shortPageUrl;
 export const getCta = (state: State) => state.linkCreate.cta;
+export const getStepper = (state: State) => state.linkCreate.stepper;

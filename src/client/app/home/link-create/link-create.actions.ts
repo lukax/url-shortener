@@ -96,9 +96,10 @@ export namespace LinkCreate {
     constructor(public payload: CreateLinkDto) { }
   }
 
+  export type StepperTypes = 'choose-link' | 'setup-brand' | 'setup-cta' | 'share-link';
   export class SelectStepAction implements Action {
     type = ActionTypes.SELECT_STEP;
-    constructor(public payload: 'choose-link' | 'setup-brand' | 'setup-cta' | 'share-link') { }
+    constructor(public payload: StepperTypes) { }
   }
 
   /**

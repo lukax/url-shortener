@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {AuthService, UserProfile} from "../../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
@@ -11,8 +11,9 @@ import {FormGroupState} from "ngrx-forms";
 import {LinkService} from '../index';
 import {
   getChooseLinkForm, State, getSetupBrandForm, getSetupCtaForm, getShortPageUrl,
-  getCta
+  getCta, getStepper
 } from "./link-create.reducer";
+import {LinkCreate} from "./link-create.actions";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -23,8 +24,7 @@ import {
   templateUrl: 'link-create.component.html',
   styleUrls: ['link-create.component.css'],
 })
-export class CreateLinkComponent implements OnInit {
-
+export class CreateLinkComponent implements OnInit, AfterViewInit {
   pageUrl: SafeResourceUrl;
   shortPageUrl: string;
   shortUrlPrefix = 'http://localhost:3000/';
@@ -36,6 +36,7 @@ export class CreateLinkComponent implements OnInit {
   setupCtaForm$: Observable<FormGroupState<CreateLinkDto>>;
   shortPageUrl$: Observable<string>;
   cta$: Observable<CreateLinkDto>;
+  stepper$: Observable<string>;
 
   @ViewChild('formStepper') formStepper: MatStepper;
 
@@ -55,6 +56,25 @@ export class CreateLinkComponent implements OnInit {
 
   ngOnInit() {
     this._auth.getProfile().subscribe(x => this.profile = x);
+  }
+
+  ngAfterViewInit(): void {
+    this._store.select(getStepper)
+      .subscribe(x => {
+        let index = 0;
+        switch(x) {
+          case 'setup-brand':
+            index = 1;
+            break;
+          case 'setup-cta':
+            index = 2;
+            break;
+          case 'share-link':
+            index = 3;
+            break;
+        }
+        this.formStepper.selectedIndex = index;
+      });
   }
 
   onChooseLinkSubmit() {

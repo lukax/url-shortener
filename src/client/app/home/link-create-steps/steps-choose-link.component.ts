@@ -1,13 +1,15 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ActionsSubject } from '@ngrx/store';
+import {ActionsSubject, Store} from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
 import {CreateLinkDto} from "../../shared/entities";
+import {LinkCreate} from "../link-create/link-create.actions";
+import {State} from "../../app.reducer";
 
 @Component({
   selector: 'sd-steps-choose-link',
   template: `
-    <form class="create-link-form" [ngrxFormState]="formState" (submit)="onChooseLinkSubmit()">
+    <form class="create-link-form" [ngrxFormState]="formState" (submit)="submit()">
       <mat-form-field>
         <input matInput placeholder="Page URL" [ngrxFormControlState]="formState.controls.pageUrl">
         <mat-hint>Enter a link to an article</mat-hint>
@@ -44,5 +46,6 @@ export class StepsChooseLinkComponent {
     }
 
     this.submittedValue = this.formState.value;
+    this.actionsSubject.next(new LinkCreate.SubmitPageUrlAction(this.submittedValue));
   }
 }
