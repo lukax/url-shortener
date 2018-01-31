@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { LinkService } from '../services/link.service';
 import {ClearAsyncErrorAction, SetAsyncErrorAction, StartAsyncValidationAction} from "ngrx-forms";
 import {LinkCreate} from './link-create.actions';
-import {getChooseLinkForm, State} from "./link-create.reducer";
+import {getChooseLinkForm, getCta, State} from "./link-create.reducer";
 
 @Injectable()
 export class HomeEffects {
@@ -40,13 +40,14 @@ export class HomeEffects {
       return new LinkCreate.SelectStepAction('setup-cta');
     });
 
-  @Effect() setupCta$: Observable<LinkCreate.Actions> = this.actions$
+  @Effect() setupCta$: Observable<Action> = this.actions$
     .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
-    .switchMap(
-      (action: LinkCreate.SubmitSetupCtaAction) =>
-        Observable.timer(300)
-          .concat(() =>
-            this.linkService.createLink(action.payload)
+    .switchMap((action: LinkCreate.SubmitSetupCtaAction) =>
+        //Observable.timer(300)
+          //.map(() =>
+         this.store.select(getCta)
+           .switchMap((cta) =>
+            this.linkService.createLink(cta)
               .flatMap(createLinkResult => {
                 this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(createLinkResult) });
                 return [
@@ -60,7 +61,7 @@ export class HomeEffects {
                   new LinkCreate.SubmitSetupCtaResultAction({ error: err.message }),
                 ];
               })
-          )
+            )
         );
 
   @Effect() verifyPageUrl$: Observable<Action> = this.store
@@ -75,7 +76,6 @@ export class HomeEffects {
         ))
         .concat(
           this.linkService.verifyUrl( fs.value.pageUrl )
-
             .flatMap((resp) => {
               if (resp.isValid) {
                 return [
@@ -95,7 +95,6 @@ export class HomeEffects {
                 ),
               ];
             })
-
             .catch(resp => [
               new LinkCreate.SetPageUrlPreviewAction(null),
               new SetAsyncErrorAction(

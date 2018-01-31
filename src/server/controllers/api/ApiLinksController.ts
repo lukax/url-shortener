@@ -48,7 +48,7 @@ export class ApiLinksController {
       const isValid = await this.links.isUrlValid(model.url);
       return <VerifyUrlResultDto>{
         isValid: isValid,
-        message: 'Url not supported'
+        message: !isValid ? 'Url not supported' : undefined
       };
     }
 

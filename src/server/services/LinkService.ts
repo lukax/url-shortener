@@ -30,12 +30,7 @@ export class LinkService {
 
     public async create(model: CreateLinkDto): Promise<CreateLinkResultDto> {
 
-      if(await this.isUrlValid(model.pageUrl)) {
-        throw new Error(`Page URL does not contain a valid HTML page :(`);
-      }
-      if(await this.isUrlValid(model.buttonUrl)) {
-        throw new Error(`Button URL does not contain a valid HTML page :(`);
-      }
+      await this.throwIfNotValid(model);
 
       let link = new Link();
       link.pageUrl = model.pageUrl;
@@ -56,12 +51,7 @@ export class LinkService {
 
     public async update(model: CreateLinkDto, hash: string): Promise<boolean> {
 
-      if(await this.isUrlValid(model.pageUrl)) {
-        throw new Error(`Page URL does not contain a valid HTML page :(`);
-      }
-      if(await this.isUrlValid(model.buttonUrl)) {
-        throw new Error(`Button URL does not contain a valid HTML page :(`);
-      }
+      await this.throwIfNotValid(model);
 
       const link = await this.findOneByHash(hash);
       if(link == null) {
@@ -90,6 +80,15 @@ export class LinkService {
       } catch(e) {
         console.log(`isUrlValid: error ${e.message}`);
         return false;
+      }
+    }
+
+    private async throwIfNotValid(model: CreateLinkDto) {
+      if(!(await this.isUrlValid(model.pageUrl))) {
+        throw new Error(`Page URL does not contain a valid HTML page :(`);
+      }
+      if(!(await this.isUrlValid(model.buttonUrl))) {
+        throw new Error(`Button URL does not contain a valid HTML page :(`);
       }
     }
 

@@ -11,7 +11,7 @@ export interface State extends RootState {
     chooseLinkForm: FormGroupState<CreateLinkDto>,
     setupBrandForm: FormGroupState<CreateLinkDto>,
     setupCtaForm: FormGroupState<CreateLinkDto>
-    shortPageUrl: string,
+    shortPageUrl: { url: string, errorMessage: string },
     cta: CreateLinkDto,
     stepper: LinkCreate.StepperTypes
   };
@@ -61,7 +61,7 @@ export function reducer(_s: any, _a: any) {
     },
     shortPageUrl(s = '', a: LinkCreate.SubmitSetupCtaResultAction) {
       if(a.type === LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT) {
-        return a.payload;
+        return { url: 'http://jeit.in/' + a.payload.hash, errorMessage: a.payload.message };
       }
       return s;
     },

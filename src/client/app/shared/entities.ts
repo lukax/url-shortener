@@ -8,7 +8,7 @@ export class CreateLinkDto {
 
 export interface CreateLinkResultDto {
   hash?: string;
-  error?: string;
+  message?: string;
 }
 
 export interface VerifyUrlResultDto {
