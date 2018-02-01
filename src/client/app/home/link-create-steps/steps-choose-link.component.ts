@@ -23,13 +23,14 @@ import {State} from "../../app.reducer";
                               *ngIf="formState.isValidationPending"></mat-progress-spinner>
       </mat-form-field>
       <br>
-      <div>
-        <button mat-raised-button color="primary" class="continue-btn">
-          CONTINUE
-          <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" 
-                                *ngIf="formState.controls.isLoading"></mat-progress-spinner>
-        </button>
-      </div>
+      
+      <button mat-raised-button color="primary" class="continue-btn"
+              [disabled]="formState.isValidationPending || formState.isInvalid && formState.isSubmitted">
+        CONTINUE
+        <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" 
+                              *ngIf="formState.userDefinedProperties.isLoading"></mat-progress-spinner>
+      </button>
+        
     </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush

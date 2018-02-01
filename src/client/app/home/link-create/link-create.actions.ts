@@ -28,10 +28,10 @@ export namespace LinkCreate {
     SUBMIT_SETUP_BRAND: string;
     SUBMIT_SETUP_CTA: string;
     SUBMIT_SETUP_CTA_RESULT: string;
-
     SET_PAGE_URL_PREVIEW: string;
-
     SELECT_STEP: string;
+
+    NEW_LINK: string;
   }
 
   export const ActionTypes: IHomeActions = {
@@ -43,10 +43,10 @@ export namespace LinkCreate {
     SUBMIT_SETUP_BRAND: type(`${CATEGORY} SUBMIT_SETUP_BRAND`),
     SUBMIT_SETUP_CTA: type(`${CATEGORY} SUBMIT_SETUP_CTA`),
     SUBMIT_SETUP_CTA_RESULT: type(`${CATEGORY} SUBMIT_SETUP_CTA_RESULT`),
-
     SET_PAGE_URL_PREVIEW: type(`${CATEGORY} SET_PAGE_URL_PREVIEW`),
-
     SELECT_STEP: type(`${CATEGORY} SELECT_STEP`),
+
+    NEW_LINK: type(`${CATEGORY} NEW_LINK`),
   };
 
   /**
@@ -100,6 +100,11 @@ export namespace LinkCreate {
   export class SelectStepAction implements Action {
     type = ActionTypes.SELECT_STEP;
     constructor(public payload: StepperTypes) { }
+  }
+
+  export class NewLinkAction implements Action {
+    type = ActionTypes.NEW_LINK;
+    constructor() { }
   }
 
   /**

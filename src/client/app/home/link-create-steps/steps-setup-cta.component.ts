@@ -24,22 +24,27 @@ import {LinkCreate} from "../link-create/link-create.actions";
         <mat-hint>Where will your button go?</mat-hint>
       </mat-form-field>
       <br>
-      <div>
-        <button mat-raised-button color="primary" class="continue-btn">
-          CONTINUE
-          <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" 
-                                *ngIf="formState.controls.isLoading"></mat-progress-spinner>
-        </button>
-        <h5>
-          {{ submitError }}
-        </h5>
-      </div>
+      
+      <button mat-raised-button color="primary" class="continue-btn"
+              [disabled]="formState.isValidationPending || formState.isInvalid && formState.isSubmitted">
+        CONTINUE
+        <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" 
+                              *ngIf="formState.userDefinedProperties.isLoading"></mat-progress-spinner>
+      </button>
+
+      <br>
+      <br>
+      <mat-error>
+        <small>{{ errorMessage }}</small>
+      </mat-error>
+      
     </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StepsSetupCtaComponent {
   @Input() formState: FormGroupState<CreateLinkDto>;
+  @Input() errorMessage: string;
   submittedValue: CreateLinkDto;
 
   constructor(private actionsSubject: ActionsSubject) { }

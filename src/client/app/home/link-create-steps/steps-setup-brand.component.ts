@@ -14,10 +14,14 @@ import {LinkCreate} from "../link-create/link-create.actions";
         <mat-hint>A nice attention grabbing header!</mat-hint>
       </mat-form-field>
       <br>
-      <button mat-raised-button color="primary" class="continue-btn">
+      
+      <button mat-raised-button color="primary" class="continue-btn"
+              [disabled]="formState.isValidationPending || formState.isInvalid && formState.isSubmitted">
         CONTINUE
-        <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" *ngIf="formState.controls.isLoading"></mat-progress-spinner>
+        <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" 
+                              *ngIf="formState.userDefinedProperties.isLoading"></mat-progress-spinner>
       </button>
+      
     </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush

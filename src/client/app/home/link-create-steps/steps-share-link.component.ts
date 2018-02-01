@@ -4,6 +4,8 @@ import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAct
 
 import {CreateLinkDto} from "../../shared/entities";
 import * as $ from "jquery";
+import {LinkCreate} from "../link-create/link-create.actions";
+import NewLinkAction = LinkCreate.NewLinkAction;
 
 @Component({
   selector: 'sd-steps-share-link',
@@ -24,17 +26,43 @@ import * as $ from "jquery";
                        [show]="8" 
                        [size]="4" 
                        [url]="shortPageUrl"></share-buttons>
+
+        <br>
+        <button mat-raised-button class="new-link-btn" (click)="newLink()">
+          NEW LINK
+        </button>
+        
       </div>
     </div>
   `,
+  styles: [` 
+      .new-link-btn {
+        width: 100%;
+        margin-top: 30px;
+      }
+      .share-btns share-button {
+        margin-left: -1px;
+        margin-top: -15px;
+      }
+      .share-btns share-buttons {
+        margin-left: -1px;
+        margin-top: 40px;
+      }
+    `
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StepsShareLinkComponent {
   @Input() shortPageUrl: string;
 
-  constructor() { }
+  constructor(private actionsSubject: ActionsSubject) { }
 
   onShortUrlClick($event: MouseEvent) {
     $($event.srcElement).select();
   }
+
+  newLink() {
+    this.actionsSubject.next(new NewLinkAction());
+  }
+
 }

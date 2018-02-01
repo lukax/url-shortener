@@ -45,16 +45,6 @@
   margin-bottom: 50px;
 }
 
-
-:host .share-btns share-button {
-  margin-left: -1px;
-  margin-top: -15px;
-}
-:host .share-btns share-buttons {
-  margin-left: -1px;
-  margin-top: 40px;
-}
-
 :host ::ng-deep .continue-btn {
   margin-top: 40px;
   /*width: 100%;*/

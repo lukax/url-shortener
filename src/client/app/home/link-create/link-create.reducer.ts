@@ -11,19 +11,20 @@ export interface State extends RootState {
     chooseLinkForm: FormGroupState<CreateLinkDto>,
     setupBrandForm: FormGroupState<CreateLinkDto>,
     setupCtaForm: FormGroupState<CreateLinkDto>
-    shortPageUrl: { url: string, errorMessage: string },
+    shortPageUrl: string,
+    errorMessage: string,
     cta: CreateLinkDto,
     stepper: LinkCreate.StepperTypes
   };
 }
 
-const CHOOSE_LINK_INITIAL_STATE = createFormGroupState<CreateLinkDto>('chooseLinkForm', {
+export const CHOOSE_LINK_INITIAL_STATE = createFormGroupState<CreateLinkDto>('chooseLinkForm', {
   pageUrl: ''
 });
-const SETUP_BRAND_INITIAL_STATE = createFormGroupState<CreateLinkDto>('setupBrandForm', {
+export const SETUP_BRAND_INITIAL_STATE = createFormGroupState<CreateLinkDto>('setupBrandForm', {
   name: '',
 });
-const SETUP_CTA_INITIAL_STATE = createFormGroupState<CreateLinkDto>('setupCtaForm', {
+export const SETUP_CTA_INITIAL_STATE = createFormGroupState<CreateLinkDto>('setupCtaForm', {
   message: '',
   buttonText: '',
   buttonUrl: ''
@@ -61,7 +62,13 @@ export function reducer(_s: any, _a: any) {
     },
     shortPageUrl(s = '', a: LinkCreate.SubmitSetupCtaResultAction) {
       if(a.type === LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT) {
-        return { url: 'http://jeit.in/' + a.payload.hash, errorMessage: a.payload.message };
+        return 'http://jeit.in/' + (a.payload.hash != null ? a.payload.hash : '');
+      }
+      return s;
+    },
+    errorMessage(s = '', a: LinkCreate.SubmitSetupCtaResultAction) {
+      if(a.type === LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT) {
+        return a.payload.message;
       }
       return s;
     },
@@ -98,3 +105,4 @@ export const getSetupCtaForm = (state: State) => state.linkCreate.setupCtaForm;
 export const getShortPageUrl = (state: State) => state.linkCreate.shortPageUrl;
 export const getCta = (state: State) => state.linkCreate.cta;
 export const getStepper = (state: State) => state.linkCreate.stepper;
+export const getErrorMessage = (state: State) => state.linkCreate.errorMessage;

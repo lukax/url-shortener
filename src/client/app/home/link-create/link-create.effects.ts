@@ -3,9 +3,16 @@ import { Store, Action } from '@ngrx/store';
 import { Effect, Actions } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { LinkService } from '../services/link.service';
-import {ClearAsyncErrorAction, SetAsyncErrorAction, StartAsyncValidationAction} from "ngrx-forms";
+import {
+  ClearAsyncErrorAction, ResetAction, SetAsyncErrorAction, SetUserDefinedPropertyAction, SetValueAction,
+  StartAsyncValidationAction
+} from "ngrx-forms";
 import {LinkCreate} from './link-create.actions';
-import {getChooseLinkForm, getCta, State} from "./link-create.reducer";
+import {
+  CHOOSE_LINK_INITIAL_STATE, getChooseLinkForm, getCta, SETUP_BRAND_INITIAL_STATE, SETUP_CTA_INITIAL_STATE,
+  State
+} from "./link-create.reducer";
+import SelectStepAction = LinkCreate.SelectStepAction;
 
 @Injectable()
 export class HomeEffects {
@@ -43,9 +50,12 @@ export class HomeEffects {
   @Effect() setupCta$: Observable<Action> = this.actions$
     .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
     .switchMap((action: LinkCreate.SubmitSetupCtaAction) =>
-        //Observable.timer(300)
-          //.map(() =>
-         this.store.select(getCta)
+        Observable.timer(300)
+        .map(() =>
+          new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', true)
+        )
+        .concat(
+          this.store.select(getCta)
            .switchMap((cta) =>
             this.linkService.createLink(cta)
               .flatMap(createLinkResult => {
@@ -53,16 +63,19 @@ export class HomeEffects {
                 return [
                   new LinkCreate.SubmitSetupCtaResultAction(createLinkResult),
                   new LinkCreate.SelectStepAction('share-link'),
+                  new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false)
                 ];
               })
               .catch(err => {
-                this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: 'fail' });
+                this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(err) });
                 return [
-                  new LinkCreate.SubmitSetupCtaResultAction({ error: err.message }),
+                  new LinkCreate.SubmitSetupCtaResultAction({ message: err.error.message }),
+                  new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false)
                 ];
               })
             )
-        );
+        )
+    );
 
   @Effect() verifyPageUrl$: Observable<Action> = this.store
     .select(getChooseLinkForm)
@@ -70,40 +83,38 @@ export class HomeEffects {
     .distinct(fs => fs.value)
     .switchMap(fs =>
       Observable.timer(300)
-        .map(() => new StartAsyncValidationAction(
-          fs.controls.pageUrl.id,
-          'exists',
-        ))
+        .map(() => new StartAsyncValidationAction(fs.controls.pageUrl.id,'exists'))
         .concat(
           this.linkService.verifyUrl( fs.value.pageUrl )
             .flatMap((resp) => {
               if (resp.isValid) {
                 return [
                   new LinkCreate.SetPageUrlPreviewAction(fs.value),
-                  new ClearAsyncErrorAction(
-                    fs.controls.pageUrl.id,
-                    'exists',
-                  ),
+                  new ClearAsyncErrorAction(fs.controls.pageUrl.id,'exists'),
                 ];
               }
               return [
                 new LinkCreate.SetPageUrlPreviewAction(null),
-                new SetAsyncErrorAction(
-                  fs.controls.pageUrl.id,
-                  'exists',
-                  fs.value.pageUrl,
-                ),
+                new SetAsyncErrorAction(fs.controls.pageUrl.id,'exists',fs.value.pageUrl),
               ];
             })
             .catch(resp => [
               new LinkCreate.SetPageUrlPreviewAction(null),
-              new SetAsyncErrorAction(
-                fs.controls.pageUrl.id,
-                'exists',
-                fs.value.pageUrl,
-              ),
+              new SetAsyncErrorAction(fs.controls.pageUrl.id,'exists',fs.value.pageUrl),
             ])
         )
+    );
+
+  @Effect() newLinkEffect$: Observable<Action> = this.actions$
+    .ofType(LinkCreate.ActionTypes.NEW_LINK)
+    .switchMap(() =>
+      Observable.of<Action>(
+        new SelectStepAction('choose-link'),
+        new SetValueAction(SETUP_BRAND_INITIAL_STATE.id, SETUP_BRAND_INITIAL_STATE.value),
+        new ResetAction(SETUP_BRAND_INITIAL_STATE.id),
+        new SetValueAction(SETUP_CTA_INITIAL_STATE.id, SETUP_CTA_INITIAL_STATE.value),
+        new ResetAction(SETUP_CTA_INITIAL_STATE.id)
+      )
     );
 
   constructor(
