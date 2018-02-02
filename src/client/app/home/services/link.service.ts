@@ -7,6 +7,7 @@ import {VerifyUrlDto} from "../../../../server/dtos/VerifyUrlDto";
 import {LinkCreate} from "../link-create/link-create.actions";
 import {CreateLinkDto, CreateLinkResultDto, VerifyUrlResultDto} from "../../shared/entities";
 import { HttpClient } from '@angular/common/http';
+import {URL_REGEXP} from "../../shared/utils";
 
 @Injectable()
 export class LinkService extends Analytics {
@@ -41,4 +42,9 @@ export class LinkService extends Analytics {
       ? (link.indexOf('://') === -1) ? 'http://' + link : link
       : link;
   }
+
+  isUrl(url: string): boolean {
+    return URL_REGEXP.test(url);
+  }
+
 }

@@ -3,7 +3,7 @@ import {AuthService, UserProfile} from "../../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {CreateLinkResultDto, CreateLinkDto} from "../../shared/entities";
-import {MatStepper} from "@angular/material";
+import {MatStepper, MatStep} from "@angular/material";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
 import {FormGroupState} from "ngrx-forms";
@@ -30,12 +30,15 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
   errorMessage$: Observable<string>;
 
   @ViewChild('formStepper') formStepper: MatStepper;
+  @ViewChild('chooseLinkStep') chooseLinkStep: MatStep;
+  @ViewChild('setupBrandStep') setupBrandStep: MatStep;
+  @ViewChild('setupCtaStep') setupCtaStep: MatStep;
+  @ViewChild('shareLinkStep') shareLinkStep: MatStep;
 
   private profile: UserProfile;
 
   constructor(private _auth: AuthService,
               private _formBuilder: FormBuilder,
-              private _sanitization: DomSanitizer,
               private _store: Store<State>) {
 
     this.chooseLinkForm$ = this._store.select(getChooseLinkForm);
@@ -53,19 +56,21 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this._store.select(getStepper)
       .subscribe(x => {
-          let index = 0;
           switch(x) {
+            case 'choose-link':
+              this.chooseLinkStep.select();
+              break;
             case 'setup-brand':
-              index = 1;
+              this.setupBrandStep.select();
               break;
             case 'setup-cta':
-              index = 2;
+              this.setupCtaStep.select();
               break;
             case 'share-link':
-              index = 3;
+              this.shareLinkStep.select();
               break;
           }
-          this.formStepper.selectedIndex = index;
+          this.formStepper._stateChanged();
       });
   }
 
@@ -90,14 +95,5 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
     //    this._auth.login();
     //}
   }
-
-  // private _sanitizeUrl(url: string) {
-  //   if (this.URL_REGEXP.test(url)) {
-  //     return this._sanitization.bypassSecurityTrustResourceUrl(this._linkService.linkenizer(url));
-  //   }
-  //   return null;
-  // }
-
-
 
 }

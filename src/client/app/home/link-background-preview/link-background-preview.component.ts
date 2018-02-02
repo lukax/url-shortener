@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AuthService, UserProfile} from "../../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
@@ -8,11 +8,12 @@ import {Headers, Http} from '@angular/http';
 
 @Component({
   moduleId: module.id,
-  selector: 'sd-link-preview',
-  templateUrl: 'link-preview.component.html',
-  styleUrls: ['link-preview.component.css'],
+  selector: 'sd-link-background-preview',
+  templateUrl: 'link-background-preview.component.html',
+  styleUrls: ['link-background-preview.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LinkPreviewComponent {
+export class LinkBackgroundPreviewComponent {
 
   constructor() {
 

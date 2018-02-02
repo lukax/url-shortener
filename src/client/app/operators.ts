@@ -13,3 +13,4 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/let';
 import "rxjs/add/operator/filter";
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/withLatestFrom';

@@ -13,6 +13,7 @@ import {
   State
 } from "./link-create.reducer";
 import SelectStepAction = LinkCreate.SelectStepAction;
+import {CreateLinkDto} from "../../shared/entities";
 
 @Injectable()
 export class HomeEffects {
@@ -49,33 +50,30 @@ export class HomeEffects {
 
   @Effect() setupCta$: Observable<Action> = this.actions$
     .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
-    .switchMap((action: LinkCreate.SubmitSetupCtaAction) =>
-        Observable.timer(300)
-        .map(() =>
-          new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', true)
-        )
+    .withLatestFrom(this.store.select(getCta))
+    .switchMap(([action, cta]) =>
+      Observable.timer(300)
+        .map(() => new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', true))
         .concat(
-          this.store.select(getCta)
-           .switchMap((cta) =>
-            this.linkService.createLink(cta)
-              .flatMap(createLinkResult => {
-                this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(createLinkResult) });
-                return [
-                  new LinkCreate.SubmitSetupCtaResultAction(createLinkResult),
-                  new LinkCreate.SelectStepAction('share-link'),
-                  new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false)
-                ];
-              })
-              .catch(err => {
-                this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(err) });
-                return [
-                  new LinkCreate.SubmitSetupCtaResultAction({ message: err.error.message }),
-                  new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false)
-                ];
-              })
+              this.linkService.createLink(cta)
+                .flatMap(createLinkResult => {
+                  this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(createLinkResult) });
+                  return [
+                    new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false),
+                    new LinkCreate.SubmitSetupCtaResultAction(createLinkResult),
+                    new LinkCreate.SelectStepAction('share-link'),
+                  ];
+                })
+                .catch(err => {
+                  this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(err) });
+                  return [
+                    new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false),
+                    new LinkCreate.SubmitSetupCtaResultAction({ message: err.error.message }),
+                  ];
+                })
             )
-        )
     );
+
 
   @Effect() verifyPageUrl$: Observable<Action> = this.store
     .select(getChooseLinkForm)
@@ -110,10 +108,12 @@ export class HomeEffects {
     .switchMap(() =>
       Observable.of<Action>(
         new SelectStepAction('choose-link'),
+        new SetValueAction(CHOOSE_LINK_INITIAL_STATE.id, CHOOSE_LINK_INITIAL_STATE.value),
+        new ResetAction(CHOOSE_LINK_INITIAL_STATE.id),
         new SetValueAction(SETUP_BRAND_INITIAL_STATE.id, SETUP_BRAND_INITIAL_STATE.value),
         new ResetAction(SETUP_BRAND_INITIAL_STATE.id),
         new SetValueAction(SETUP_CTA_INITIAL_STATE.id, SETUP_CTA_INITIAL_STATE.value),
-        new ResetAction(SETUP_CTA_INITIAL_STATE.id)
+        new ResetAction(SETUP_CTA_INITIAL_STATE.id),
       )
     );
 

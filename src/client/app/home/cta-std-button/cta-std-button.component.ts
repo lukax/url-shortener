@@ -1,4 +1,4 @@
-import {Component, Input} from "@angular/core";
+import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
 import {CreateLinkDto} from "../../shared/entities";
 
 @Component({
@@ -6,6 +6,7 @@ import {CreateLinkDto} from "../../shared/entities";
   selector: 'sd-cta-std-button',
   templateUrl: 'cta-std-button.component.html',
   styleUrls: ['cta-std-button.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CtaStdButtonComponent {
 

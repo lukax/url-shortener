@@ -1,7 +1,7 @@
 import {NgModule, Optional, SkipSelf} from '@angular/core';
 import { CreateLinkComponent } from './link-create/link-create.component';
 import { SharedModule } from '../shared/shared.module';
-import {LinkPreviewComponent} from "./link-preview/link-preview.component";
+import {LinkBackgroundPreviewComponent} from "./link-background-preview/link-background-preview.component";
 import {ShareButtonsModule} from "@ngx-share/buttons";
 import {CtaStdButtonComponent} from "./cta-std-button/cta-std-button.component";
 import {SERVICE_PROVIDERS} from "./services/index";
@@ -15,6 +15,7 @@ import {StepsChooseLinkComponent} from "./link-create-steps/steps-choose-link.co
 import {StepsSetupBrandComponent} from "./link-create-steps/steps-setup-brand.component";
 import {StepsSetupCtaComponent} from "./link-create-steps/steps-setup-cta.component";
 import {StepsShareLinkComponent} from "./link-create-steps/steps-share-link.component";
+import {LinkUrlPreviewComponent} from "./link-url-preview/link-url-preview";
 
 @NgModule({
   imports: [
@@ -31,21 +32,17 @@ import {StepsShareLinkComponent} from "./link-create-steps/steps-share-link.comp
   ],
   declarations: [
     CreateLinkComponent,
-    LinkPreviewComponent,
+    LinkBackgroundPreviewComponent,
+    LinkUrlPreviewComponent,
     CtaStdButtonComponent,
 
     StepsChooseLinkComponent,
     StepsSetupBrandComponent,
     StepsSetupCtaComponent,
-    StepsShareLinkComponent
+    StepsShareLinkComponent,
   ],
   providers: [
     ...SERVICE_PROVIDERS
-  ],
-  exports: [
-    CreateLinkComponent,
-    LinkPreviewComponent,
-    CtaStdButtonComponent,
   ],
 })
 export class HomeModule {
