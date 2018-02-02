@@ -14,8 +14,15 @@ export class BrowserService {
     let page: puppeteer.Page;
 
     try {
-      await this.initBrowser();
+      if(!this.browser) {
+        console.log('⏳️ init browser');
+        this.browser = await puppeteer.launch({
+          ignoreHTTPSErrors: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        });
+      }
 
+      console.log('⏳️ new page ' + pageURL);
       page = await this.browser.newPage();
 
       const nowTime = +new Date();
@@ -180,14 +187,6 @@ export class BrowserService {
     return content;
   }
 
-  private async initBrowser(): Promise<any> {
-    if(!this.browser) {
-      this.browser = await puppeteer.launch({
-        ignoreHTTPSErrors: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-      });
-    }
-  }
 
   private truncate(str: string, len: number) { return  str.length > len ? str.slice(0, len) + '…' : str; }
 
