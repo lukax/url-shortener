@@ -28,7 +28,7 @@ import {LinkCreate} from "../link-create/link-create.actions";
       <button mat-raised-button color="primary" class="continue-btn"
               [disabled]="formState.isValidationPending || formState.isInvalid && formState.isSubmitted">
         CONTINUE
-        <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" 
+        <mat-progress-spinner mode="indeterminate" diameter="20" color="accent"
                               *ngIf="formState.userDefinedProperties.isLoading"></mat-progress-spinner>
       </button>
 

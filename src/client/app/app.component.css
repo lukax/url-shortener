@@ -1,7 +1,13 @@
-
-
 :host {
   flex: 1 1 100%;
   display: flex;
   flex-flow: column;
 }
+
+:host ::ng-deep .mat-step-header .mat-step-icon {
+  background-color: #800080;
+}
+:host ::ng-deep .mat-raised-button.mat-primary {
+  background-color: #800080;
+}
+

@@ -1,6 +1,6 @@
 <sd-toolbar></sd-toolbar>
 <mat-sidenav-container class="example-container">
-  <mat-sidenav mode="side" opened="true">
+  <mat-sidenav mode="side" opened="true" disableClose="true">
 
     <mat-vertical-stepper [linear]="true" #formStepper>
       <mat-step #chooseLinkStep [completed]="(chooseLinkForm$ | async).isValid">

@@ -27,10 +27,9 @@ import NewLinkAction = LinkCreate.NewLinkAction;
                        [size]="4" 
                        [url]="shortPageUrl"></share-buttons>
 
-        <br>
-        <button mat-raised-button class="new-link-btn" (click)="newLink()">
+        <!--button mat-raised-button class="new-link-btn" (click)="newLink()">
           NEW LINK
-        </button>
+        </button-->
         
       </div>
     </div>

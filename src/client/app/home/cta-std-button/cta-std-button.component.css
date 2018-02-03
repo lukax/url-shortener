@@ -51,7 +51,7 @@
   margin-bottom: 0 !important;
   text-align: left !important;
   padding: 26px !important;
-  background-color: #663ab7 !important;
+  background-color: #800080 !important;
   border-radius: 2px !important;
 
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
@@ -80,7 +80,7 @@
 }
 .cta-wrapper .blue-cta-button {
   width: 37%;
-  background-color: #663ab7 !important;
+  background-color: #800080 !important;
   /*letter-spacing: 0.1em !important;*/
   border-radius: 2px !important;
   transition: all 0.2s ease-in-out !important;
@@ -90,7 +90,7 @@
   margin: 31px 0 25px 0 !important;
   float: right !important;
   margin: 0 !important;
-  color: #663ab7 !important;
+  color: #800080 !important;
   background-color: #FFF !important;
   padding: 17px 15px !important;
   text-align: center !important;
