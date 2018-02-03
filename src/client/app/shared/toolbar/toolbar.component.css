@@ -2,9 +2,13 @@
   height: 55px;
 }
 
-.example-icon {
+:host .example-icon {
   padding: 0 25px;
 }
-.example-spacer {
+:host .example-spacer {
   flex: 1 1 auto;
+}
+
+:host .main-logo {
+  width: 120px;
 }
