@@ -4,11 +4,12 @@ import { LinkService } from "../../services/LinkService";
 import { log } from "util";
 import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../../dtos/CreateLinkDto";
 import {VerifyUrlDto, VerifyUrlResultDto} from "../../dtos/VerifyUrlDto";
+import {checkJwt} from "../../app.auth";
 
 
 @Service()
 @JsonController('/api/links')
-//@UseBefore(checkJwt())
+@UseBefore(checkJwt())
 export class ApiLinksController {
 
     @Inject()

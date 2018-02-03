@@ -30,7 +30,7 @@ export class ProjectConfig extends SeedConfig {
       ...this.NPM_DEPENDENCIES,
       // {src: 'jquery/dist/jquery.min.js', inject: 'libs'},
       // {src: 'lodash/lodash.min.js', inject: 'libs'},
-      {src: 'auth0-js/build/auth0.min.js', inject: 'libs'},
+      // {src: 'auth0-js/build/auth0.min.js', inject: 'libs'},
 
       /* Select a pre-built Material theme */
       {src: '@angular/material/prebuilt-themes/deeppurple-amber.css', inject: true},
@@ -60,6 +60,18 @@ export class ProjectConfig extends SeedConfig {
     ];
 
     const additionalPackages: ExtendPackages[] = [
+      {
+        name: 'auth0-js',
+        path: 'node_modules/auth0-js/build/auth0.js'
+      },
+      // {
+      //   name: 'auth0-lock',
+      //   path: 'node_modules/auth0-lock/lib',
+      //   packageMeta: {
+      //     main: 'index.js',
+      //     defaultExtension: 'js'
+      //   }
+      // },
       {
         name: '@ngx-share/button',
         path: 'node_modules/@ngx-share/button/bundles/ngx-share-button.umd.js'

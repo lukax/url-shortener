@@ -11,6 +11,7 @@ import {
   getChooseLinkForm, State, getSetupBrandForm, getSetupCtaForm, getShortPageUrl,
   getCta, getStepper, getErrorMessage
 } from "./link-create.reducer";
+import {Auth} from "../../auth/auth.actions";
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -51,6 +52,7 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this._auth.getProfile().subscribe(x => this.profile = x);
+    this._store.dispatch(new Auth.LoginAction());
   }
 
   ngAfterViewInit(): void {
@@ -72,28 +74,6 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
           }
           this.formStepper._stateChanged();
       });
-  }
-
-  onSetupCtaSubmit() {
-    // this._store.dispatch(new LinkCreate.SetupCtaAction(<LinkCreateDto> {
-    //   message: this.ctaFormGroup.value.message,
-    //   buttonText: this.ctaFormGroup.value.buttonText,
-    //   buttonUrl: this._linkenizer(this.ctaFormGroup.value.buttonUrl),
-    // }));
-
-    //if (this._auth.isAuthenticated()) {
-    // this.isLoading = true;
-    // try {
-    //   this._auth.login();
-    //   await this._createLinkInternal();
-    //   this.formStepper.next();
-    // } catch(e) {
-    //   this.submitError = 'An error has occurred, please try again later';
-    // }
-    // this.isLoading = false;
-    //} else {
-    //    this._auth.login();
-    //}
   }
 
 }

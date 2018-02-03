@@ -3,7 +3,7 @@ import { AUTH_CONFIG } from './auth0-variables';
 import { Router } from '@angular/router';
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
-declare var auth0: any;
+import auth0 from 'auth0-js';
 
 @Injectable()
 export class AuthService {

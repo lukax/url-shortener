@@ -10,7 +10,7 @@ import {RouterModule} from "@angular/router";
 import {StoreModule} from "@ngrx/store";
 import {reducer} from "./link-create/link-create.reducer";
 import {EffectsModule} from "@ngrx/effects";
-import {HomeEffects} from "./link-create/link-create.effects";
+import {LinkCreateEffects} from "./link-create/link-create.effects";
 import {StepsChooseLinkComponent} from "./link-create-steps/steps-choose-link.component";
 import {StepsSetupBrandComponent} from "./link-create-steps/steps-setup-brand.component";
 import {StepsSetupCtaComponent} from "./link-create-steps/steps-setup-cta.component";
@@ -29,7 +29,7 @@ import {LinkViewComponent} from "./link-view/link-view.component";
     ]),
 
     StoreModule.forFeature('linkCreate', reducer),
-    EffectsModule.forFeature([HomeEffects]),
+    EffectsModule.forFeature([LinkCreateEffects]),
 
   ],
   declarations: [

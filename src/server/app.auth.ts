@@ -18,12 +18,12 @@ function checkJwt() {
       cache: true,
       rateLimit: true,
       jwksRequestsPerMinute: 5,
-      jwksUri: `https://${appConfig.auth.AUTH0_DOMAIN}/.well-known/jwks.json`
+      jwksUri: `https://${appConfig.auth.AUTH_DOMAIN}/.well-known/jwks.json`
     }),
 
     // Validate the audience and the issuer.
-    audience: appConfig.auth.AUTH0_AUDIENCE,
-    issuer: `https://${appConfig.auth.AUTH0_DOMAIN}/`,
+    audience: appConfig.auth.AUTH_AUDIENCE,
+    issuer: `https://${appConfig.auth.AUTH_DOMAIN}/`,
     algorithms: ['RS256']
   });
 }
@@ -99,11 +99,11 @@ function registerAuthMiddleware(expressApp: Express) {
 
     expressApp.get('/login',
         authenticate('auth0', <any>{
-            clientID: appConfig.auth.AUTH0_CLIENT_ID,
-            domain: appConfig.auth.AUTH0_DOMAIN,
-            redirectUri: appConfig.auth.AUTH0_CALLBACK_URL,
+            clientID: appConfig.auth.AUTH_CLIENT_ID,
+            domain: appConfig.auth.AUTH_DOMAIN,
+            redirectUri: appConfig.auth.AUTH_CALLBACK_URL,
             responseType: 'code',
-            audience: 'https://' + appConfig.auth.AUTH0_DOMAIN + '/userinfo',
+            audience: 'https://' + appConfig.auth.AUTH_DOMAIN + '/userinfo',
             scope: 'openid profile'
         }));
 

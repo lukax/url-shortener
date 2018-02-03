@@ -1,3 +1,5 @@
+import {APP_CONFIG} from "../app.config";
+
 interface AuthConfig {
   clientID: string;
   domain: string;
@@ -6,8 +8,9 @@ interface AuthConfig {
 }
 
 export const AUTH_CONFIG: AuthConfig = {
-  clientID: 'T9IPDYb4JkFXkwWLeQDy56nVI9K0wH6H',
-  domain: 'jeitin.auth0.com',
-  callbackURL: 'http://localhost:3000/callback',
-  apiURL: 'http://localhost:3000'
+  clientID: APP_CONFIG.AUTH_CLIENT_ID,
+  domain:  APP_CONFIG.AUTH_DOMAIN,
+  callbackURL:  APP_CONFIG.AUTH_CALLBACK_URL,
+  apiURL: APP_CONFIG.AUTH_API_URL
 };
+

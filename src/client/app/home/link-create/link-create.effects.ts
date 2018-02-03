@@ -13,10 +13,9 @@ import {
   State
 } from "./link-create.reducer";
 import SelectStepAction = LinkCreate.SelectStepAction;
-import {CreateLinkDto} from "../../shared/entities";
 
 @Injectable()
-export class HomeEffects {
+export class LinkCreateEffects {
 
   /**
    * This effect makes use of the `startWith` operator to trigger

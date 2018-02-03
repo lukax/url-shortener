@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Config } from './shared/config/env.config';
 import './operators';
 import {AuthService} from "./auth/auth.service";
+import {ActionsSubject} from "@ngrx/store";
+import {Auth} from "./auth/auth.actions";
 
 /**
  * This class represents the main application component.
@@ -14,10 +16,12 @@ import {AuthService} from "./auth/auth.service";
 })
 export class AppComponent {
 
-  constructor(private auth: AuthService) {
+
+  constructor(private actionsSubject: ActionsSubject) {
     console.log('Environment config', Config);
 
-    auth.handleAuthentication();
+    this.actionsSubject.next(new Auth.HandleAuthenticationAction());
   }
+
 
 }
