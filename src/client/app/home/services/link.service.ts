@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import {Analytics, AnalyticsService} from "../../modules/analytics/services/index";
-import {AuthHttp} from "angular2-jwt";
 import {VerifyUrlDto} from "../../../../server/dtos/VerifyUrlDto";
 import {LinkCreate} from "../link-create/link-create.actions";
 import {CreateLinkDto, CreateLinkResultDto, VerifyUrlResultDto} from "../../shared/entities";

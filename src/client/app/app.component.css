@@ -10,4 +10,6 @@
 :host ::ng-deep .mat-raised-button.mat-primary {
   background-color: #800080;
 }
-
+:host ::ng-deep .mat-raised-button[disabled][disabled] {
+  background-color: rgba(0,0,0,.12);
+}

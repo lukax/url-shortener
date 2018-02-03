@@ -8,5 +8,5 @@ export interface EnvConfig {
   AUTH_CLIENT_ID?: string;
   AUTH_DOMAIN?: string;
   AUTH_CALLBACK_URL?: string;
-  AUTH_API_URL?: string;
+  AUTH_API_ID?: string;
 }

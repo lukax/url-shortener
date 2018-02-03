@@ -64,6 +64,10 @@ export class ProjectConfig extends SeedConfig {
         name: 'auth0-js',
         path: 'node_modules/auth0-js/build/auth0.js'
       },
+      {
+        name: '@auth0/angular-jwt',
+        path: 'node_modules/@auth0/angular-jwt/bundles/core.umd.js'
+      },
       // {
       //   name: 'auth0-lock',
       //   path: 'node_modules/auth0-lock/lib',

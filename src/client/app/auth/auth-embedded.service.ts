@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
-import { AUTH_CONFIG } from './auth0-variables';
 import {NavigationStart, Router} from '@angular/router';
 //import Auth0Lock from 'auth0-lock';
 import {Observable} from "rxjs/Observable";
 import {UserProfile} from "./auth.service";
+import {APP_CONFIG} from "../app.config";
 
 @Injectable()
 export class AuthEmbeddedService {
 
-  lock = new Auth0Lock(AUTH_CONFIG.clientID, AUTH_CONFIG.domain, {
+  lock = new Auth0Lock(APP_CONFIG.AUTH_CLIENT_ID, APP_CONFIG.AUTH_DOMAIN, {
     autoclose: true,
     closable: false,
     auth: {
-      redirectUrl: AUTH_CONFIG.callbackURL,
+      redirectUrl: APP_CONFIG.AUTH_CALLBACK_URL,
       responseType: 'token id_token',
-      audience: `https://${AUTH_CONFIG.domain}/userinfo`,
+      //audience: `https://${APP_CONFIG.AUTH_DOMAIN}/userinfo`,
+      audience: APP_CONFIG.AUTH_API_ID,
       params: {
         scope: 'openid'
       }

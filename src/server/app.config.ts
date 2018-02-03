@@ -13,11 +13,11 @@ export interface IAppConfig {
     AUTH_DOMAIN: string;
     AUTH_CLIENT_SECRET: string;
     AUTH_CALLBACK_URL: string;
-    AUTH_AUDIENCE: string;
+    AUTH_API_ID: string;
   };
 }
 
-const appConfig: IAppConfig = {
+const appConfig: IAppConfig = ({
   database: {
     type: process.env.DB_TYPE,
     database: process.env.DB_NAME,
@@ -33,12 +33,12 @@ const appConfig: IAppConfig = {
     title: process.env.APP_TITLE
   },
   auth: {
-    AUTH_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
-    AUTH_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
-    AUTH_DOMAIN: process.env.AUTH0_DOMAIN,
-    AUTH_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL || `http://localhost:${process.env.PORT}/callback`,
-    AUTH_AUDIENCE: process.env.AUTH0_AUDIENCE
+    AUTH_CLIENT_ID: process.env.AUTH_CLIENT_ID,
+    AUTH_CLIENT_SECRET: process.env.AUTH_CLIENT_SECRET,
+    AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+    AUTH_CALLBACK_URL: process.env.AUTH_CALLBACK_URL || `http://localhost:${process.env.PORT}/callback`,
+    AUTH_API_ID: process.env.AUTH_API_ID
   }
-};
+});
 
 export { appConfig };

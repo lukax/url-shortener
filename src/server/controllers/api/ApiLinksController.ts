@@ -11,7 +11,6 @@ import {checkJwt} from "../../app.auth";
 @JsonController('/api/links')
 @UseBefore(checkJwt())
 export class ApiLinksController {
-
     @Inject()
     private links: LinkService;
 
