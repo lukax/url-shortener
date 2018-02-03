@@ -47,4 +47,12 @@ export class LinkService extends Analytics {
     return URL_REGEXP.test(url);
   }
 
+  getLinkViewUrlFromHash(hash: string): string {
+    return `/api/pages/${hash}`;
+  }
+
+  getLinkCta(hash: string): Observable<CreateLinkDto> {
+    return this.http.get<CreateLinkDto>(`/api/links/${hash}`);
+  }
+
 }

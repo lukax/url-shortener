@@ -4,8 +4,8 @@
 .cta-std-button {
   position: fixed !important;
   bottom: 0px !important;
-  left: 25em !important;
-  margin: 15px !important;
+  right: 0px !important;
+  margin: 20px !important;
   z-index: 2147483647 !important;
   border-radius: 0 !important;
 }
