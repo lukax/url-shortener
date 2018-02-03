@@ -62,7 +62,7 @@ export function reducer(_s: any, _a: any) {
     },
     shortPageUrl(s = '', a: LinkCreate.SubmitSetupCtaResultAction) {
       if(a.type === LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT) {
-        return 'http://jeit.in/' + (a.payload.hash != null ? a.payload.hash : '');
+        return `${window.location.protocol}//${window.location.host}/${(a.payload.hash != null ? a.payload.hash : '')}`;
       }
       return s;
     },

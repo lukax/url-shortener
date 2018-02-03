@@ -8,8 +8,8 @@ import {LinkCacheService} from "../../services/LinkCacheService";
 
 
 @Service()
-@Controller()
-export class HomeController {
+@Controller('/api/pages')
+export class PagesController {
 
     @Inject() private linkSvc: LinkService;
     @Inject() private browserSvc: BrowserService;

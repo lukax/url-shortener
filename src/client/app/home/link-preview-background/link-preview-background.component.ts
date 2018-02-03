@@ -8,12 +8,12 @@ import {Headers, Http} from '@angular/http';
 
 @Component({
   moduleId: module.id,
-  selector: 'sd-link-background-preview',
-  templateUrl: 'link-background-preview.component.html',
-  styleUrls: ['link-background-preview.component.css'],
+  selector: 'sd-link-preview-background',
+  templateUrl: 'link-preview-background.component.html',
+  styleUrls: ['link-preview-background.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LinkBackgroundPreviewComponent {
+export class LinkPreviewBackgroundComponent {
 
   constructor() {
 

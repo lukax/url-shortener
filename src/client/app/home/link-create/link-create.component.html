@@ -1,3 +1,4 @@
+<sd-toolbar></sd-toolbar>
 <mat-sidenav-container class="example-container">
   <mat-sidenav mode="side" opened="true">
 
@@ -31,8 +32,8 @@
   <mat-sidenav-content>
 
     <div class="link-preview hidden-on-mobile">
-      <sd-link-url-preview [pageUrl]="(chooseLinkForm$ | async).value.pageUrl"></sd-link-url-preview>
-      <sd-link-background-preview></sd-link-background-preview>
+      <sd-link-preview-url [pageUrl]="(chooseLinkForm$ | async).value.pageUrl"></sd-link-preview-url>
+      <sd-link-preview-background></sd-link-preview-background>
     </div>
 
 

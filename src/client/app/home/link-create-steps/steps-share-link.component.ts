@@ -37,8 +37,8 @@ import NewLinkAction = LinkCreate.NewLinkAction;
   `,
   styles: [` 
       .new-link-btn {
-        width: 100%;
-        margin-top: 30px;
+        /*width: 100%;*/
+        margin-top: 50px;
       }
       .share-btns share-button {
         margin-left: -1px;

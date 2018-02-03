@@ -12,7 +12,7 @@ import {appConfig} from "./app.config";
 import * as compression from "compression";
 
 
-export function init(expressApp: Express){
+export function init(expressApp: Express) {
   /**
    * Provide a configuration injectable.
    */

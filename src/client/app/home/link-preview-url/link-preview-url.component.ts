@@ -6,7 +6,7 @@ import {SafeResourceUrl} from "@angular/platform-browser/src/security/dom_saniti
 
 @Component({
   moduleId: module.id,
-  selector: 'sd-link-url-preview',
+  selector: 'sd-link-preview-url',
   template: `
     <iframe class="overlay" *ngIf="_pageUrl" [src]="_pageUrl" 
             scrolling="no" 
@@ -31,7 +31,7 @@ import {SafeResourceUrl} from "@angular/platform-browser/src/security/dom_saniti
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LinkUrlPreviewComponent {
+export class LinkPreviewUrlComponent {
   _pageUrl: SafeResourceUrl;
   _rawUrl: string;
 

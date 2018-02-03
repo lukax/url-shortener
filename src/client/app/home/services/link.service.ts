@@ -25,7 +25,7 @@ export class LinkService extends Analytics {
   }
 
   verifyUrl(url: string): Observable<VerifyUrlResultDto> {
-    return this.http.post<VerifyUrlResultDto>(`/api/verify/url`, <VerifyUrlDto>{
+    return this.http.post<VerifyUrlResultDto>(`/api/links/verify`, <VerifyUrlDto>{
         url: this.linkenizer(url)
       });
   }

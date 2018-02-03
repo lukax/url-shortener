@@ -41,4 +41,4 @@ const appConfig: IAppConfig = {
   }
 };
 
-export { appConfig }
+export { appConfig };

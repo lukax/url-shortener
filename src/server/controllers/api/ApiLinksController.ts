@@ -7,19 +7,19 @@ import {VerifyUrlDto, VerifyUrlResultDto} from "../../dtos/VerifyUrlDto";
 
 
 @Service()
-@JsonController('/api')
+@JsonController('/api/links')
 //@UseBefore(checkJwt())
 export class ApiLinksController {
 
     @Inject()
     private links: LinkService;
 
-    @Get('/links')
+    @Get('/')
     async findAllLinks(): Promise<ViewLinkDto[]> {
       return await this.links.findAll();
     }
 
-    @Post('/links')
+    @Post('/')
     async insertLink(@Body() model: CreateLinkDto): Promise<CreateLinkResultDto> {
 
         log("💥 insert link - " + JSON.stringify(model));
@@ -27,7 +27,7 @@ export class ApiLinksController {
         return await this.links.create(model);
     }
 
-    @Put('/links/:hash')
+    @Put('/:hash')
     async editLink(@Param("hash") hash: string, @Body() model: CreateLinkDto): Promise<boolean> {
 
       log("💥 edit link - " + JSON.stringify(model));
@@ -40,7 +40,7 @@ export class ApiLinksController {
       return await this.links.update(model, hash);
     }
 
-    @Post('/verify/url')
+    @Post('/verify')
     async verifyUrl(@Body() model: VerifyUrlDto): Promise<VerifyUrlResultDto> {
 
       log("💥 verify url - " + JSON.stringify(model));
