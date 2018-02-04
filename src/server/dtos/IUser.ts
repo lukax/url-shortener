@@ -1,5 +1,5 @@
 
-export interface IUser {
+export interface IUserJwt {
   iss: string;
   sub: string;
   aud?: string[] | string;

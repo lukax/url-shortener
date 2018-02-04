@@ -6,6 +6,7 @@ import {randomBytes} from "crypto";
 import axios from "axios";
 import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../dtos/CreateLinkDto";
 import {ObjectID} from "typeorm";
+import {User} from "../model/User";
 
 @Service()
 export class LinkService {
@@ -18,8 +19,8 @@ export class LinkService {
         return links.map(ViewLinkDto.toDto).filter(x => x != null);
     }
 
-    public async findAllByUser(userId: string): Promise<ViewLinkDto[]> {
-        const links = await this.repo.find({ userId: userId });
+    public async findAllByUser(user: User): Promise<ViewLinkDto[]> {
+        const links = await this.repo.find({ userId: user._id });
         return links.map(ViewLinkDto.toDto).filter(x => x != null);
     }
 
@@ -28,7 +29,7 @@ export class LinkService {
         return ViewLinkDto.toDto(x);
     }
 
-    public async create(model: CreateLinkDto): Promise<CreateLinkResultDto> {
+    public async create(model: CreateLinkDto, user: User): Promise<CreateLinkResultDto> {
 
       await this.throwIfNotValid(model);
 
@@ -39,6 +40,7 @@ export class LinkService {
       link.name = model.name;
       link.message = model.message;
       link.hash = this._createUrlHash(link);
+      link.userId = user._id;
 
       if((await this.findOneByHash(link.hash)) != null) {
         throw new Error("Could not save link, hash already exists. ");
@@ -49,7 +51,7 @@ export class LinkService {
       return { hash: link.hash };
     }
 
-    public async update(model: CreateLinkDto, hash: string): Promise<boolean> {
+    public async update(model: CreateLinkDto, hash: string, user: User): Promise<boolean> {
 
       await this.throwIfNotValid(model);
 

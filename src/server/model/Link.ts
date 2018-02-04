@@ -4,28 +4,28 @@ import {Column, Entity, ObjectID, ObjectIdColumn} from "typeorm";
 export class Link {
 
     @ObjectIdColumn()
-    public _id: ObjectID;
+    _id: ObjectID;
 
     @Column()
-    public name: string;
+    name: string;
 
     @Column()
-    public pageUrl: string;
+    pageUrl: string;
 
     @Column()
-    public hash: string;
+    hash: string;
 
     @Column()
-    public buttonUrl: string;
+    buttonUrl: string;
 
     @Column()
-    public buttonText: string;
+    buttonText: string;
 
     @Column()
-    public message: string;
+    message: string;
 
     @Column()
-    public userId: string;
+    userId: ObjectID;
 
 }
 

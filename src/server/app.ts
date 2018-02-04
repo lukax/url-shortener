@@ -10,8 +10,9 @@ import {join} from "path";
 import {getConnectionManager, useContainer as ormUsec} from "typeorm";
 import {appConfig} from "./app.config";
 import * as compression from "compression";
-import {checkJwt} from "./app.auth";
-
+import * as jwt from 'jsonwebtoken';
+import {IUserJwt} from "./dtos/IUser";
+import {UserService} from "./services/UserService";
 
 export function init(expressApp: Express) {
   /**
@@ -32,30 +33,30 @@ export function init(expressApp: Express) {
      */
     controllers: [join(__dirname, '/controllers/web/**/*'), join(__dirname, '/controllers/api/**/*') ],
 
-    authorizationChecker: async (action: Action, roles: string[]) => {
-      // here you can use request/response objects from action
-      // also if decorator defines roles it needs to access the action
-      // you can use them to provide granular access check
-      // checker must return either boolean (true or false)
-      // either promise that resolves a boolean value
-      // demo code:
-      // const token = action.request.headers["authorization"];
-      //
-      // const user = await getEntityManager().findOneByToken(User, token);
-      // if (user && !roles.length)
-      //   return true;
-      // if (user && roles.find(role => user.roles.indexOf(role) !== -1))
-      //   return true;
-      return !!action.request.user;
-    },
+    // authorizationChecker: async (action: Action, roles: string[]) => {
+    //   // here you can use request/response objects from action
+    //   // also if decorator defines roles it needs to access the action
+    //   // you can use them to provide granular access check
+    //   // checker must return either boolean (true or false)
+    //   // either promise that resolves a boolean value
+    //   // demo code:
+    //   // const token = action.request.headers["authorization"];
+    //   //
+    //   // const user = await getEntityManager().findOneByToken(User, token);
+    //   // if (user && !roles.length)
+    //   //   return true;
+    //   // if (user && roles.find(role => user.roles.indexOf(role) !== -1))
+    //   //   return true;
+    //   return !!action.request.user;
+    // },
 
     currentUserChecker: async (action: Action) => {
-      // here you can use request/response objects from action
-      // you need to provide a user object that will be injected in controller actions
-      // demo code:
-      //const token = action.request.headers["authorization"];
-      return action.request.user;
+      const token = action.request.headers["authorization"].split(' ')[1];
+      const decoded: IUserJwt = <IUserJwt>jwt.decode(token);
+      const userSvc = Container.get(UserService);
+      return await userSvc.findByToken(decoded);
     }
+
   });
 
   /**

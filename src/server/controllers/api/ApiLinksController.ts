@@ -8,8 +8,7 @@ import { log } from "util";
 import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../../dtos/CreateLinkDto";
 import {VerifyUrlDto, VerifyUrlResultDto} from "../../dtos/VerifyUrlDto";
 import {checkJwt} from "../../app.auth";
-import {IUser} from "../../dtos/IUser";
-import {Request} from "express";
+import {User} from "../../model/User";
 
 
 @Service()
@@ -26,30 +25,30 @@ export class ApiLinksController {
     }
 
     @Post('/')
-    async insertLink(@Body() model: CreateLinkDto, @CurrentUser() user: IUser): Promise<CreateLinkResultDto> {
+    async insertLink(@Body() model: CreateLinkDto, @CurrentUser() user: User): Promise<CreateLinkResultDto> {
 
         log(`💥 insert link - ${JSON.stringify(model)}, user - ${JSON.stringify(user)}`);
 
-        return await this.links.create(model);
+        return await this.links.create(model, user);
     }
 
     @Put('/:hash')
-    async editLink(@Param("hash") hash: string, @Body() model: CreateLinkDto): Promise<boolean> {
+    async editLink(@Param("hash") hash: string, @Body() model: CreateLinkDto, @CurrentUser() user: User): Promise<boolean> {
 
-      log("💥 edit link - " + JSON.stringify(model));
+      log(`💥 edit link - ${JSON.stringify(model)}, user - ${JSON.stringify(user)}`);
 
       const l = await this.links.findOneByHash(hash);
       if(l == null) {
         throw new NotFoundError(`Link not found`);
       }
 
-      return await this.links.update(model, hash);
+      return await this.links.update(model, hash, user);
     }
 
     @Post('/verify')
-    async verifyUrl(@Body() model: VerifyUrlDto, @Req() req: Request): Promise<VerifyUrlResultDto> {
+    async verifyUrl(@Body() model: VerifyUrlDto, @CurrentUser() user: User): Promise<VerifyUrlResultDto> {
 
-      log(`💥 verify link - ${JSON.stringify(model)}, user - ${JSON.stringify(req.user)}`);
+      log(`💥 verify link - ${JSON.stringify(model)}, user - ${JSON.stringify(user)}`);
 
       const isValid = await this.links.isUrlValid(model.url);
       return <VerifyUrlResultDto>{
