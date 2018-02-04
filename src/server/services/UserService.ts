@@ -2,6 +2,8 @@ import {User} from "../model/User";
 import {OrmRepository} from "typeorm-typedi-extensions";
 import {Service} from "typedi";
 import {UserRepository} from "../repository/UserRepository";
+import axios from "axios";
+import {IUser} from "../dtos/IUser";
 
 @Service()
 export class UserService {
@@ -15,6 +17,12 @@ export class UserService {
 
     public async persist(user: User): Promise<any> {
         return this.repo.save(user);
+    }
+
+    public async getUserInfo(accessToken: string): Promise<IUser> {
+      const res = await axios.get(`https://jeitin.auth0.com/userinfo`,
+        {timeout: 5000, headers: { 'Authorization': `Bearer ${accessToken}`} });
+      return res.data;
     }
 
 }

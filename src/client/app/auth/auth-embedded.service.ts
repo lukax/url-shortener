@@ -14,10 +14,9 @@ export class AuthEmbeddedService {
     auth: {
       redirectUrl: APP_CONFIG.AUTH_CALLBACK_URL,
       responseType: 'token id_token',
-      //audience: `https://${APP_CONFIG.AUTH_DOMAIN}/userinfo`,
       audience: APP_CONFIG.AUTH_API_ID,
       params: {
-        scope: 'openid'
+        scope: 'openid profile email'
       }
     },
     theme: {

@@ -79,7 +79,7 @@ export class LinkCreateEffects {
     .filter(fs => !!fs.value.pageUrl)
     .distinct(fs => fs.value)
     .switchMap(fs =>
-      Observable.timer(300)
+      Observable.timer(1000)
         .map(() => new StartAsyncValidationAction(fs.controls.pageUrl.id,'exists'))
         .concat(
           this.linkService.verifyUrl( fs.value.pageUrl )

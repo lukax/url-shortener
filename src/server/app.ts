@@ -10,6 +10,7 @@ import {join} from "path";
 import {getConnectionManager, useContainer as ormUsec} from "typeorm";
 import {appConfig} from "./app.config";
 import * as compression from "compression";
+import {checkJwt} from "./app.auth";
 
 
 export function init(expressApp: Express) {
@@ -24,11 +25,6 @@ export function init(expressApp: Express) {
   rtUsec(Container);
   ormUsec(Container);
 
-  /**
-   * We create a new express server instance.
-   * We could have also use useExpressServer here to attach controllers to an existing express instance.
-   */
-  //registerAuthMiddleware(expressApp);
   useExpressServer(expressApp, {
     /**
      * We can add options about how routing-controllers should configure itself.
@@ -36,6 +32,30 @@ export function init(expressApp: Express) {
      */
     controllers: [join(__dirname, '/controllers/web/**/*'), join(__dirname, '/controllers/api/**/*') ],
 
+    authorizationChecker: async (action: Action, roles: string[]) => {
+      // here you can use request/response objects from action
+      // also if decorator defines roles it needs to access the action
+      // you can use them to provide granular access check
+      // checker must return either boolean (true or false)
+      // either promise that resolves a boolean value
+      // demo code:
+      // const token = action.request.headers["authorization"];
+      //
+      // const user = await getEntityManager().findOneByToken(User, token);
+      // if (user && !roles.length)
+      //   return true;
+      // if (user && roles.find(role => user.roles.indexOf(role) !== -1))
+      //   return true;
+      return !!action.request.user;
+    },
+
+    currentUserChecker: async (action: Action) => {
+      // here you can use request/response objects from action
+      // you need to provide a user object that will be injected in controller actions
+      // demo code:
+      //const token = action.request.headers["authorization"];
+      return action.request.user;
+    }
   });
 
   /**

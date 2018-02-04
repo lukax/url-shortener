@@ -1,16 +1,22 @@
-import {JsonController, Get, Post, Body, NotFoundError, UseBefore, Put, Param} from "routing-controllers";
+import {
+  JsonController, Get, Post, Body, NotFoundError, UseBefore, Put, Param, CurrentUser,
+  Req
+} from "routing-controllers";
 import { Inject, Service } from "typedi";
 import { LinkService } from "../../services/LinkService";
 import { log } from "util";
 import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../../dtos/CreateLinkDto";
 import {VerifyUrlDto, VerifyUrlResultDto} from "../../dtos/VerifyUrlDto";
 import {checkJwt} from "../../app.auth";
+import {IUser} from "../../dtos/IUser";
+import {Request} from "express";
 
 
 @Service()
 @JsonController('/api/links')
 @UseBefore(checkJwt())
 export class ApiLinksController {
+
     @Inject()
     private links: LinkService;
 
@@ -20,9 +26,9 @@ export class ApiLinksController {
     }
 
     @Post('/')
-    async insertLink(@Body() model: CreateLinkDto): Promise<CreateLinkResultDto> {
+    async insertLink(@Body() model: CreateLinkDto, @CurrentUser() user: IUser): Promise<CreateLinkResultDto> {
 
-        log("💥 insert link - " + JSON.stringify(model));
+        log(`💥 insert link - ${JSON.stringify(model)}, user - ${JSON.stringify(user)}`);
 
         return await this.links.create(model);
     }
@@ -41,9 +47,9 @@ export class ApiLinksController {
     }
 
     @Post('/verify')
-    async verifyUrl(@Body() model: VerifyUrlDto): Promise<VerifyUrlResultDto> {
+    async verifyUrl(@Body() model: VerifyUrlDto, @Req() req: Request): Promise<VerifyUrlResultDto> {
 
-      log("💥 verify url - " + JSON.stringify(model));
+      log(`💥 verify link - ${JSON.stringify(model)}, user - ${JSON.stringify(req.user)}`);
 
       const isValid = await this.links.isUrlValid(model.url);
       return <VerifyUrlResultDto>{
