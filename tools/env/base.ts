@@ -1,13 +1,16 @@
 import { EnvConfig } from './env-config.interface';
+import dotenv = require('dotenv');
+const dotenvConfig = dotenv.config();
+if (dotenvConfig.error) { throw dotenvConfig.error; }
 
 const BaseConfig: EnvConfig = {
   // API url
-  API: 'http://localhost:9001',
+  API: process.env.AUTH_API_ID,
 
-  AUTH_CLIENT_ID: 'T9IPDYb4JkFXkwWLeQDy56nVI9K0wH6H',
-  AUTH_DOMAIN: 'jeitin.auth0.com',
-  AUTH_CALLBACK_URL: 'http://localhost:3000/callback',
-  AUTH_API_ID: 'https://jeit.in/api/'
+  AUTH_CLIENT_ID: process.env.AUTH_CLIENT_ID,
+  AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+  AUTH_CALLBACK_URL: process.env.AUTH_CALLBACK_URL,
+  AUTH_API_ID: process.env.AUTH_API_ID,
 };
 
 export = BaseConfig;

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {NavigationStart, Router} from '@angular/router';
-//import Auth0Lock from 'auth0-lock';
 import {Observable} from "rxjs/Observable";
 import {UserProfile} from "./auth.service";
 import {APP_CONFIG} from "../app.config";

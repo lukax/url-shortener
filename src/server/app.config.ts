@@ -36,7 +36,7 @@ const appConfig: IAppConfig = ({
     AUTH_CLIENT_ID: process.env.AUTH_CLIENT_ID,
     AUTH_CLIENT_SECRET: process.env.AUTH_CLIENT_SECRET,
     AUTH_DOMAIN: process.env.AUTH_DOMAIN,
-    AUTH_CALLBACK_URL: process.env.AUTH_CALLBACK_URL || `http://localhost:${process.env.PORT}/callback`,
+    AUTH_CALLBACK_URL: process.env.AUTH_CALLBACK_URL,
     AUTH_API_ID: process.env.AUTH_API_ID
   }
 });
