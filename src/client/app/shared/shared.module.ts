@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import {MaterialModule} from "../material/material.module";
+import {LoadingSpinnerComponent} from "./loading-spinner/loading-spinner.component";
 
 
 @NgModule({
@@ -12,14 +13,19 @@ import {MaterialModule} from "../material/material.module";
     CommonModule,
     MaterialModule,
   ],
-  declarations: [ToolbarComponent],
-  exports: [
+  declarations: [
     ToolbarComponent,
+    LoadingSpinnerComponent,
+  ],
+  exports: [
     CommonModule,
     MaterialModule,
-
     FormsModule,
     ReactiveFormsModule,
+
+    ToolbarComponent,
+    LoadingSpinnerComponent,
+
   ],
 })
 export class SharedModule {

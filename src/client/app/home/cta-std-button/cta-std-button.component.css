@@ -5,7 +5,7 @@
   position: fixed !important;
   bottom: 0px !important;
   right: 0px !important;
-  margin: 20px !important;
+  margin: 25px !important;
   /*z-index: 2147483647 !important;*/
   z-index: 100000 !important;
   border-radius: 0 !important;
@@ -22,6 +22,11 @@
   .cta-std-button {
     left: unset !important;
     right: 0 !important;
+  }
+}
+@media screen and (max-width: 400px) {
+  .cta-std-button {
+    margin: 0 !important;
   }
 }
 

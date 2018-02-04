@@ -10,15 +10,15 @@ import {Observable} from "rxjs/Observable";
   moduleId: module.id,
   selector: 'sd-link-view',
   template: `
-    <iframe [src]="pageUrl" frameborder="0" sandbox="allow-scripts allow-same-origin"></iframe>
+    <iframe [src]="pageUrl" frameborder="0" sandbox="allow-scripts allow-same-origin" (load)="onPageLoad()"></iframe>
     <sd-cta-std-button [cta]="cta$"></sd-cta-std-button>
+    <sd-loading-spinner *ngIf="isLoading"></sd-loading-spinner>
   `,
   styles: [`
     iframe {
       width: 100%;
       height: 100%;
       position: absolute;
-      z-index: 2;
     }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,6 +26,7 @@ import {Observable} from "rxjs/Observable";
 export class LinkViewComponent implements OnInit, OnDestroy {
   pageUrl: SafeResourceUrl;
   cta$: Observable<CreateLinkDto>;
+  isLoading: boolean;
   private sub: Subscription;
 
   constructor(private route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class LinkViewComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
+      this.isLoading = true;
       this.pageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.linkService.getLinkViewUrlFromHash(params['pageHash']));
       this.cta$ = this.linkService.getLinkCta(params['pageHash']);
     });
@@ -43,4 +45,7 @@ export class LinkViewComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  onPageLoad() {
+    this.isLoading = false;
+  }
 }
