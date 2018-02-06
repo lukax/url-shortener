@@ -62,6 +62,7 @@ export function init(port: number, mode: string) {
     app.use('/js', express.static(path.resolve(__dirname, _clientDir + '/js')));
     app.use('/css', express.static(path.resolve(__dirname, _clientDir + '/css')));
     app.use('/assets', express.static(path.resolve(__dirname, _clientDir + '/assets')));
+    app.use('/fonts', express.static(path.resolve(__dirname, _clientDir + '/fonts')));
 
     /**
      * Spa Res Sender.

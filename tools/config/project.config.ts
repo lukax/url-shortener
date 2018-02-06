@@ -62,20 +62,20 @@ export class ProjectConfig extends SeedConfig {
     const additionalPackages: ExtendPackages[] = [
       {
         name: 'auth0-js',
-        path: 'node_modules/auth0-js/build/auth0.js'
+        path: 'node_modules/auth0-js/build/auth0.min.js'
       },
       {
         name: '@auth0/angular-jwt',
         path: 'node_modules/@auth0/angular-jwt/bundles/core.umd.js'
       },
-      // {
-      //   name: 'auth0-lock',
-      //   path: 'node_modules/auth0-lock/lib',
-      //   packageMeta: {
-      //     main: 'index.js',
-      //     defaultExtension: 'js'
-      //   }
-      // },
+      {
+        name: 'auth0-lock',
+        path: 'node_modules/auth0-lock/lib',
+        packageMeta: {
+          main: 'index.js',
+          defaultExtension: 'js'
+        }
+      },
       {
         name: '@ngx-share/button',
         path: 'node_modules/@ngx-share/button/bundles/ngx-share-button.umd.js'
@@ -164,7 +164,6 @@ export class ProjectConfig extends SeedConfig {
         name: '@angular/cdk/table',
         path: 'node_modules/@angular/cdk/bundles/cdk-table.umd.js'
       },
-
       {
         name: 'lodash',
         path: 'node_modules/lodash/lodash.js'
@@ -203,11 +202,11 @@ export class ProjectConfig extends SeedConfig {
       },
       {
         name: 'angulartics2',
-        path: 'node_modules/angulartics2/bundles',
-        packageMeta: {
-          main: 'core.umd.js',
-          defaultExtension: 'umd.js'
-        }
+        path: 'node_modules/angulartics2/bundles/core.umd.js',
+      },
+      {
+        name: 'angulartics2/segment',
+        path: 'node_modules/angulartics2/bundles/segment.umd.js',
       },
       {
         name: 'ngrx-store-freeze',

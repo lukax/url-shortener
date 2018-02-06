@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {Subject} from "rxjs/Subject";
 import {Observable} from "rxjs/Observable";
-import auth0 from 'auth0-js';
 import {APP_CONFIG} from "../app.config";
 
 @Injectable()
 export class AuthService {
 
-  auth0 = new auth0.WebAuth({
+  auth0 = new WebAuth({
     clientID: APP_CONFIG.AUTH_CLIENT_ID,
     domain: APP_CONFIG.AUTH_DOMAIN,
     responseType: 'token id_token',

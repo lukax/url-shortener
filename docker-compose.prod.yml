@@ -10,6 +10,7 @@ services:
     image: jeitin/prod
     environment:
       - PORT=80
+      - AUTH_CALLBACK_URL=http://localhost:80
     networks:
       - prod-network
     ports:
