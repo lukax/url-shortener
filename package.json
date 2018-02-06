@@ -45,8 +45,8 @@
     "webdriver-update": "node ./node_modules/protractor/bin/webdriver-manager update",
     "compodoc": "./node_modules/.bin/compodoc -p src/client/tsconfig.json",
     "serve.compodoc": "./node_modules/.bin/compodoc -s",
-    "serve.prod.pm2": "pm2 start app.server.prod.js",
-    "serve.dev.pm2": "pm2 start app.server.dev.js"
+    "serve.dev.pm2": "pm2-dev app.server.dev.js",
+    "serve.prod.pm2": "pm2-runtime process.yml"
   },
   "author": "Minko Gechev <mgechev>",
   "contributors": [
@@ -66,7 +66,6 @@
     "@compodoc/compodoc": "^1.0.4",
     "@types/async": "^2.0.45",
     "@types/auth0-js": "^8.11.2",
-    "@types/aws-sdk": "^2.7.0",
     "@types/body-parser": "^1.16.7",
     "@types/browser-sync": "^0.0.38",
     "@types/compression": "0.0.35",
@@ -103,7 +102,6 @@
     "@types/yargs": "^10.0.0",
     "async": "^2.6.0",
     "autoprefixer": "^7.1.6",
-    "body-parser": "1.17.2",
     "browser-sync": "^2.18.13",
     "codelyzer": "^4.0.1",
     "concurrently": "^3.5.1",

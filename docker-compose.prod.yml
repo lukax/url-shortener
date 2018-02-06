@@ -5,16 +5,16 @@ services:
   web:
     build:
       context: .
-      dockerfile: ./.docker/Dockerfile_prod
+      dockerfile: ./.docker/prod/Dockerfile
     container_name: jeitin-prod
     image: jeitin/prod
     environment:
-      - PORT=80
-      - AUTH_CALLBACK_URL=http://localhost:80
+      - PORT=9001
+      - AUTH_CALLBACK_URL=http://localhost:9001
     networks:
       - prod-network
     ports:
-      - '5555:80'
+      - '9001:9001'
 
 networks:
   prod-network:

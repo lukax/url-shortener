@@ -1,4 +1,4 @@
-FROM node:8.6 as builder
+FROM node:8.9.4 as builder
 
 WORKDIR /home/node/jeitin
 
@@ -54,13 +54,13 @@ COPY . .
 RUN chown -R node:node .
 USER node
 
-RUN npm install
-RUN npm run build.prod
+RUN yarn install
+RUN yarn run build.prod
 
 # FROM nginx:1.13
 # COPY --from=builder /home/node/jeitin/dist/prod /var/www/dist/prod
-# COPY ./.docker/nginx.conf /etc/nginx/conf.d/jeitin.template
+# COPY ./.docker/prod/nginx.conf /etc/nginx/conf.d/jeitin.template
 
 # CMD /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/jeitin.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
-CMD pm2 start app.server.prod.js
+CMD ["yarn", "run", "serve.prod.pm2"]
