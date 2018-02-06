@@ -573,17 +573,21 @@ export class SeedConfig {
     base: this.PROJECT_ROOT,
     packageConfigPaths: [
       join('node_modules', '*', 'package.json'),
-      join('node_modules', '@angular', '*', 'package.json')
+      join('node_modules', '@angular', '*', 'package.json'),
       // for other modules like @ngx-translate the package.json path needs to updated here
       // otherwise npm run build.prod would fail
       // join('node_modules', '@ngx-translate', '*', 'package.json')
+      join('node_modules', '@ngx-share', '*', 'package.json'),
+      join('node_modules', '@ngrx', '*', 'package.json'),
+      join('node_modules', '@auth0', '*', 'package.json'),
+      join('node_modules', '@newrelic', '*', 'package.json'),
     ],
     paths: {
       // Note that for multiple apps this configuration need to be updated
       // You will have to include entries for each individual application in
       // `src/client`.
-      [join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this
-        .BOOTSTRAP_DIR}/*`,
+      //[join(this.TMP_DIR, '*')]: `${this.TMP_DIR}/*`,
+      [join(this.TMP_DIR, this.BOOTSTRAP_DIR, '*')]: `${this.TMP_DIR}/${this.BOOTSTRAP_DIR}/*`,
       '@angular/platform-browser/animations':
         'node_modules/@angular/platform-browser/bundles/platform-browser-animations.umd.js',
       '@angular/animations/browser':

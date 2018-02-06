@@ -69,26 +69,6 @@ export class ProjectConfig extends SeedConfig {
         path: 'node_modules/@auth0/angular-jwt/bundles/core.umd.js'
       },
       {
-        name: 'auth0-lock',
-        path: 'node_modules/auth0-lock/lib',
-        packageMeta: {
-          main: 'index.js',
-          defaultExtension: 'js'
-        }
-      },
-      {
-        name: '@ngx-share/button',
-        path: 'node_modules/@ngx-share/button/bundles/ngx-share-button.umd.js'
-      },
-      {
-        name: '@ngx-share/buttons',
-        path: 'node_modules/@ngx-share/buttons/bundles/ngx-share-buttons.umd.js'
-      },
-      {
-        name: '@ngx-share/core',
-        path: 'node_modules/@ngx-share/core/bundles/ngx-share-core.umd.js'
-      },
-      {
         name: 'jquery',
         path: 'node_modules/jquery/dist/jquery.js',
       },
@@ -169,20 +149,53 @@ export class ProjectConfig extends SeedConfig {
         path: 'node_modules/lodash/lodash.js'
       },
       {
+        name: 'auth0-lock',
+        packageMeta: {
+          main: 'lib/index.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: '@ngx-share/button',
+        packageMeta: {
+          main: 'bundles/ngx-share-button.umd.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: '@ngx-share/buttons',
+        packageMeta: {
+          main: 'bundles/ngx-share-buttons.umd.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: '@ngx-share/core',
+        packageMeta: {
+          main: 'bundles/ngx-share-core.umd.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: '@ngrx/core',
+        packageMeta: {
+          main: 'bundles/core.umd.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
         name: '@ngrx/store',
-        path: 'node_modules/@ngrx/store/bundles/store.umd.js'
+        packageMeta: {
+          main: 'bundles/store.umd.js',
+          defaultExtension: 'js'
+        }
       },
       {
         name: '@ngrx/effects',
-        path: 'node_modules/@ngrx/effects/bundles/effects.umd.js'
-      },
-      {
-        name: '@ngrx/db',
-        path: 'node_modules/@ngrx/db/bundles/db.umd.js'
-      },
-      {
-        name: '@ngrx/router-store',
-        path: 'node_modules/@ngrx/router-store/bundles/router-store.umd.js'
+        packageMeta: {
+          main: 'bundles/effects.umd.js',
+          defaultExtension: 'js'
+        }
       },
       {
         name: '@ngrx/effects/testing',
@@ -190,35 +203,57 @@ export class ProjectConfig extends SeedConfig {
       },
       {
         name: '@ngrx/store-devtools',
-        path: 'node_modules/@ngrx/store-devtools/bundles/store-devtools.umd.js'
+        packageMeta: {
+          main: 'bundles/store-devtools.umd.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: '@ngrx/db',
+        packageMeta: {
+          main: 'bundles/db.umd.js',
+          defaultExtension: 'js'
+        }
+      },
+      {
+        name: '@ngrx/router-store',
+        packageMeta: {
+          main: 'bundles/router-store.umd.js',
+          defaultExtension: 'js'
+        }
       },
       {
         name: '@ngx-translate/core',
-        path: 'node_modules/@ngrx/store-devtools/bundles/store-devtools.umd.js'
+        packageMeta: {
+          main: 'bundles/core.umd.js',
+          defaultExtension: 'js'
+        }
       },
       {
         name: '@ngx-translate/http-loader',
-        path: 'node_modules/@ngx-translate/store-devtools/bundles/store-devtools.umd.js'
+        packageMeta: {
+          main: 'bundles/http-loader.umd.js',
+          defaultExtension: 'js'
+        }
       },
       {
         name: 'angulartics2',
-        path: 'node_modules/angulartics2/bundles/core.umd.js',
+        path: 'node_modules/angulartics2/bundles/core.umd.js'
       },
       {
         name: 'angulartics2/segment',
-        path: 'node_modules/angulartics2/bundles/segment.umd.js',
+        path: 'node_modules/angulartics2/bundles/segment.umd.js'
       },
       {
         name: 'ngrx-store-freeze',
-        path: 'node_modules/ngrx-store-freeze/bundles/ngrx-store-freeze.umd.js'
+        packageMeta: {
+          main: 'bundles/ngrx-store-freeze.umd.js',
+          defaultExtension: 'js'
+        }
       },
       {
         name: 'deep-freeze-strict',
-        path: 'node_modules/deep-freeze-strict',
-        packageMeta: {
-          main: 'index.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/deep-freeze-strict/index.js'
       },
       {
         name: 'ngrx-forms',
