@@ -1,5 +1,6 @@
 {
-  "name": "angular-seed-express",
+  "name": "jeitin-app",
+  "private": true,
   "version": "5.0.1",
   "description": "Modular starter project for Angular 2 (and beyond) with statically typed build and AoT compilation with Express",
   "repository": "https://github.com/vyakymenko/angular-seed-express.git",
@@ -43,7 +44,9 @@
     "webdriver-start": "node ./node_modules/protractor/bin/webdriver-manager start",
     "webdriver-update": "node ./node_modules/protractor/bin/webdriver-manager update",
     "compodoc": "./node_modules/.bin/compodoc -p src/client/tsconfig.json",
-    "serve.compodoc": "./node_modules/.bin/compodoc -s"
+    "serve.compodoc": "./node_modules/.bin/compodoc -s",
+    "serve.prod.pm2": "pm2 start app.server.prod.js",
+    "serve.dev.pm2": "pm2 start app.server.dev.js"
   },
   "author": "Minko Gechev <mgechev>",
   "contributors": [
@@ -194,7 +197,8 @@
     "typeorm-typedi-extensions": "^0.1.1",
     "typescript": "^2.6.1",
     "walk": "^2.3.9",
-    "yargs": "^10.0.3"
+    "yargs": "^10.0.3",
+    "pm2": "^2.9.3"
   },
   "dependencies": {
     "@angular-devkit/build-optimizer": "0.0.41",

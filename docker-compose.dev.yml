@@ -6,11 +6,12 @@ services:
     build:
       context: .
       dockerfile: ./.docker/Dockerfile_dev
-    command: npm start
-    container_name: angular-seed-dev
-    image: angular-seed/dev
+    container_name: jeitin-dev
+    image: jeitin/dev
     volumes:
-      - ./src:/home/node/angular-seed/src
+      - ./src:/home/node/jeitin/src
+    environment:
+      - PORT=5555
     networks:
       - dev-network
     ports:

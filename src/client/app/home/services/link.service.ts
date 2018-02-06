@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import {Analytics, AnalyticsService} from "../../modules/analytics/services/index";
-import {VerifyUrlDto} from "../../../../server/dtos/VerifyUrlDto";
 import {LinkCreate} from "../link-create/link-create.actions";
-import {CreateLinkDto, CreateLinkResultDto, VerifyUrlResultDto} from "../../shared/entities";
+import {CreateLinkDto, CreateLinkResultDto, VerifyUrlDto, VerifyUrlResultDto} from "../../shared/entities";
 import { HttpClient } from '@angular/common/http';
 import {URL_REGEXP} from "../../shared/utils";
 
