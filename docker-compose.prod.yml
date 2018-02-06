@@ -11,6 +11,7 @@ services:
     environment:
       - PORT=9001
       - AUTH_CALLBACK_URL=http://localhost:9001
+      - DB_HOST=docker.for.mac.localhost # Mac-only DNS name for localhost, will resolve to the internal IP address used by the host.
     networks:
       - prod-network
     ports:
