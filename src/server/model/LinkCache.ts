@@ -10,7 +10,7 @@ export class LinkCache {
   public pageUrl: string;
 
   @Column()
-  public cacheContent: string;
+  public fileKey: string;
 
   @Column()
   public cacheTime: number;
@@ -18,7 +18,7 @@ export class LinkCache {
   isAlive(): boolean {
     const seconds = ((+new Date()) - this.cacheTime) / 1000;
     const maxTimeAliveSeconds = 60 * 60 * 24;
-    return this.cacheContent != null && seconds < maxTimeAliveSeconds;
+    return !!this.fileKey && seconds < maxTimeAliveSeconds;
   }
 
 }

@@ -15,6 +15,12 @@ export interface IAppConfig {
     AUTH_CALLBACK_URL: string;
     AUTH_API_ID: string;
   };
+
+  storage: {
+    AWS_ACCESS_KEY_ID: string;
+    AWS_SECRET_ACCESS_KEY: string;
+    AWS_S3_BUCKET: string;
+  };
 }
 
 const appConfig: IAppConfig = ({
@@ -38,7 +44,12 @@ const appConfig: IAppConfig = ({
     AUTH_DOMAIN: process.env.AUTH_DOMAIN,
     AUTH_CALLBACK_URL: process.env.AUTH_CALLBACK_URL,
     AUTH_API_ID: process.env.AUTH_API_ID
-  }
+  },
+  storage: {
+    AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+    AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+    AWS_S3_BUCKET: process.env.AWS_S3_BUCKET,
+  },
 });
 
 export { appConfig };
