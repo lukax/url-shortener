@@ -20,7 +20,7 @@ import NewLinkAction = LinkCreate.NewLinkAction;
         <!--<mat-icon>open_in_new</mat-icon>-->
         <!--</a>-->
         <share-button theme="material-dark" [button]="'copy'" [showText]="true" [size]="4" [url]="shortPageUrl"></share-button>
-        <br><br>
+        <br><br><br>
         <share-buttons theme="material-dark" 
                        [include]="['facebook','twitter','whatsapp','email','linkedin','pinterest','telegram','google']"
                        [show]="8" 
@@ -44,7 +44,7 @@ import NewLinkAction = LinkCreate.NewLinkAction;
         margin-top: -15px;
       }
       .share-btns share-buttons {
-        margin-left: -1px;
+        margin-left: -6px;
         margin-top: 40px;
       }
     `
