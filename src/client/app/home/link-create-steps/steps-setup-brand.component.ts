@@ -16,10 +16,10 @@ import {LinkCreate} from "../link-create/link-create.actions";
       <br>
       
       <button mat-raised-button color="primary" class="continue-btn"
-              [disabled]="formState.isValidationPending || formState.isInvalid && formState.isSubmitted">
+              [disabled]="formState.isValidationPending 
+                          || (formState.isInvalid && formState.isSubmitted) 
+                          || formState.userDefinedProperties.isLoading">
         CONTINUE
-        <mat-progress-spinner mode="indeterminate" color="accent" diameter="20" 
-                              *ngIf="formState.userDefinedProperties.isLoading"></mat-progress-spinner>
       </button>
       
     </form>
