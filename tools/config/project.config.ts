@@ -157,38 +157,23 @@ export class ProjectConfig extends SeedConfig {
       },
       {
         name: '@ngx-share/button',
-        packageMeta: {
-          main: 'bundles/ngx-share-button.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngx-share/button/bundles/ngx-share-button.umd.js'
       },
       {
         name: '@ngx-share/buttons',
-        packageMeta: {
-          main: 'bundles/ngx-share-buttons.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngx-share/buttons/bundles/ngx-share-buttons.umd.js'
       },
       {
         name: '@ngx-share/core',
-        packageMeta: {
-          main: 'bundles/ngx-share-core.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngx-share/core/bundles/ngx-share-core.umd.js'
       },
       {
         name: '@ngrx/store',
-        packageMeta: {
-          main: 'bundles/store.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngrx/store/bundles/store.umd.js'
       },
       {
         name: '@ngrx/effects',
-        packageMeta: {
-          main: 'bundles/effects.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngrx/effects/bundles/effects.umd.js'
       },
       {
         name: '@ngrx/effects/testing',
@@ -196,24 +181,15 @@ export class ProjectConfig extends SeedConfig {
       },
       {
         name: '@ngrx/store-devtools',
-        packageMeta: {
-          main: 'bundles/store-devtools.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngrx/store-devtools/bundles/store-devtools.umd.js'
       },
       {
         name: '@ngrx/db',
-        packageMeta: {
-          main: 'bundles/db.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngrx/db/bundles/db.umd.js'
       },
       {
         name: '@ngrx/router-store',
-        packageMeta: {
-          main: 'bundles/router-store.umd.js',
-          defaultExtension: 'js'
-        }
+        path: 'node_modules/@ngrx/router-store/bundles/router-store.umd.js'
       },
       {
         name: '@ngx-translate/core',

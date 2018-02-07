@@ -30,6 +30,7 @@ export namespace LinkCreate {
     SUBMIT_SETUP_CTA_RESULT: string;
     SET_PAGE_URL_PREVIEW: string;
     SELECT_STEP: string;
+    SELECTED_STEP: string;
 
     NEW_LINK: string;
   }
@@ -45,6 +46,7 @@ export namespace LinkCreate {
     SUBMIT_SETUP_CTA_RESULT: type(`${CATEGORY} SUBMIT_SETUP_CTA_RESULT`),
     SET_PAGE_URL_PREVIEW: type(`${CATEGORY} SET_PAGE_URL_PREVIEW`),
     SELECT_STEP: type(`${CATEGORY} SELECT_STEP`),
+    SELECTED_STEP: type(`${CATEGORY} SELECTED_STEP`),
 
     NEW_LINK: type(`${CATEGORY} NEW_LINK`),
   };
@@ -99,6 +101,10 @@ export namespace LinkCreate {
   export type StepperTypes = 'choose-link' | 'setup-brand' | 'setup-cta' | 'share-link';
   export class SelectStepAction implements Action {
     type = ActionTypes.SELECT_STEP;
+    constructor(public payload: StepperTypes) { }
+  }
+  export class SelectedStepAction implements Action {
+    type = ActionTypes.SELECTED_STEP;
     constructor(public payload: StepperTypes) { }
   }
 

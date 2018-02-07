@@ -12,6 +12,8 @@ import {
   getCta, getStepper, getErrorMessage
 } from "./link-create.reducer";
 import {Auth} from "../../auth/auth.actions";
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { LinkCreate } from './link-create.actions';
 
 /**
  * This class represents the lazy loaded HomeComponent.
@@ -31,10 +33,7 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
   errorMessage$: Observable<string>;
 
   @ViewChild('formStepper') formStepper: MatStepper;
-  @ViewChild('chooseLinkStep') chooseLinkStep: MatStep;
-  @ViewChild('setupBrandStep') setupBrandStep: MatStep;
-  @ViewChild('setupCtaStep') setupCtaStep: MatStep;
-  @ViewChild('shareLinkStep') shareLinkStep: MatStep;
+  stepperIndexDict: LinkCreate.StepperTypes[] = ['choose-link', 'setup-brand', 'setup-cta', 'share-link'];
 
   private profile: UserProfile;
 
@@ -58,22 +57,13 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this._store.select(getStepper)
       .subscribe(x => {
-          switch(x) {
-            case 'choose-link':
-              this.chooseLinkStep.select();
-              break;
-            case 'setup-brand':
-              this.setupBrandStep.select();
-              break;
-            case 'setup-cta':
-              this.setupCtaStep.select();
-              break;
-            case 'share-link':
-              this.shareLinkStep.select();
-              break;
-          }
+          this.formStepper.selectedIndex = this.stepperIndexDict.indexOf(x);
           this.formStepper._stateChanged();
       });
+  }
+
+  onStepperSelectionChange($event: StepperSelectionEvent) {
+    this._store.dispatch(new LinkCreate.SelectedStepAction(this.stepperIndexDict[$event.selectedIndex]));
   }
 
 }

@@ -83,10 +83,13 @@ export function reducer(_s: any, _a: any) {
       }
     },
     stepper(s = STEPPER_INITIAL_STATE, a: LinkCreate.Actions) {
-      if(a.type === LinkCreate.ActionTypes.SELECT_STEP) {
-        return a.payload;
+      switch(a.type) { 
+        case LinkCreate.ActionTypes.SELECT_STEP:
+        case LinkCreate.ActionTypes.SELECTED_STEP:
+          return a.payload;
+        default:
+          return s;
       }
-      return s;
     }
     // searchResults(s: string[] = [], a: Action) {
     //   if (a.type === SetSearchResultAction.TYPE) {
