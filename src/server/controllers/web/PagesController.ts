@@ -46,4 +46,35 @@ export class PagesController {
         };
     }
 
+    @Render('viewUrl')
+    @Get('/api/pages/preview/:pageUrl') 
+    @HttpCode(200)
+    async previewUrlAction(@Param("pageUrl") pageUrl: string, @Req() req: Request): Promise<any> {
+        console.log("Loading url preview: " + pageUrl);
+
+        pageUrl = decodeURIComponent(pageUrl);
+        const isValid = await this.linkSvc.isUrlValid(pageUrl);
+        if(!isValid) {
+            throw new NotFoundError();
+        }
+
+        const { host } = req.headers;
+
+        let content = null;
+        const cache = await this.linkCacheSvc.findCache(pageUrl);
+        if(cache.isAlive) {
+            console.log(`access -> ${pageUrl}. cached`);
+            content = cache.content;
+        } else {
+          console.log(`access -> ${pageUrl}. no cache`);
+          content = await this.browserSvc.getContentOfPage(pageUrl, host);
+          await this.linkCacheSvc.saveCache(pageUrl, content);
+        }
+
+        return {
+            port: this.config.host.port,
+            title: this.config.app.title,
+            content: content || "An error has occurred, please try again"
+        };
+    }
 }

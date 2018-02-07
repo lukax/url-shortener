@@ -36,7 +36,7 @@ export class LinkViewComponent implements OnInit, OnDestroy {
     this.sub = this.route.params.subscribe(params => {
       this.isLoading = true;
       const pageHash = params['pageHash'];
-      this.pageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.linkService.getLinkViewUrlFromHash(pageHash));
+      this.pageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.linkService.getLinkViewUrl(pageHash));
       this.linkService.getLinkCta(pageHash).subscribe(x => this.cta = x);
     });
   }

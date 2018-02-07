@@ -35,18 +35,22 @@ export class LinkService extends Analytics {
       }));
   }
 
-  linkenizer(link: string): string {
-    return (!!link)
-      ? (link.indexOf('://') === -1) ? 'http://' + link : link
-      : link;
+  linkenizer(url: string): string {
+    return (!!url)
+      ? (url.indexOf('://') === -1) ? 'http://' + url : url
+      : url;
   }
 
   isUrl(url: string): boolean {
     return URL_REGEXP.test(url);
   }
 
-  getLinkViewUrlFromHash(hash: string): string {
+  getLinkViewUrl(hash: string): string {
     return `/api/pages/${hash}`;
+  }
+
+  getLinkPreviewUrl(pageUrl: string): string {
+    return `/api/pages/preview/${encodeURIComponent(this.linkenizer(pageUrl))}`;
   }
 
   getLinkCta(hash: string): Observable<CreateLinkDto> {
