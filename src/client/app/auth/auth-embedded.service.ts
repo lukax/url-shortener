@@ -11,7 +11,7 @@ export class AuthEmbeddedService {
     autoclose: true,
     closable: false,
     auth: {
-      redirectUrl: APP_CONFIG.AUTH_CALLBACK_URL,
+      redirectUrl: `${window.location.protocol}//${window.location.host}/callback`,
       responseType: 'token id_token',
       audience: APP_CONFIG.AUTH_API_ID,
       params: {

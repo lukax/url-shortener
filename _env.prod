@@ -1,8 +1,5 @@
-PORT=9001
+PORT=80
 
-# npm start hosts the ng app from port 3000, where the redirect URL is
-# AUTH_CALLBACK_URL=http://localhost:3000/callback
-# AUTH_CALLBACK_URL=http://localhost:9001/callback
 AUTH_CALLBACK_URL=http://app.jeit.in/callback
 AUTH_CLIENT_ID=T9IPDYb4JkFXkwWLeQDy56nVI9K0wH6H
 AUTH_DOMAIN=jeitin.auth0.com
@@ -11,11 +8,12 @@ AUTH_API_ID=https://jeit.in/api/
 
 DB_TYPE=mongodb
 DB_NAME=jeitin
-DB_HOST=localhost
 # DB_HOST=docker.for.win.localhost
 # DB_HOST=docker.for.mac.localhost
-DB_USERNAME=
-DB_PASSWORD=
+# DB_HOST=localhost
+DB_HOST=172.25.10.168
+DB_USERNAME=adminjeitin
+DB_PASSWORD=2@!wx0Jeitin*Y^%$
 DB_PORT=27017
 
 PORT=9001

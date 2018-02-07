@@ -177,13 +177,6 @@ export class ProjectConfig extends SeedConfig {
         }
       },
       {
-        name: '@ngrx/core',
-        packageMeta: {
-          main: 'bundles/core.umd.js',
-          defaultExtension: 'js'
-        }
-      },
-      {
         name: '@ngrx/store',
         packageMeta: {
           main: 'bundles/store.umd.js',

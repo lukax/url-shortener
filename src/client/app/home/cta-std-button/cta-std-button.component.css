@@ -67,7 +67,7 @@
   float: left !important;
   width: 60% !important;
   max-width: 500px;
-  padding-right: 20px;
+  /*padding-right: 20px;*/
 }
 :host .cta-wrapper .details-wrapper h2 {
   font-weight: 600 !important;
@@ -76,6 +76,7 @@
   font-size: 18px !important;
   line-height: normal !important;
   min-width: 80px;
+  padding-right: 20px !important;
 }
 :host .cta-wrapper .details-wrapper p {
   font-size: 15px !important;
@@ -84,6 +85,7 @@
   padding: 0 !important;
   box-sizing: border-box !important;
   min-width: 80px;
+  padding-right: 20px !important;
 }
 :host .cta-wrapper .blue-cta-button {
   width: 30%;
