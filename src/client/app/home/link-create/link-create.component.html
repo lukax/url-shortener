@@ -32,7 +32,7 @@
   <mat-sidenav-content>
 
     <div class="link-preview hidden-on-mobile">
-      <sd-link-preview-url [pageUrl]="(chooseLinkForm$ | async).value.pageUrl" *ngIf="(chooseLinkForm$ | async).isSubmitted"></sd-link-preview-url>
+      <sd-link-preview-url [pageUrl]="previewPageUrl$ | async"></sd-link-preview-url>
       <sd-link-preview-background></sd-link-preview-background>
     </div>
 

@@ -5,6 +5,7 @@ import {LinkCreate} from "./link-create.actions";
 import {State as RootState} from "../../app.reducer";
 import {combineReducers} from "@ngrx/store";
 import {URL_REGEXP} from "../../shared/utils";
+import {DBSchema} from "@ngrx/db";
 
 export interface State extends RootState {
   linkCreate: {
@@ -14,7 +15,8 @@ export interface State extends RootState {
     shortPageUrl: string,
     errorMessage: string,
     cta: CreateLinkDto,
-    stepper: LinkCreate.StepperTypes
+    stepper: LinkCreate.StepperTypes,
+    previewPageUrl: string
   };
 }
 
@@ -83,9 +85,17 @@ export function reducer(_s: any, _a: any) {
       }
     },
     stepper(s = STEPPER_INITIAL_STATE, a: LinkCreate.Actions) {
-      switch(a.type) { 
+      switch(a.type) {
         case LinkCreate.ActionTypes.SELECT_STEP:
         case LinkCreate.ActionTypes.SELECTED_STEP:
+          return a.payload;
+        default:
+          return s;
+      }
+    },
+    previewPageUrl(s: string = null, a: LinkCreate.Actions) {
+      switch (a.type) {
+        case LinkCreate.ActionTypes.SET_PAGE_URL_PREVIEW:
           return a.payload;
         default:
           return s;
@@ -109,3 +119,4 @@ export const getShortPageUrl = (state: State) => state.linkCreate.shortPageUrl;
 export const getCta = (state: State) => state.linkCreate.cta;
 export const getStepper = (state: State) => state.linkCreate.stepper;
 export const getErrorMessage = (state: State) => state.linkCreate.errorMessage;
+export const getPreviewPageUrl = (state: State) => state.linkCreate.previewPageUrl;

@@ -9,7 +9,7 @@ import {Observable} from "rxjs/Observable";
 import {FormGroupState} from "ngrx-forms";
 import {
   getChooseLinkForm, State, getSetupBrandForm, getSetupCtaForm, getShortPageUrl,
-  getCta, getStepper, getErrorMessage
+  getCta, getStepper, getErrorMessage, getPreviewPageUrl
 } from "./link-create.reducer";
 import {Auth} from "../../auth/auth.actions";
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
@@ -31,6 +31,7 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
   shortPageUrl$: Observable<string>;
   cta$: Observable<CreateLinkDto>;
   errorMessage$: Observable<string>;
+  previewPageUrl$: Observable<string>;
 
   @ViewChild('formStepper') formStepper: MatStepper;
   stepperIndexDict: LinkCreate.StepperTypes[] = ['choose-link', 'setup-brand', 'setup-cta', 'share-link'];
@@ -47,6 +48,7 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
     this.shortPageUrl$ = this._store.select(getShortPageUrl);
     this.cta$ = this._store.select(getCta);
     this.errorMessage$ = this._store.select(getErrorMessage);
+    this.previewPageUrl$ = this._store.select(getPreviewPageUrl);
   }
 
   ngOnInit() {

@@ -15,7 +15,7 @@ import {AnalyticsModule} from "./modules/analytics/index";
 import {RouterModule} from "@angular/router";
 import {DBModule} from "@ngrx/db";
 import {RouterStateSerializer, StoreRouterConnectingModule} from "@ngrx/router-store";
-import {reducers, schema} from "./app.reducer";
+import {metaReducers, reducers} from "./app.reducer";
 import {EffectsModule} from "@ngrx/effects";
 import {CustomRouterStateSerializer} from "./shared/utils";
 
@@ -46,11 +46,11 @@ if (String('<%= BUILD_TYPE %>') === 'dev') {
     AnalyticsModule,
 
     RouterModule.forRoot(routes),
-    StoreModule.forRoot(reducers),
+    StoreModule.forRoot(reducers, {metaReducers}),
     StoreRouterConnectingModule,
     EffectsModule.forRoot([]),
+
     ...DEV_IMPORTS,
-    DBModule.provideDB(schema),
 
     AdminModule,
     AuthModule,

@@ -86,7 +86,7 @@ export class LinkCreateEffects {
             .flatMap((resp) => {
               if (resp.isValid) {
                 return [
-                  new LinkCreate.SetPageUrlPreviewAction(fs.value),
+                  new LinkCreate.SetPageUrlPreviewAction(fs.value.pageUrl),
                   new ClearAsyncErrorAction(fs.controls.pageUrl.id,'exists'),
                 ];
               }

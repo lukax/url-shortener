@@ -95,7 +95,7 @@ export namespace LinkCreate {
 
   export class SetPageUrlPreviewAction implements Action {
     type = ActionTypes.SET_PAGE_URL_PREVIEW;
-    constructor(public payload: CreateLinkDto) { }
+    constructor(public payload: string) { }
   }
 
   export type StepperTypes = 'choose-link' | 'setup-brand' | 'setup-cta' | 'share-link';

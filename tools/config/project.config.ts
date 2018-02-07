@@ -221,6 +221,10 @@ export class ProjectConfig extends SeedConfig {
         }
       },
       {
+        name: 'ngrx-store-localstorage',
+        path: 'node_modules/ngrx-store-localstorage/dist/index.js'
+      },
+      {
         name: 'deep-freeze-strict',
         path: 'node_modules/deep-freeze-strict/index.js'
       },
