@@ -13,6 +13,8 @@ import * as compression from "compression";
 import * as jwt from 'jsonwebtoken';
 import {IUserJwt} from "./dtos/IUser";
 import {UserService} from "./services/UserService";
+import { PagesController } from "./controllers/web/PagesController";
+import { ApiLinksController } from "./controllers/api/ApiLinksController";
 
 export function init(expressApp: Express) {
   /**
@@ -31,7 +33,10 @@ export function init(expressApp: Express) {
      * We can add options about how routing-controllers should configure itself.
      * Here we specify what controllers should be registered in our express server.
      */
-    controllers: [join(__dirname, '/controllers/web/**/*'), join(__dirname, '/controllers/api/**/*') ],
+    controllers: [
+      PagesController, 
+      ApiLinksController
+    ],
 
     // authorizationChecker: async (action: Action, roles: string[]) => {
     //   // here you can use request/response objects from action

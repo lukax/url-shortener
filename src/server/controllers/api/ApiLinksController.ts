@@ -12,19 +12,19 @@ import {User} from "../../model/User";
 
 
 @Service()
-@JsonController('/api/links')
+@JsonController()
 @UseBefore(checkJwt())
 export class ApiLinksController {
 
     @Inject()
     private links: LinkService;
 
-    @Get('/')
+    @Get('/api/links')
     async findAllLinks(): Promise<ViewLinkDto[]> {
       return await this.links.findAll();
     }
 
-    @Post('/')
+    @Post('/api/links')
     async insertLink(@Body() model: CreateLinkDto, @CurrentUser() user: User): Promise<CreateLinkResultDto> {
 
         log(`💥 insert link - ${JSON.stringify(model)}, user - ${JSON.stringify(user)}`);
@@ -32,7 +32,20 @@ export class ApiLinksController {
         return await this.links.create(model, user);
     }
 
-    @Put('/:hash')
+    @Get('/api/links/:hash')
+    async findLinkByHash(@Param("hash") hash: string): Promise<ViewLinkDto> {
+
+      log(`💥 find link - ${JSON.stringify(hash)}`);
+
+      const l = await this.links.findOneByHash(hash);
+      if(l == null) {
+        throw new NotFoundError(`Link not found`);
+      }
+
+      return l;
+    }
+
+    @Put('/api/links/:hash')
     async editLink(@Param("hash") hash: string, @Body() model: CreateLinkDto, @CurrentUser() user: User): Promise<boolean> {
 
       log(`💥 edit link - ${JSON.stringify(model)}, user - ${JSON.stringify(user)}`);
@@ -45,7 +58,7 @@ export class ApiLinksController {
       return await this.links.update(model, hash, user);
     }
 
-    @Post('/verify')
+    @Post('/api/links/verify')
     async verifyUrl(@Body() model: VerifyUrlDto, @CurrentUser() user: User): Promise<VerifyUrlResultDto> {
 
       log(`💥 verify link - ${JSON.stringify(model)}, user - ${JSON.stringify(user)}`);

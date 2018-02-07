@@ -43,7 +43,7 @@ export class LinkCreateEffects {
     .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND)
     .map((action: LinkCreate.SubmitPageUrlAction) => {
       // analytics
-      this.linkService.track(LinkCreate.ActionTypes.SUBMIT_PAGE_URL, { label: JSON.stringify(action.payload) });
+      this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND, { label: JSON.stringify(action.payload) });
       return new LinkCreate.SelectStepAction('setup-cta');
     });
 

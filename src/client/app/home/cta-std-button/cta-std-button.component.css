@@ -43,7 +43,7 @@
   text-align: center !important;
 
   width: 100% !important;
-  min-width: 375px;
+  min-width: 360px;
 }
 :host .clearfix {
   clear: both !important;

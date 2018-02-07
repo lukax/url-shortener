@@ -75,7 +75,7 @@ export class LinkService {
       try {
         const res = await axios.head(url, {timeout: 5000 });
 
-        const isValid = res.status >= 200 && res.status < 400 && /text\/html/i.test(res.headers['content-type']);
+        const isValid = res.status >= 200 && res.status < 400 /*&& /text\/html/i.test(res.headers['content-type'])*/;
         console.log(`isUrlValid: ${isValid}, status=${res.status}, content-type=${res.headers['content-type']}`);
 
         return isValid;

@@ -11,10 +11,12 @@ import {AuthEffects} from "./auth.effects";
 import {reducer} from "./auth.reducer";
 import {JwtModule} from "@auth0/angular-jwt";
 import {HttpClientModule} from "@angular/common/http";
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     HttpClientModule,
 
     JwtModule.forRoot({
