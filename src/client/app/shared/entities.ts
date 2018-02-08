@@ -4,6 +4,7 @@ export class CreateLinkDto {
   buttonText? = '';
   buttonUrl? = '';
   pageUrl? = '';
+  userEmail?: string;
 }
 
 export interface CreateLinkResultDto {

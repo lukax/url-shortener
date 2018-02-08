@@ -40,7 +40,9 @@ export class LinkService {
       link.name = model.name;
       link.message = model.message;
       link.hash = this._createUrlHash(link);
-      link.userId = user._id;
+      if(!!user) {
+        link.userId = user._id;
+      }
 
       if((await this.findOneByHash(link.hash)) != null) {
         throw new Error("Could not save link, hash already exists. ");

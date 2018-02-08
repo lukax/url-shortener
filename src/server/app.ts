@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import "newrelic";
 import {Action, useContainer as rtUsec, useExpressServer} from "routing-controllers";
 import {Container} from "typedi";
 import {Express} from "express";
@@ -16,7 +15,12 @@ import {UserService} from "./services/UserService";
 import { PagesController } from "./controllers/web/PagesController";
 import { ApiLinksController } from "./controllers/api/ApiLinksController";
 import * as Raven from 'raven';
-Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0cc7a66a@sentry.io/284838').install();
+Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0cc7a66a@sentry.io/284838', {
+  autoBreadcrumbs: {
+    'console': true,  // console logging
+    'http': true,     // http and https requests
+  }
+}).install();
 
 export function init(expressApp: Express) {
 

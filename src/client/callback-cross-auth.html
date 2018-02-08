@@ -1,10 +1,10 @@
 <head>
-  <script src="https://cdn.auth0.com/js/auth0/9.0.0/auth0.min.js"></script>
+  <script src="https://cdn.auth0.com/js/auth0/9.0.1/auth0.min.js"></script>
   <script type="text/javascript">
     var auth0 = new auth0.WebAuth({
-      clientID: '{CLIENT_ID}',
-      domain: '{DOMAIN}',
-      redirectUri: 'http://localhost:4200/callback'
+      clientID: 'WUsTbAMNoMECL8FROyXAtFkQBRILVY0T',
+      domain: 'jeitin.auth0.com',
+      redirectUri: window.location.protocol + '//' + window.location.host + '/callback'
     });
     auth0.crossOriginVerification();
   </script>

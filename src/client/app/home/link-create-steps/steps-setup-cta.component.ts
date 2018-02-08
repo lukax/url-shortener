@@ -4,6 +4,8 @@ import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAct
 
 import {CreateLinkDto} from "../../shared/entities";
 import {LinkCreate} from "../link-create/link-create.actions";
+import {EmailPromptDialogComponent} from "../../email-prompt/email-prompt.component";
+import {MatDialog} from "@angular/material";
 
 @Component({
   selector: 'sd-steps-setup-cta',
@@ -47,14 +49,30 @@ export class StepsSetupCtaComponent {
   @Input() errorMessage: string;
   submittedValue: CreateLinkDto;
 
-  constructor(private actionsSubject: ActionsSubject) { }
+  constructor(private actionsSubject: ActionsSubject,
+              private dialog: MatDialog) { }
 
   submit() {
     if (this.formState.isInvalid) {
       return;
     }
 
-    this.submittedValue = this.formState.value;
-    this.actionsSubject.next(new LinkCreate.SubmitSetupCtaAction(this.submittedValue));
+    this.emailPrompt((email) => {
+      this.submittedValue = this.formState.value;
+      this.submittedValue.userEmail = email;
+      this.actionsSubject.next(new LinkCreate.SubmitSetupCtaAction(this.submittedValue));
+    });
   }
+
+  emailPrompt(callback: (email: string) => void) {
+    const dialogRef = this.dialog.open(EmailPromptDialogComponent, {
+      width: '300px',
+      data: {  }
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      callback(result);
+    });
+  }
+
 }

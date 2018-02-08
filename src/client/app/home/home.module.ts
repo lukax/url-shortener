@@ -17,6 +17,7 @@ import {StepsSetupCtaComponent} from "./link-create-steps/steps-setup-cta.compon
 import {StepsShareLinkComponent} from "./link-create-steps/steps-share-link.component";
 import {LinkPreviewUrlComponent} from "./link-preview-url/link-preview-url.component";
 import {LinkViewComponent} from "./link-view/link-view.component";
+import {EmailPromptDialogComponent} from "../email-prompt/email-prompt.component";
 
 @NgModule({
   imports: [
@@ -42,7 +43,12 @@ import {LinkViewComponent} from "./link-view/link-view.component";
     StepsSetupBrandComponent,
     StepsSetupCtaComponent,
     StepsShareLinkComponent,
-    LinkViewComponent
+    LinkViewComponent,
+
+    EmailPromptDialogComponent
+  ],
+  entryComponents: [
+    EmailPromptDialogComponent
   ],
   providers: [
     ...SERVICE_PROVIDERS
