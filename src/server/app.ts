@@ -15,8 +15,14 @@ import {IUserJwt} from "./dtos/IUser";
 import {UserService} from "./services/UserService";
 import { PagesController } from "./controllers/web/PagesController";
 import { ApiLinksController } from "./controllers/api/ApiLinksController";
+import * as Raven from 'raven';
+Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0cc7a66a@sentry.io/284838').install();
 
 export function init(expressApp: Express) {
+
+  // The request handler must be the first middleware on the app
+  expressApp.use(Raven.requestHandler());
+
   /**
    * Provide a configuration injectable.
    */
@@ -34,7 +40,7 @@ export function init(expressApp: Express) {
      * Here we specify what controllers should be registered in our express server.
      */
     controllers: [
-      PagesController, 
+      PagesController,
       ApiLinksController
     ],
 
@@ -106,6 +112,10 @@ export function init(expressApp: Express) {
    */
   expressApp.set('view engine', 'twig');
   expressApp.set('views', join(__dirname, '/resources/views'));
+
+
+  // The error handler must be before any other error middleware
+  expressApp.use(Raven.errorHandler());
 
   /**
    * Setup static file serving

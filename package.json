@@ -93,6 +93,7 @@
     "@types/p-timeout": "^1.2.0",
     "@types/passport": "^0.4.2",
     "@types/puppeteer": "^0.13.9",
+    "@types/raven": "^2.1.4",
     "@types/redis": "^2.8.1",
     "@types/rimraf": "2.0.2",
     "@types/run-sequence": "^0.0.30",
@@ -166,6 +167,7 @@
     "p-timeout": "^2.0.1",
     "passport": "^0.4.0",
     "passport-auth0": "^0.6.1",
+    "pm2": "^2.9.3",
     "protractor": "^5.2.0",
     "puppeteer": "^1.0.0",
     "reflect-metadata": "0.1.10",
@@ -195,8 +197,7 @@
     "typeorm-typedi-extensions": "^0.1.1",
     "typescript": "^2.6.1",
     "walk": "^2.3.9",
-    "yargs": "^10.0.3",
-    "pm2": "^2.9.3"
+    "yargs": "^10.0.3"
   },
   "dependencies": {
     "@angular-devkit/build-optimizer": "0.0.41",
@@ -241,6 +242,7 @@
     "ngrx-forms": "^2.1.2",
     "ngrx-store-localstorage": "^0.3.0",
     "postcss-assets": "^5.0.0",
+    "raven": "^2.4.0",
     "redis": "^2.8.0",
     "rxjs": "5.5.6",
     "systemjs": "0.20.19",
