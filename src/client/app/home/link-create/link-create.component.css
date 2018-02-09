@@ -12,7 +12,7 @@
   }
 }
 :host .example-container {
-  height: 94vh;
+  /* height: 94vh; */
   /*max-height: 800px;*/
 }
 

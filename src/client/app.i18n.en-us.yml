@@ -1,0 +1,43 @@
+messages:
+
+    choose_page: Choose a page to create a link
+    choose_page_help: You can display your call-to-action on any web page. This is usually an article that you'd like to share with your audience.
+    
+    page_url: Page URL
+    page_url_hint: Enter a link to an article
+    page_url_required: A page URL is required
+    page_url_validation_err: This page URL is not supported :(
+
+    setup_brand: Setup your brand
+    setup_brand_help: Your brand will appear on all your jeit.in links. This should be your photo or company logo.
+    
+    brand_name: Name
+    brand_name_hint: A nice attention grabbing header!
+    brand_name_required: A brand name is required
+
+    setup_cta: Setup your CTA
+    setup_cta_help: Every jeit.in link contains a call-to-action. This should include a short message and a button linking to your landing page.
+    
+    brand_message: Message
+    brand_message_hint: A descriptive sentence for the Call To Action (CTA)
+    brand_message_required: A button text is required
+    
+    button_text: Button Text
+    button_text_hint: What will your button say?
+    button_text_required: A button text is required
+    
+    button_url: Button Text
+    button_url_hint: Where will your button go?
+    button_url_required: A button URL is required
+    button_url_validation_err: This page URL is not supported :(
+    
+    share_link: Share your link!
+    share_link_help: Anyone clicking on this link will see the page with your message inside.
+
+    continue: Continue
+    back: Back
+
+    copy_link: Copy link
+
+    email_prompt: Enter your email to continue
+    email_prompt_placeholder: yours@example.com
