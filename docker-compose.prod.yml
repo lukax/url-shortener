@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: ./.docker/prod/Dockerfile
     container_name: jeitin-prod
-    image: jeitin/prod
+    image: espdlucas/jeitin:latest
     environment:
       - PORT=9001
       - DB_HOST=docker.for.win.localhost # Mac-only DNS name for localhost, will resolve to the internal IP address used by the host.

@@ -1,7 +1,7 @@
 {
   "name": "jeitin-app",
   "private": true,
-  "version": "5.0.1",
+  "version": "0.1.5",
   "description": "Modular starter project for Angular 2 (and beyond) with statically typed build and AoT compilation with Express",
   "repository": "https://github.com/vyakymenko/angular-seed-express.git",
   "scripts": {
