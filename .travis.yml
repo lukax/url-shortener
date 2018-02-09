@@ -6,7 +6,13 @@ env:
   global:
     - IMAGE_NAME=espdlucas/jeitin
     - REGISTRY_USER=espdlucas
-    # REGISTRY_PASS=
+    # - REGISTRY_PASS=...
+    # - DOCKER_HOST=75.101.224.76
+    # - DOCKER_HOST_USR=lucas
+
+addons:
+  ssh_known_hosts: 
+    - 75.101.224.76
 
 before_script:
   - mkdir -p ~/bin && curl -sSL -o ~/bin/jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ~/bin/jq
@@ -30,5 +36,17 @@ deploy:
   provider: script
   script: docker push "${IMAGE_NAME}:latest" && docker push "${IMAGE_NAME}:${version}"
   on:
-    branch: master
+    branch: develop
 
+after_deploy:
+  - echo "$VM_SSH_KEY" | base64 -d > sshkey.pem
+  - chmod 400 sshkey.pem
+  - ssh-keyscan 75.101.224.76 >> ~/.ssh/known_hosts
+  - > 
+    ssh -i sshkey.pem lucas@75.101.224.76 '
+    ssh -i /home/lucas/lucas.pem lucas@172.25.10.168
+    sudo docker login -u $8 -p $9 &&
+    sudo docker pull $7 &&
+    sudo docker kill $(docker ps -q) &&
+    sudo docker run -d -p $1 -e $2 -e $3 -e $4 -e $5 -e $6 $7
+    ' -- "80:$PORT" "PORT=${PORT}" "DB_NAME=${DB_NAME}" "DB_USERNAME=${DB_USERNAME}" "DB_PASSWORD=${DB_PASSWORD}" "DB_PORT=${DB_PORT}" "${IMAGE_NAME}:${version}" "$REGISTRY_USER" "$REGISTRY_PASS"
