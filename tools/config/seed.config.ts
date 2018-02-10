@@ -183,7 +183,7 @@ export class SeedConfig {
    * `index.html`.
    * @type {string}
    */
-  APP_TITLE = 'jeit.in';
+  APP_TITLE = 'Jeit.in';
 
   /**
    * Tracking ID.

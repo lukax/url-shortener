@@ -19,7 +19,8 @@ import NewLinkAction = LinkCreate.NewLinkAction;
         <!--VISIT LINK-->
         <!--<mat-icon>open_in_new</mat-icon>-->
         <!--</a>-->
-        <share-button theme="material-dark" [button]="'copy'" [showText]="true" [size]="4" [url]="shortPageUrl"></share-button>
+        <share-button theme="material-dark" text="Copiar o link" 
+                      [button]="'copy'" [showText]="true" [size]="4" [url]="shortPageUrl"></share-button>
         <br><br><br>
         <share-buttons theme="material-dark" 
                        [include]="['facebook','twitter','whatsapp','email','linkedin','pinterest','telegram','google']"

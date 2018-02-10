@@ -9,6 +9,10 @@ export class BrowserService {
 
   browser: puppeteer.Browser;
 
+  constructor() {
+    this.browser = null;
+  }
+
   async getContentOfPage(pageURL: string, hostURL: string): Promise<any> {
     let content: string;
     let page: puppeteer.Page;

@@ -11,13 +11,13 @@ import {State} from "../../app.reducer";
   template: `
     <form class="create-link-form" [ngrxFormState]="formState" (submit)="submit()">
       <mat-form-field>
-        <input matInput placeholder="Page URL" [ngrxFormControlState]="formState.controls.pageUrl">
-        <mat-hint>Enter a link to an article</mat-hint>
+        <input matInput placeholder="Endereço do conteúdo" [ngrxFormControlState]="formState.controls.pageUrl">
+        <mat-hint>Cole o link aqui</mat-hint>
         <mat-error *ngIf="formState.errors._pageUrl?.required">
-          A page URL is required
+          Para avançarmos você precisa indicar um link com o conteúdo original
         </mat-error>
-        <mat-error *ngIf="formState.errors._pageUrl?.$exists">
-          This page URL is not supported :(
+        <mat-error *ngIf="formState.errors._pageUrl?.pattern">
+          Hummmm nos desculpe mas ainda não conseguimos criar um Jeit.in dessa página :(
         </mat-error>
         <mat-progress-spinner class="input-spinner" mode="indeterminate" color="primary" diameter="20" span 
                               *ngIf="formState.isValidationPending"></mat-progress-spinner>
@@ -30,6 +30,7 @@ import {State} from "../../app.reducer";
                           || formState.userDefinedProperties.isLoading">
         CONTINUE
       </button>
+      <br>
         
     </form>
   `,

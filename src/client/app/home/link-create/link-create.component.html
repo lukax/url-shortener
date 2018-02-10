@@ -4,25 +4,23 @@
 
     <mat-vertical-stepper [linear]="true" #formStepper (selectionChange)="onStepperSelectionChange($event)">
       <mat-step [completed]="(chooseLinkForm$ | async).isValid">
-        <ng-template matStepLabel>Choose a page to create a link</ng-template>
-        <small>You can display your call-to-action on any web page. This is usually an
-          article that you'd like to share with your audience.</small>
+        <ng-template matStepLabel>Qual link você quer compartilhar?</ng-template>
+        <small>Escolha uma com conteúdo interessante, chamativo. Algo que desperte interesse de seus potenciais usuários/clientes. Quanto mais interessante/curioso, melhor.</small>
         <sd-steps-choose-link [formState]="chooseLinkForm$ | async"></sd-steps-choose-link>
       </mat-step>
       <mat-step [completed]="(setupBrandForm$ | async).isValid">
-        <ng-template matStepLabel>Setup your brand</ng-template>
-        <small>Your brand will appear on all your jeit.in links. This should be your photo or company logo.</small>
+        <ng-template matStepLabel>Escolha um título para sua chamada</ng-template>
+        <small>Deve ser algo chamativo que desperte interesse do visitante e que esteja direcione ele a clickar na sua chamada.</small>
         <sd-steps-setup-brand [formState]="setupBrandForm$ | async"></sd-steps-setup-brand>
       </mat-step>
       <mat-step [completed]="(setupCtaForm$ | async).isValid" editable="false">
-        <ng-template matStepLabel>Setup your CTA</ng-template>
-        <small>Every jeit.in link contains a call-to-action. This should include a short
-          message and a button linking to your landing page.</small>
+        <ng-template matStepLabel>Estamos quase lá :)</ng-template>
+        <small>Todas as "chamadas" devem levar à uma ação (clickar no botão que leva o visitante ao seu site, página, whatsapp etc). Indique os textos que deseja para sua mensagem, botão e o link de destino.</small>
         <sd-steps-setup-cta [formState]="setupCtaForm$ | async" [errorMessage]="errorMessage$ | async"></sd-steps-setup-cta>
       </mat-step>
       <mat-step>
-        <ng-template matStepLabel>Share your link!</ng-template>
-        <small>Anyone clicking on this link will see the page with your message inside.</small>
+        <ng-template matStepLabel>Compartilhe seu Jeit.in!</ng-template>
+        <small>Qualquer um que acesse esse link verá o conteúdo original com sua chamada! Quanto mais pessoas acessarem maiores as chances de você atrair mais gente para seu site/página/conteúdo e vender mais!</small>
         <sd-steps-share-link [shortPageUrl]="(shortPageUrl$ | async)"></sd-steps-share-link>
       </mat-step>
 

@@ -8,8 +8,10 @@ import {IUserJwt} from "../dtos/IUser";
 @Service()
 export class UserService {
 
-    @OrmRepository(User)
-    private repo: UserRepository;
+    constructor(
+       @OrmRepository(User)
+          private repo: UserRepository,
+     ) {}
 
     public async getAll(): Promise<User[]> {
         return this.repo.find();

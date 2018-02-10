@@ -8,10 +8,14 @@ import {appConfig} from "../app.config";
 @Service()
 export class LinkCacheService {
 
-  @OrmRepository(LinkCache)
-  private repo: LinkCacheRepository;
+  private s3: aws.S3;
 
-  private s3 = new aws.S3({ accessKeyId:appConfig.storage.AWS_ACCESS_KEY_ID, secretAccessKey: appConfig.storage.AWS_SECRET_ACCESS_KEY });
+  constructor(
+    @OrmRepository(LinkCache)
+      private repo: LinkCacheRepository,
+  ) {
+    this.s3 = new aws.S3({ accessKeyId:appConfig.storage.AWS_ACCESS_KEY_ID, secretAccessKey: appConfig.storage.AWS_SECRET_ACCESS_KEY });
+  }
 
   public async saveCache(pageUrl: string, cacheContent: string): Promise<boolean> {
 

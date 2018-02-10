@@ -13,7 +13,7 @@ import {User} from "../../model/User";
 
 @Service()
 @JsonController()
-//@UseBefore(checkJwt())
+@UseBefore(checkJwt())
 export class ApiLinksController {
 
     @Inject()

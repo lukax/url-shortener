@@ -11,8 +11,10 @@ import {User} from "../model/User";
 @Service()
 export class LinkService {
 
-    @OrmRepository(Link)
-    private repo: LinkRepository;
+    constructor(
+      @OrmRepository(Link)
+        private repo: LinkRepository,
+    ) { }
 
     public async findAll(): Promise<ViewLinkDto[]> {
         const links = await this.repo.find();

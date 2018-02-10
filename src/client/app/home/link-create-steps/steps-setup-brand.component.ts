@@ -10,8 +10,11 @@ import {LinkCreate} from "../link-create/link-create.actions";
   template: `
     <form class="create-link-form" [ngrxFormState]="formState" (submit)="submit()">
       <mat-form-field>
-        <input matInput placeholder="Name" [ngrxFormControlState]="formState.controls.name">
-        <mat-hint>A nice attention grabbing header!</mat-hint>
+        <input matInput placeholder="Título para sua chamada" [ngrxFormControlState]="formState.controls.name">
+        <mat-hint>Escolha um título para sua chamada</mat-hint>
+        <mat-error *ngIf="formState.errors._name?.required">
+          Precisamos que indique um título para sua chamada.
+        </mat-error>
       </mat-form-field>
       <br>
       
@@ -21,6 +24,7 @@ import {LinkCreate} from "../link-create/link-create.actions";
                           || formState.userDefinedProperties.isLoading">
         CONTINUE
       </button>
+      <br>
       
     </form>
   `,
