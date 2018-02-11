@@ -44,7 +44,7 @@ export class BrowserService {
         const otherResources = /^(manifest|other)$/i.test(resourceType);
         // Abort requests that exceeds 15 seconds
         // Also abort if more than 100 requests
-        if (seconds > 15 || reqCount > 100 || false) {
+        if (seconds > 20 || reqCount > 100 || false) {
           console.log(`❌⏳ ${method} ${shortURL}`);
           request.abort();
         } else if (BLOCKED_REGEXP.test(url) || otherResources) {

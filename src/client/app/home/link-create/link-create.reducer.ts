@@ -32,10 +32,10 @@ export const SETUP_CTA_INITIAL_STATE = createFormGroupState<CreateLinkDto>('setu
   buttonUrl: ''
 });
 const CTA_INITIAL_STATE = {
-  name: 'A nice attention grabbing header!',
-  message: 'A descriptive sentence for the Call To Action (CTA)',
+  name: 'Título para sua chamada',
+  message: 'Uma descrição para sua "chamada"',
   buttonUrl: '',
-  buttonText: 'CONTACT US NOW!',
+  buttonText: 'Texto do botão',
 };
 const STEPPER_INITIAL_STATE: LinkCreate.StepperTypes = 'choose-link';
 

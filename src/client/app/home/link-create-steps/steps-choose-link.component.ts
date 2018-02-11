@@ -16,7 +16,7 @@ import {State} from "../../app.reducer";
         <mat-error *ngIf="formState.errors._pageUrl?.required">
           Para avançarmos você precisa indicar um link com o conteúdo original
         </mat-error>
-        <mat-error *ngIf="formState.errors._pageUrl?.pattern">
+        <mat-error *ngIf="formState.errors._pageUrl?.$exists || formState.errors._pageUrl?.pattern">
           Hummmm nos desculpe mas ainda não conseguimos criar um Jeit.in dessa página :(
         </mat-error>
         <mat-progress-spinner class="input-spinner" mode="indeterminate" color="primary" diameter="20" span 

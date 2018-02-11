@@ -65,7 +65,7 @@
   padding-right: 20px !important;
 }
 :host .cta-wrapper .blue-cta-button {
-  width: 30%;
+  /* width: 30%; */
   border-radius: 2px !important;
   transition: all 0.2s ease-in-out !important;
   text-decoration: none !important;
@@ -75,7 +75,7 @@
   margin: 0 !important;
   color: #800080 !important;
   background-color: #FFF !important;
-  padding: 17px 11px !important;
+  padding: 17px 12px !important;
   text-align: center !important;
   margin-top: 5px !important;
   font-size: 14px !important;

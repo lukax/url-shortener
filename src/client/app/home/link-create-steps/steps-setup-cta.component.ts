@@ -33,7 +33,7 @@ import {MatDialog} from "@angular/material";
         <mat-error *ngIf="formState.errors._buttonText?.required">
           Precisamos que indique um link de destino.
         </mat-error>
-        <mat-error *ngIf="formState.errors._buttonText?.pattern">
+        <mat-error *ngIf="formState.errors._buttonText?.$exists || formState.errors._buttonText?.pattern">
           Ops! Não conseguimos direcionar visitantes para esse endereço :(
         </mat-error>
       </mat-form-field>
