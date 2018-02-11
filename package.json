@@ -192,9 +192,9 @@
     "tslint": "^5.8.0",
     "twig": "^1.10.5",
     "typedi": "0.6.0",
-    "typeorm": "^0.1.10",
-    "typeorm-routing-controllers-extensions": "^0.1.0",
-    "typeorm-typedi-extensions": "^0.1.1",
+    "typeorm": "0.1.12",
+    "typeorm-routing-controllers-extensions": "0.1.0",
+    "typeorm-typedi-extensions": "0.1.1",
     "typescript": "^2.6.1",
     "walk": "^2.3.9",
     "yargs": "^10.0.3"

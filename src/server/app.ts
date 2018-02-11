@@ -15,6 +15,12 @@ import {UserService} from "./services/UserService";
 import { PagesController } from "./controllers/web/PagesController";
 import { ApiLinksController } from "./controllers/api/ApiLinksController";
 import * as Raven from 'raven';
+import { User } from "./model/User";
+import { LinkCache } from "./model/LinkCache";
+import { Link } from "./model/Link";
+import { BrowserService } from "./services/BrowserService";
+import { LinkCacheService } from "./services/LinkCacheService";
+import { LinkService } from "./services/LinkService";
 Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0cc7a66a@sentry.io/284838', {
   autoBreadcrumbs: {
     'console': true,  // console logging
@@ -35,15 +41,31 @@ export function createApp() {
   rtUsec(Container);
   ormUsec(Container);
 
+  /** 
+   * Import controllers, services and entities
+  */
+  const controllers = [
+    PagesController,
+    ApiLinksController
+  ];
+  const services = [
+    BrowserService,
+    LinkCacheService,
+    LinkService,
+    UserService
+  ];
+  const entities = [
+    Link,
+    User,
+    LinkCache
+  ];
+
   const expressApp = createExpressServer({
     /**
      * We can add options about how routing-controllers should configure itself.
      * Here we specify what controllers should be registered in our express server.
      */
-    controllers: [
-      PagesController,
-      ApiLinksController
-    ],
+    controllers: controllers,
 
     // authorizationChecker: async (action: Action, roles: string[]) => {
     //   // here you can use request/response objects from action
@@ -71,30 +93,23 @@ export function createApp() {
 
   });
 
-  /**
-   * Import services
-   */
-  readdirSync(join(__dirname, '/services'))
-    .filter(file => file.endsWith('.js'))
-    .forEach((file) => require(join(__dirname, '/services', file)));
+  // readdirSync(join(__dirname, '/services'))
+  //   .filter(file => file.endsWith('.js'))
+  //   .forEach((file) => require(join(__dirname, '/services', file)));
 
-  /**
-   * Import entities
-   */
-  appConfig.database.entities = [];
-  readdirSync(join(__dirname, '/model'))
-    .filter(file => file.endsWith('.js'))
-    .forEach((file) => {
-      const exported = require(join(__dirname, '/model', file));
-      Object.keys(exported).forEach(className => {
-        appConfig.database.entities.push(exported[className]);
-      });
-    });
+  // readdirSync(join(__dirname, '/model'))
+  //   .filter(file => file.endsWith('.js'))
+  //   .forEach((file) => {
+  //     const exported = require(join(__dirname, '/model', file));
+  //     Object.keys(exported).forEach(className => {
+  //       appConfig.database.entities.push(exported[className]);
+  //     });
+  //   });
 
   /**
    * This creates the default connection using appConfig
    */
-  getConnectionManager().create(appConfig.database).connect().then(() => {
+  getConnectionManager().create(Object.assign({}, appConfig.database, { entities: entities })).connect().then(() => {
     console.log('Connected to db!');
   });
 

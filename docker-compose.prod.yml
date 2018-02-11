@@ -8,6 +8,7 @@ services:
       dockerfile: ./.docker/prod/Dockerfile
     container_name: jeitin-prod
     image: espdlucas/jeitin:latest
+    #autoredeploy: true
     environment:
       - PORT=9001
       - DB_HOST=docker.for.mac.localhost # Mac-only DNS name for localhost, will resolve to the internal IP address used by the host.

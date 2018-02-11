@@ -43,11 +43,11 @@ const chooseLinkFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<Cr
   pageUrl: validate([required,pattern(URL_REGEXP)]),
 });
 const setupBrandFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
-  name: validate(required),
+  name: validate([required]),
 });
 const setupCtaFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
-  message: validate(required),
-  buttonText: validate(required),
+  message: validate([required]),
+  buttonText: validate([required]),
   buttonUrl: validate([required, pattern(URL_REGEXP)]),
 });
 

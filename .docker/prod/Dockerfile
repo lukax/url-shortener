@@ -2,8 +2,6 @@ FROM node:8.9.4 as builder
 
 WORKDIR /home/node/jeitin
 
-ENV NODE_ENV production
-
 ###########################
 ###########################
 ###########################
@@ -64,5 +62,7 @@ RUN yarn run build.prod
 # COPY ./.docker/prod/nginx.conf /etc/nginx/conf.d/jeitin.template
 
 # CMD /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/jeitin.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
+# ENV NODE_ENV production
 
 CMD ["yarn", "run", "serve.prod.pm2"]
