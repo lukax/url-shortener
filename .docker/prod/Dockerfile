@@ -2,6 +2,8 @@ FROM node:8.9.4 as builder
 
 WORKDIR /home/node/jeitin
 
+ENV NODE_ENV production
+
 ###########################
 ###########################
 ###########################
