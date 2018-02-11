@@ -57,17 +57,18 @@ export class LinkCacheService {
 
   public async findCache(pageUrl: string): Promise<{content: string, isAlive: boolean}> {
     const linkCache = await this.repo.findOne({ pageUrl: pageUrl });
+    if(linkCache == null || linkCache.isExpired()) {
+      return { content: null, isAlive: false };
+    }
 
     const fileKey = this.getPageUrlKey(pageUrl);
     const params = {Bucket: appConfig.storage.AWS_S3_BUCKET, Key: fileKey};
-    let ok = true;
-    let content;
+    let content = null;
     try {
       await new Promise((resolve, reject) => {
         this.s3.getObject(params, (err, data) => {
           if (err) {
             console.log(err);
-            ok = false;
             reject();
           } else {
             console.log(`cache content downloaded ${fileKey}`);
@@ -76,16 +77,13 @@ export class LinkCacheService {
           }
         });
       });
-    } catch(e) {
-      ok = false;
+    } catch(e) { }
+
+    if(content) {
+      return { content: content, isAlive: true };
     }
 
-    if(!ok) {
-      return {content: null, isAlive: false};
-    }
-
-    const isAlive = linkCache != null && linkCache.isAlive();
-    return { content: isAlive ? content : null, isAlive: isAlive };
+    return { content: null, isAlive: false };
   }
 
   private getPageUrlKey(pageUrl: string): string {

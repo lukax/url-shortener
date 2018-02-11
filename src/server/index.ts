@@ -8,26 +8,25 @@ import * as appIniter from './app';
  * @note `dev` default.
  */
 let _clientDir = '../../client/dev';
-const app = express();
+
+const app = appIniter.createApp();
 
 export function init(port: number, mode: string) {
-
 
   if (mode === 'dev') {
     /**
      * Dev Mode.
      * @note Dev server will only give for you middleware.
      */
-    app.all('/*', function(req, res, next) {
-      res.header('Access-Control-Allow-Origin', '*');
-      res.header('Access-Control-Allow-Headers', 'X-Requested-With');
-      next();
-    });
+    // app.all('/*', function(req, res, next) {
+    //   res.header('Access-Control-Allow-Origin', '*');
+    //   res.header('Access-Control-Allow-Headers', 'X-Requested-With');
+    //   next();
+    // });
 
     /**
      * Api Routes for `Development`.
      */
-    appIniter.init(app);
 
     console.log('cwd ' + process.cwd());
     app.use(express.static(path.resolve(process.cwd())));
@@ -45,11 +44,6 @@ export function init(port: number, mode: string) {
      * Prod Mode.
      * @note Prod mod will give you static + middleware.
      */
-
-    /**
-     * Api Routes for `Production`.
-     */
-    appIniter.init(app);
 
     /**
      * Client Dir

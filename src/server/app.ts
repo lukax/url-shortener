@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import {Action, useContainer as rtUsec, useExpressServer} from "routing-controllers";
+import {Action, useContainer as rtUsec, createExpressServer} from "routing-controllers";
 import {Container} from "typedi";
 import {Express} from "express";
 import morgan = require("morgan");
@@ -22,10 +22,7 @@ Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0
   }
 }).install();
 
-export function init(expressApp: Express) {
-
-  // The request handler must be the first middleware on the app
-  expressApp.use(Raven.requestHandler());
+export function createApp() {
 
   /**
    * Provide a configuration injectable.
@@ -38,7 +35,7 @@ export function init(expressApp: Express) {
   rtUsec(Container);
   ormUsec(Container);
 
-  useExpressServer(expressApp, {
+  const expressApp = createExpressServer({
     /**
      * We can add options about how routing-controllers should configure itself.
      * Here we specify what controllers should be registered in our express server.
@@ -104,6 +101,8 @@ export function init(expressApp: Express) {
   /**
    * Use middlewares
    */
+  // The request handler must be the first middleware on the app
+  expressApp.use(Raven.requestHandler());
   expressApp.use(morgan('combined')); //logger
   expressApp.use(bodyParser.raw());
   expressApp.use(bodyParser.urlencoded({ extended: false }));
@@ -114,8 +113,8 @@ export function init(expressApp: Express) {
   /**
    * Configure the view engine.
    */
-  expressApp.set('view engine', 'twig');
-  expressApp.set('views', join(__dirname, '/resources/views'));
+  //expressApp.set('view engine', 'twig');
+  //expressApp.set('views', join(__dirname, '/resources/views'));
 
 
   // The error handler must be before any other error middleware
@@ -131,4 +130,6 @@ export function init(expressApp: Express) {
    */
   //expressApp.listen(appConfig.host.port);
   //console.log(`Server is up and running at port ${appConfig.host.port}`);
+
+  return expressApp;
 }

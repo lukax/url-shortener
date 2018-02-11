@@ -1,5 +1,5 @@
 import {Inject, Service} from "typedi";
-import {Controller, Get, Render, HttpCode, Req, Res, Param, UseBefore, NotFoundError} from "routing-controllers";
+import {Controller, Get, Render, HttpCode, Req, Res, Param, UseBefore, NotFoundError, BadRequestError} from "routing-controllers";
 import {Request, Response} from "express";
 import { LinkService } from "../../services/LinkService";
 import { IAppConfig } from "../../app.config";
@@ -17,7 +17,6 @@ export class PagesController {
 
     constructor (@Inject('config') private config: IAppConfig) {}
 
-    @Render('viewUrl')
     @Get('/api/pages/:hash([a-z0-9]{5})') // match 5 digit hex string!
     @HttpCode(200)
     async viewUrlAction(@Param("hash") hash: string, @Req() req: Request): Promise<any> {
@@ -38,15 +37,13 @@ export class PagesController {
           await this.linkCacheSvc.saveCache(link.pageUrl, content);
         }
 
-        return {
-            port: this.config.host.port,
-            title: this.config.app.title,
-            link: link,
-            content: content || "An error has occurred, please try again"
-        };
+        if(!content) {
+            throw new BadRequestError("An error has occurred, please try again");
+        }
+
+        return content;
     }
 
-    @Render('viewUrl')
     @Get('/api/pages/preview/:pageUrl') 
     @HttpCode(200)
     async previewUrlAction(@Param("pageUrl") pageUrl: string, @Req() req: Request): Promise<any> {
@@ -71,10 +68,10 @@ export class PagesController {
           await this.linkCacheSvc.saveCache(pageUrl, content);
         }
 
-        return {
-            port: this.config.host.port,
-            title: this.config.app.title,
-            content: content || "An error has occurred, please try again"
-        };
+        if(!content) {
+            throw new BadRequestError("An error has occurred, please try again");
+        }
+
+        return content;
     }
 }
