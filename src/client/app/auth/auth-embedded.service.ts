@@ -24,7 +24,7 @@ export class AuthEmbeddedService {
     },
     languageDictionary: {
       emailInputPlaceholder: "your@email.com",
-      title: "jeit.in"
+      title: "Jeit.in"
     },
   });
 
