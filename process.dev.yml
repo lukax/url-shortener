@@ -1,0 +1,5 @@
+apps:
+  - script: './dist/server/dev/index.dev.js'
+    name: 'web.dev'
+    watch: 
+      - 'dist/server'

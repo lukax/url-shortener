@@ -29,7 +29,7 @@ import {MatDialog} from "@angular/material";
       <br>
       <mat-form-field>
         <input matInput placeholder="Link de destino" [ngrxFormControlState]="formState.controls.buttonUrl">
-        <mat-hint>Para onde você quer levar o visitante quando ele clicar no botão da sua chamada?</mat-hint>
+        <mat-hint>Para onde você quer levar o visitante quando ele clicar no botão da sua chamada? (ex: medium.com)</mat-hint>
         <mat-error *ngIf="formState.errors._buttonText?.required">
           Precisamos que indique um link de destino.
         </mat-error>

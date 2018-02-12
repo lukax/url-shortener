@@ -12,7 +12,7 @@ import {State} from "../../app.reducer";
     <form class="create-link-form" [ngrxFormState]="formState" (submit)="submit()">
       <mat-form-field>
         <input matInput placeholder="Endereço do conteúdo" [ngrxFormControlState]="formState.controls.pageUrl">
-        <mat-hint>Cole o link aqui</mat-hint>
+        <mat-hint>Cole o link aqui. (ex: medium.com)</mat-hint>
         <mat-error *ngIf="formState.errors._pageUrl?.required">
           Para avançarmos você precisa indicar um link com o conteúdo original
         </mat-error>

@@ -4,7 +4,7 @@ import * as puppeteer from "puppeteer";
 import * as pTimeout from "p-timeout";
 import {BLOCKED_REGEXP} from '../app.blocked';
 
-@Service({ global: true }) //completely global and not container-specific
+@Service()
 export class BrowserService {
 
   browser: puppeteer.Browser;

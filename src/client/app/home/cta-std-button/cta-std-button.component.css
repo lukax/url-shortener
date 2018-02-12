@@ -17,7 +17,7 @@
   -webkit-font-smoothing: antialiased !important;
   text-rendering: optimizeLegibility !important;
   -moz-osx-font-smoothing: grayscale !important;
-  padding: 75px 0 10px 0 !important;
+  /* padding: 75px 0 10px 0 !important; */
   float: left !important;
   text-align: center !important;
   width: 100% !important;
@@ -70,7 +70,6 @@
   transition: all 0.2s ease-in-out !important;
   text-decoration: none !important;
   font-weight: 600 !important;
-  display: inline-block !important;
   float: right !important;
   margin: 0 !important;
   color: #800080 !important;

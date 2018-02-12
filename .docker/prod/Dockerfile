@@ -1,10 +1,19 @@
+###########################
+###########################
+###########################
 FROM node:8.9.4 as builder
-
 WORKDIR /home/node/jeitin
 
+COPY . .
+
+RUN yarn --pure-lockfile
+RUN yarn run build.prod
+
 ###########################
 ###########################
 ###########################
+FROM node:8.9.4-slim as runner
+WORKDIR /home/node/jeitin
 
 # See https://crbug.com/795759
 RUN apt-get update && apt-get install -yq libgconf-2-4
@@ -43,19 +52,20 @@ RUN chmod +x /usr/local/bin/dumb-init
 # Run everything after as non-privileged user.
 # USER pptruser
 
-###########################
-###########################
-###########################
-
 # copy all files not listed in .dockerignore
-COPY . .
+COPY --from=builder /home/node/jeitin/dist /home/node/jeitin/dist
+COPY --from=builder /home/node/jeitin/node_modules /home/node/jeitin/node_modules
+COPY --from=builder /home/node/jeitin/process.prod.yml /home/node/jeitin/process.prod.yml
+COPY --from=builder /home/node/jeitin/package.json /home/node/jeitin/package.json
+COPY --from=builder /home/node/jeitin/.env /home/node/jeitin/.env
 
 # before switching to non-root user, change ownership of home
 RUN chown -R node:node .
 USER node
 
-RUN yarn install
-RUN yarn run build.prod
+###########################
+###########################
+###########################
 
 # FROM nginx:1.13
 # COPY --from=builder /home/node/jeitin/dist/prod /var/www/dist/prod
@@ -63,6 +73,7 @@ RUN yarn run build.prod
 
 # CMD /bin/bash -c "envsubst '$$NGINX_HOST $$NGINX_PORT' < /etc/nginx/conf.d/jeitin.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
 
-# ENV NODE_ENV production
+EXPOSE 9001
 
-CMD ["yarn", "run", "serve.prod.pm2"]
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["yarn", "run", "pm2-runtime", "process.prod.yml"]

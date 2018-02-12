@@ -8343,11 +8343,7 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-reflect-metadata@0.1.10:
-  version "0.1.10"
-  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.10.tgz#b4f83704416acad89988c9b15635d47e03b9344a"
-
-reflect-metadata@^0.1.10, reflect-metadata@^0.1.2:
+reflect-metadata@^0.1.10, reflect-metadata@^0.1.12, reflect-metadata@^0.1.2:
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.12.tgz#311bf0c6b63cd782f228a81abe146a2bfa9c56f2"
 
@@ -10107,19 +10103,19 @@ typedarray@^0.0.6, typedarray@~0.0.5:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typedi@0.6.0:
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/typedi/-/typedi-0.6.0.tgz#d011024eb250692327572bcacbb46afb45b74a51"
+typedi@^0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/typedi/-/typedi-0.5.2.tgz#e1f67409bf0d19be86f072ff88ae30db15f61b74"
 
-typeorm-routing-controllers-extensions@0.1.0:
+typeorm-routing-controllers-extensions@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/typeorm-routing-controllers-extensions/-/typeorm-routing-controllers-extensions-0.1.0.tgz#c5b8a1d6bcc3d2c7eed97b9acccde9539980862a"
 
-typeorm-typedi-extensions@0.1.1:
+typeorm-typedi-extensions@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/typeorm-typedi-extensions/-/typeorm-typedi-extensions-0.1.1.tgz#e99a66dcf501fbd5837cf2f7a3dc75e13de89734"
 
-typeorm@0.1.12:
+typeorm@^0.1.12:
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/typeorm/-/typeorm-0.1.12.tgz#adcd45f302d21ab4d5b02671bfa8c07cea044af7"
   dependencies:

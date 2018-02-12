@@ -1,6 +1,0 @@
-apps:
-  - script   : 'app.server.prod.js'
-    name     : 'web'
-    exec_mode: 'cluster'
-    instances: 2
-#  - script   : 'worker.js'

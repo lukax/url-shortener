@@ -30,7 +30,7 @@ Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0
 
 export async function createApp(): Promise<Express> {
 
-  Container.set([{ id: 'config', value: appConfig }]);
+  Container.provide([{ id: 'config', value: appConfig }]);
 
   /**
    * Setup routing-controllers to use typedi container.
