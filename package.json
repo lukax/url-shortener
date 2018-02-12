@@ -170,7 +170,7 @@
     "pm2": "^2.9.3",
     "protractor": "^5.2.0",
     "puppeteer": "^1.0.0",
-    "reflect-metadata": "0.1.10",
+    "reflect-metadata": "0.1.12",
     "remap-istanbul": "^0.10.0",
     "rimraf": "^2.6.2",
     "rollup": "~0.54.0",

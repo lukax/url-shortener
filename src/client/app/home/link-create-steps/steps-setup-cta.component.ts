@@ -18,15 +18,15 @@ import {MatDialog} from "@angular/material";
           Ela é um complemento ao título e deve levar o visitante a clicar no botão da chamada.
         </mat-error>
       </mat-form-field>
-      <br><br>
+      <br>
       <mat-form-field>
         <input matInput placeholder="Texto do botão" [ngrxFormControlState]="formState.controls.buttonText">
-        <mat-hint>O que deve estar escrito no botão? (Ex. Clique aqui, Clique agora, Vamos lá...)</mat-hint>
+        <mat-hint>O que deve estar escrito no botão?</mat-hint>
         <mat-error *ngIf="formState.errors._buttonText?.required">
           Precisamos que indique um texto.
         </mat-error>
       </mat-form-field>
-      <br><br>
+      <br>
       <mat-form-field>
         <input matInput placeholder="Link de destino" [ngrxFormControlState]="formState.controls.buttonUrl">
         <mat-hint>Para onde você quer levar o visitante quando ele clicar no botão da sua chamada?</mat-hint>
@@ -58,7 +58,6 @@ import {MatDialog} from "@angular/material";
 export class StepsSetupCtaComponent {
   @Input() formState: FormGroupState<CreateLinkDto>;
   @Input() errorMessage: string;
-  submittedValue: CreateLinkDto;
 
   constructor(private actionsSubject: ActionsSubject,
               private dialog: MatDialog) { }
@@ -67,8 +66,8 @@ export class StepsSetupCtaComponent {
     if (this.formState.isInvalid) {
       return;
     }
-
-    this.actionsSubject.next(new LinkCreate.SubmitSetupCtaAction(this.submittedValue));
+    
+    this.actionsSubject.next(new LinkCreate.SubmitSetupCtaAction(this.formState.value));
 
     // this.emailPrompt((email) => {
     //   this.submittedValue = this.formState.value;

@@ -9,9 +9,10 @@ import * as appIniter from './app';
  */
 let _clientDir = '../../client/dev';
 
-const app = appIniter.createApp();
 
-export function init(port: number, mode: string) {
+export async function init(port: number, mode: string): Promise<http.Server> {
+  
+  const app = await appIniter.createApp();
 
   if (mode === 'dev') {
     /**

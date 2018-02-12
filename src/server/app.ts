@@ -6,7 +6,7 @@ import morgan = require("morgan");
 import {readdirSync} from "fs";
 import bodyParser = require("body-parser");
 import {join} from "path";
-import {getConnectionManager, useContainer as ormUsec} from "typeorm";
+import {getConnectionManager, useContainer as ormUsec, createConnection} from "typeorm";
 import {appConfig} from "./app.config";
 import * as compression from "compression";
 import * as jwt from 'jsonwebtoken';
@@ -28,11 +28,8 @@ Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0
   }
 }).install();
 
-export function createApp() {
+export async function createApp(): Promise<Express> {
 
-  /**
-   * Provide a configuration injectable.
-   */
   Container.set([{ id: 'config', value: appConfig }]);
 
   /**
@@ -60,6 +57,15 @@ export function createApp() {
     LinkCache
   ];
 
+  try {
+    /**
+     * Connect to database
+     */
+    await createConnection(Object.assign({}, appConfig.database, { entities: entities }));
+  } catch(ex) {
+    console.log('Error! Failed to connect to db');
+  }
+  
   const expressApp = createExpressServer({
     /**
      * We can add options about how routing-controllers should configure itself.
@@ -93,26 +99,6 @@ export function createApp() {
 
   });
 
-  // readdirSync(join(__dirname, '/services'))
-  //   .filter(file => file.endsWith('.js'))
-  //   .forEach((file) => require(join(__dirname, '/services', file)));
-
-  // readdirSync(join(__dirname, '/model'))
-  //   .filter(file => file.endsWith('.js'))
-  //   .forEach((file) => {
-  //     const exported = require(join(__dirname, '/model', file));
-  //     Object.keys(exported).forEach(className => {
-  //       appConfig.database.entities.push(exported[className]);
-  //     });
-  //   });
-
-  /**
-   * This creates the default connection using appConfig
-   */
-  getConnectionManager().create(Object.assign({}, appConfig.database, { entities: entities })).connect().then(() => {
-    console.log('Connected to db!');
-  });
-
   /**
    * Use middlewares
    */
@@ -125,26 +111,14 @@ export function createApp() {
   //expressApp.use(bodyParser.text());
   expressApp.use(compression());
 
+  // The error handler must be before any other error middleware
+  expressApp.use(Raven.errorHandler());
+
   /**
    * Configure the view engine.
    */
   //expressApp.set('view engine', 'twig');
   //expressApp.set('views', join(__dirname, '/resources/views'));
-
-
-  // The error handler must be before any other error middleware
-  expressApp.use(Raven.errorHandler());
-
-  /**
-   * Setup static file serving
-   */
-  //expressApp.use(serveStatic('static'));
-
-  /**
-   * Start the express app.
-   */
-  //expressApp.listen(appConfig.host.port);
-  //console.log(`Server is up and running at port ${appConfig.host.port}`);
 
   return expressApp;
 }

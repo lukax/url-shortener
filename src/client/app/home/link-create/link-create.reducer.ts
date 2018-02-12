@@ -40,7 +40,7 @@ const CTA_INITIAL_STATE = {
 const STEPPER_INITIAL_STATE: LinkCreate.StepperTypes = 'choose-link';
 
 const chooseLinkFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
-  pageUrl: validate([required,pattern(URL_REGEXP)]),
+  pageUrl: validate([required, pattern(URL_REGEXP)]),
 });
 const setupBrandFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
   name: validate([required]),
