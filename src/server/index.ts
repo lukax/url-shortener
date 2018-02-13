@@ -9,12 +9,9 @@ import * as appIniter from './app';
  */
 let _clientDir = '../../client/dev';
 
-const app: express.Express = express();
+const app: express.Express = appIniter.initApp();
 
 export function init(mode: string): Promise<http.Server> {
-
-  const port = process.env.PORT;
-  appIniter.initApp(app);
 
   if (mode === 'dev') {
     /**
@@ -39,7 +36,9 @@ export function init(mode: string): Promise<http.Server> {
      * Spa Res Sender
      */
     const renderIndex = (req: express.Request, res: express.Response) => {
-      res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
+      if(!res.headersSent) {
+        res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
+      }
     };
     app.get('/*', renderIndex);
   } else {
@@ -65,7 +64,9 @@ export function init(mode: string): Promise<http.Server> {
      * Spa Res Sender.
      */
     const renderIndex = function (req: express.Request, res: express.Response) {
-      res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
+      if(!res.headersSent) {
+        res.sendFile(path.resolve(__dirname, _clientDir + '/index.html'));
+      }
     };
 
     /**
@@ -78,7 +79,7 @@ export function init(mode: string): Promise<http.Server> {
    * Server with gzip compression.
    */
   return new Promise<http.Server>((resolve, reject) => {
-    const server = app.listen(port, () => {
+    const server = app.listen(process.env.PORT, () => {
       const port = server.address().port;
       console.log('App is listening on port:' + port);
       resolve(server);

@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/
 import {AuthService, UserProfile} from "../../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {CreateLinkResultViewModel, CreateLinkViewModel} from "../../shared/entities";
+import {CreateLinkResultViewModel, CreateLinkViewModel, PageMetadataViewModel} from "../../shared/models";
 import {MatStepper, MatStep} from "@angular/material";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
@@ -32,7 +32,7 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
   cta$: Observable<CreateLinkViewModel>;
   errorMessage$: Observable<string>;
   previewPageUrl$: Observable<string>;
-
+  
   @ViewChild('formStepper') formStepper: MatStepper;
   stepperIndexDict: LinkCreate.StepperTypes[] = ['choose-link', 'setup-brand', 'setup-cta', 'share-link'];
 

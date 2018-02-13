@@ -22,7 +22,7 @@ Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0
   }
 }).install();
 
-export function initApp(expressApp: Express) {
+export function initApp(): Express {
 
   /**
    * Provide a configuration injectable.
@@ -35,7 +35,7 @@ export function initApp(expressApp: Express) {
   rtUsec(Container);
   ormUsec(Container);
 
-  useExpressServer(expressApp, {
+  const app = createExpressServer({
     /**
      * We can add options about how routing-controllers should configure itself.
      * Here we specify what controllers should be registered in our express server.
@@ -100,12 +100,12 @@ export function initApp(expressApp: Express) {
   /**
    * Use middlewares
    */
-  expressApp.use(morgan('combined')); //logger
-  expressApp.use(bodyParser.raw());
-  expressApp.use(bodyParser.urlencoded({ extended: false }));
-  expressApp.use(bodyParser.json());
-  //expressApp.use(bodyParser.text());
-  expressApp.use(compression());
+  app.use(morgan('combined')); //logger
+  app.use(bodyParser.raw());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
+  //app.use(bodyParser.text());
+  app.use(compression());
 
   /**
    * Configure the view engine.
@@ -122,4 +122,6 @@ export function initApp(expressApp: Express) {
    */
   //expressApp.listen(appConfig.host.port);
   //console.log(`Server is up and running at port ${appConfig.host.port}`);
+
+  return app;
 }

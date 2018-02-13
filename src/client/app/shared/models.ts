@@ -10,6 +10,9 @@ export class CreateLinkViewModel {
 export interface CreateLinkResultViewModel {
   hash?: string;
   message?: string;
+  pageUrl?: string;
+  metadata?: PageMetadataViewModel;
+  isExpired?: boolean;
 }
 
 export interface VerifyUrlResultViewModel {
@@ -36,4 +39,6 @@ export interface PageMetadataViewModel {
   publisher?: string;
   title?: string;
   url?: string;
+
+  [name: string]: string;
 }

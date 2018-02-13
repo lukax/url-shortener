@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActionsSubject } from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
-import {CreateLinkViewModel} from "../../shared/entities";
+import {CreateLinkViewModel, PageMetadataViewModel} from "../../shared/models";
 import * as $ from "jquery";
 import {LinkCreate} from "../link-create/link-create.actions";
 import NewLinkAction = LinkCreate.NewLinkAction;
@@ -26,7 +26,11 @@ import NewLinkAction = LinkCreate.NewLinkAction;
                        [include]="['facebook','twitter','whatsapp','email','linkedin','pinterest','telegram','google']"
                        [show]="8" 
                        [size]="4" 
-                       [url]="shortPageUrl"></share-buttons>
+                       [url]="shortPageUrl"
+                       [title]="pageMetadata?.title"
+                       [description]="pageMetadata?.description"
+                       [image]="pageMetadata?.image"
+                       [tags]="pageMetadata?.tags"></share-buttons>
 
         <!--button mat-raised-button class="new-link-btn" (click)="newLink()">
           NEW LINK
@@ -54,7 +58,8 @@ import NewLinkAction = LinkCreate.NewLinkAction;
 })
 export class StepsShareLinkComponent {
   @Input() shortPageUrl: string;
-
+  @Input() pageMetadata: PageMetadataViewModel;
+  
   constructor(private actionsSubject: ActionsSubject) { }
 
   onShortUrlClick($event: MouseEvent) {

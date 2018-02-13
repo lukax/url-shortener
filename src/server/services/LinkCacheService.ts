@@ -4,7 +4,7 @@ import {LinkCache} from "../model/LinkCache";
 import {LinkCacheRepository} from "../repository/LinkCacheRepository";
 import * as aws from 'aws-sdk';
 import {appConfig} from "../app.config";
-import metascraper from 'metascraper';
+import * as metascraper from 'metascraper';
 import { PageMetadata } from '../dtos/PageMetadata';
 
 @Service()
@@ -88,18 +88,16 @@ export class LinkCacheService {
     return { content: null, isAlive: false };
   }
 
-
-
-  async getMetadata(pageUrl:string, pageHtml: string): Promise<PageMetadata> {
+  public async getMetadata(pageUrl:string, pageHtml: string): Promise<PageMetadata> {
     let metadata = {};
     try {
         metadata = await metascraper({url: pageUrl, html: pageHtml});
-    } catch(ex) {
-        //log
+        console.log(`OK. Metadata for ${pageUrl}: ` + JSON.stringify(metadata));
+      } catch(ex) {
+        console.log(`ERR. Could not get metadata for ${pageUrl}. ` + ex);
     }
     return metadata;
 }
-
 
   private getPageUrlKey(pageUrl: string): string {
     return `pageUrl//${pageUrl}`;

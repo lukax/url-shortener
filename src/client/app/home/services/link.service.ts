@@ -6,7 +6,7 @@ import {LinkCreate} from "../link-create/link-create.actions";
 import {
   CreateLinkViewModel, CreateLinkResultViewModel, VerifyUrlViewModel, VerifyUrlResultViewModel,
   LinkViewModel
-} from "../../shared/entities";
+} from "../../shared/models";
 import { HttpClient } from '@angular/common/http';
 import {URL_REGEXP} from "../../shared/utils";
 

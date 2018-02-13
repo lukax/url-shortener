@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActionsSubject } from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
-import {CreateLinkViewModel} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/models";
 import {LinkCreate} from "../link-create/link-create.actions";
 import {EmailPromptDialogComponent} from "../../email-prompt/email-prompt.component";
 import {MatDialog} from "@angular/material";

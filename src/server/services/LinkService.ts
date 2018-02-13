@@ -32,9 +32,12 @@ export class LinkService {
 
     public async findOneByHash(hash: string): Promise<ViewLinkDto> {
         const link = await this.repo.findOne({ hash: hash });
-        const linkCache = await this.repoLinkCache.findOne({ pageUrl: link.pageUrl });
+        if(link) {
+          const linkCache = await this.repoLinkCache.findOne({ pageUrl: link.pageUrl });
+          return ViewLinkDto.toDto(link, linkCache);
+        }
 
-        return ViewLinkDto.toDto(link, linkCache);
+        return null;
     }
 
     public async create(model: CreateLinkDto, user: User): Promise<CreateLinkResultDto> {
@@ -58,7 +61,16 @@ export class LinkService {
 
       link = await this.repo.save(link);
 
-      return { hash: link.hash };
+      const linkCache = await this.repoLinkCache.findOne({ pageUrl: link.pageUrl });
+      let isExpired = false;
+      let metadata = {};
+      if(linkCache) {
+        isExpired = linkCache.isExpired();
+        metadata = linkCache.metadata;
+
+      }
+
+      return { hash: link.hash, pageUrl: link.pageUrl, isExpired, metadata };
     }
 
     public async update(model: CreateLinkDto, hash: string, user: User): Promise<boolean> {

@@ -31,6 +31,9 @@ export class CreateLinkDto {
 
 export class CreateLinkResultDto {
   hash: string;
+  isExpired: boolean;
+  metadata: PageMetadata;
+  pageUrl: string;
 }
 
 export class ViewLinkDto {

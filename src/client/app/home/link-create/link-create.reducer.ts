@@ -1,6 +1,6 @@
 import { createFormGroupReducerWithUpdate, createFormGroupState, FormGroupState, validate } from 'ngrx-forms';
 import { required,pattern } from 'ngrx-forms/validation';
-import {CreateLinkViewModel} from "../../shared/entities";
+import {CreateLinkViewModel, LinkViewModel} from "../../shared/models";
 import {LinkCreate} from "./link-create.actions";
 import {State as RootState} from "../../app.reducer";
 import {combineReducers} from "@ngrx/store";
@@ -31,7 +31,7 @@ export const SETUP_CTA_INITIAL_STATE = createFormGroupState<CreateLinkViewModel>
   buttonText: '',
   buttonUrl: ''
 });
-const CTA_INITIAL_STATE = {
+const CTA_INITIAL_STATE: LinkViewModel = {
   name: 'Título para sua chamada',
   message: 'Uma descrição para sua "chamada"',
   buttonUrl: '',
@@ -79,6 +79,8 @@ export function reducer(_s: any, _a: any) {
         case LinkCreate.ActionTypes.SUBMIT_PAGE_URL:
         case LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND:
         case LinkCreate.ActionTypes.SUBMIT_SETUP_CTA:
+          return Object.assign({}, s, a.payload);
+        case LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT:
           return Object.assign({}, s, a.payload);
         default:
           return s;

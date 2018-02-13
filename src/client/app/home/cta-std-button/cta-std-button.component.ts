@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
-import {CreateLinkViewModel} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/models";
 import { LinkService } from "../index";
 
 @Component({

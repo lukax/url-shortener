@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {CreateLinkViewModel, CreateLinkResultViewModel} from "../../shared/entities";
+import {CreateLinkViewModel, CreateLinkResultViewModel} from "../../shared/models";
 import {type} from "../../shared/type";
 
 /**
