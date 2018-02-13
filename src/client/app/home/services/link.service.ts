@@ -3,7 +3,10 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import {Analytics, AnalyticsService} from "../../modules/analytics/services/index";
 import {LinkCreate} from "../link-create/link-create.actions";
-import {CreateLinkDto, CreateLinkResultDto, VerifyUrlDto, VerifyUrlResultDto} from "../../shared/entities";
+import {
+  CreateLinkViewModel, CreateLinkResultViewModel, VerifyUrlViewModel, VerifyUrlResultViewModel,
+  LinkViewModel
+} from "../../shared/entities";
 import { HttpClient } from '@angular/common/http';
 import {URL_REGEXP} from "../../shared/utils";
 
@@ -18,18 +21,18 @@ export class LinkService extends Analytics {
     this.category = LinkCreate.CATEGORY;
   }
 
-  getCurrentCreateLink(): Observable<CreateLinkDto> {
-    return Observable.of(new CreateLinkDto());
+  getCurrentCreateLink(): Observable<CreateLinkViewModel> {
+    return Observable.of(new CreateLinkViewModel());
   }
 
-  verifyUrl(url: string): Observable<VerifyUrlResultDto> {
-    return this.http.post<VerifyUrlResultDto>(`/api/links/verify`, <VerifyUrlDto>{
+  verifyUrl(url: string): Observable<VerifyUrlResultViewModel> {
+    return this.http.post<VerifyUrlResultViewModel>(`/api/links/verify`, <VerifyUrlViewModel>{
         url: this.linkenizer(url)
       });
   }
 
-  createLink(model: CreateLinkDto): Observable<CreateLinkResultDto> {
-    return this.http.post<CreateLinkResultDto>(`/api/links`, Object.assign({}, model, <CreateLinkDto>{
+  createLink(model: CreateLinkViewModel): Observable<CreateLinkResultViewModel> {
+    return this.http.post<CreateLinkResultViewModel>(`/api/links`, Object.assign({}, model, <CreateLinkViewModel>{
         pageUrl: this.linkenizer(model.pageUrl),
         buttonUrl: this.linkenizer(model.buttonUrl)
       }));
@@ -53,8 +56,8 @@ export class LinkService extends Analytics {
     return `/api/pages/preview/${encodeURIComponent(this.linkenizer(pageUrl))}`;
   }
 
-  getLinkCta(hash: string): Observable<CreateLinkDto> {
-    return this.http.get<CreateLinkDto>(`/api/links/${hash}`);
+  getLinkCta(hash: string): Observable<LinkViewModel> {
+    return this.http.get<LinkViewModel>(`/api/links/${hash}`);
   }
 
 }

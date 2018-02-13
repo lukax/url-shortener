@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActionsSubject } from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
-import {CreateLinkDto} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/entities";
 import * as $ from "jquery";
 import {LinkCreate} from "../link-create/link-create.actions";
 import NewLinkAction = LinkCreate.NewLinkAction;

@@ -1,4 +1,5 @@
 import {Column, Entity, ObjectID, ObjectIdColumn} from "typeorm";
+import { PageMetadata } from "../dtos/PageMetadata";
 
 @Entity()
 export class LinkCache {
@@ -14,6 +15,9 @@ export class LinkCache {
 
   @Column()
   public cacheTime: number;
+
+  @Column()
+  metadata: PageMetadata;
 
   isExpired(): boolean {
     const seconds = ((+new Date()) - this.cacheTime) / 1000;

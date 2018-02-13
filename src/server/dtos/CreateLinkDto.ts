@@ -1,6 +1,8 @@
 import {IsNotEmpty, IsUrl} from 'class-validator';
 import {Link} from "../model/Link";
 import {ObjectID} from "typeorm";
+import { PageMetadata } from './PageMetadata';
+import { LinkCache } from '../model/LinkCache';
 
 export class CreateLinkDto {
 
@@ -39,8 +41,9 @@ export class ViewLinkDto {
   buttonText: string;
   buttonUrl: string;
   pageUrl: string;
+  metadata?: PageMetadata;
 
-  public static toDto(link: Link): ViewLinkDto {
+  public static toDto(link: Link, linkCache?: LinkCache): ViewLinkDto {
     if(link) {
       const dto = new ViewLinkDto();
       dto._id = link._id.toHexString();
@@ -50,6 +53,9 @@ export class ViewLinkDto {
       dto.buttonUrl = link.buttonUrl;
       dto.name = link.name;
       dto.message = link.message;
+      if(linkCache) {
+        dto.metadata = linkCache.metadata;
+      }
       return dto;
     }
     return null;

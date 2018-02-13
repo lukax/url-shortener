@@ -1,9 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit} from "@angular/core";
 import {ActivatedRoute} from "@angular/router";
 import {Subscription} from "rxjs/Subscription";
-import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {DomSanitizer, Meta, SafeResourceUrl, Title} from "@angular/platform-browser";
 import {LinkService} from "../services/index";
-import {CreateLinkDto} from "../../shared/entities";
+import {CreateLinkViewModel, LinkViewModel, PageMetadataViewModel} from "../../shared/entities";
 import {Observable} from "rxjs/Observable";
 
 @Component({
@@ -23,21 +23,23 @@ import {Observable} from "rxjs/Observable";
   `],
 })
 export class LinkViewComponent implements OnInit, OnDestroy {
-  pageUrl: SafeResourceUrl;
-  cta: CreateLinkDto;
   isLoading: boolean;
+  pageUrl: SafeResourceUrl;
+  cta: CreateLinkViewModel;
   private sub: Subscription;
 
   constructor(private route: ActivatedRoute,
               private sanitizer: DomSanitizer,
-              private linkService: LinkService) {}
+              private linkService: LinkService,
+              private titleService: Title,
+              private meta: Meta) {}
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.isLoading = true;
       const pageHash = params['pageHash'];
       this.pageUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.linkService.getLinkViewUrl(pageHash));
-      this.linkService.getLinkCta(pageHash).subscribe(x => this.cta = x);
+      this.linkService.getLinkCta(pageHash).subscribe(this.onLoadCta);
     });
   }
 
@@ -48,4 +50,34 @@ export class LinkViewComponent implements OnInit, OnDestroy {
   onPageLoad() {
     this.isLoading = false;
   }
+
+  onLoadCta(cta: LinkViewModel) {
+    this.cta = cta;
+    this.loadMetadata(cta.metadata || {});
+  }
+
+  loadMetadata(metadata: PageMetadataViewModel) {
+    if(metadata.title) {
+      this.titleService.setTitle(metadata.title);
+    }
+    this.meta.addTag({ name: 'og:title', content: metadata.title });
+    this.meta.addTag({ name: 'og:description', content: metadata.description });
+    this.meta.addTag({ name: 'og:image', content: metadata.image });
+    this.meta.addTag({ name: 'og:url', content: metadata.url });
+    this.meta.addTag({ name: 'og:video', content: metadata.video });
+    this.meta.addTag({ name: 'og:logo', content: metadata.logo });
+    this.meta.addTag({ name: 'og:site_name', content: metadata.publisher });
+    this.meta.addTag({ name: 'twitter:title', content: metadata.image });
+    this.meta.addTag({ name: 'twitter:image', content: metadata.image });
+    this.meta.addTag({ name: 'twitter:description', content: metadata.description });
+    this.meta.addTag({ name: 'twitter:player:stream', content: metadata.video });
+    this.meta.addTag({ name: 'author', content: metadata.author });
+    this.meta.addTag({ name: 'description', content: metadata.description });
+    this.meta.addTag({ name: 'logo', content: metadata.logo });
+    this.meta.addTag({ name: 'application-name', content: metadata.publisher });
+    this.meta.addTag({ name: 'publisher', content: metadata.publisher });
+    this.meta.addTag({ name: 'date', content: metadata.date });
+  }
+
+
 }

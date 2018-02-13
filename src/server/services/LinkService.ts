@@ -7,28 +7,34 @@ import axios from "axios";
 import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../dtos/CreateLinkDto";
 import {ObjectID} from "typeorm";
 import {User} from "../model/User";
+import { LinkCacheRepository } from "../repository/LinkCacheRepository";
+import { LinkCache } from "../model/LinkCache";
 
 @Service()
 export class LinkService {
 
-    constructor(
-      @OrmRepository(Link)
-        private repo: LinkRepository,
-    ) { }
+    @OrmRepository(Link)
+    private repo: LinkRepository;
+
+    @OrmRepository(LinkCache)
+    private repoLinkCache: LinkCacheRepository;
+
 
     public async findAll(): Promise<ViewLinkDto[]> {
         const links = await this.repo.find();
-        return links.map(ViewLinkDto.toDto).filter(x => x != null);
+        return links.map((x) => ViewLinkDto.toDto(x)).filter(x => x != null);
     }
 
     public async findAllByUser(user: User): Promise<ViewLinkDto[]> {
         const links = await this.repo.find({ userId: user._id });
-        return links.map(ViewLinkDto.toDto).filter(x => x != null);
+        return links.map((x) => ViewLinkDto.toDto(x)).filter(x => x != null);
     }
 
     public async findOneByHash(hash: string): Promise<ViewLinkDto> {
-        const x = await this.repo.findOne({ hash: hash });
-        return ViewLinkDto.toDto(x);
+        const link = await this.repo.findOne({ hash: hash });
+        const linkCache = await this.repoLinkCache.findOne({ pageUrl: link.pageUrl });
+
+        return ViewLinkDto.toDto(link, linkCache);
     }
 
     public async create(model: CreateLinkDto, user: User): Promise<CreateLinkResultDto> {

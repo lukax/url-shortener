@@ -2,6 +2,23 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch via Yarn",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": [
+        "run",
+        "pm2-dev",
+        "process.prod.yml"
+      ],
+      "port": 9001
+    },{
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/dist/server/dev/index.dev.js"
+    },
+    {
       "name": "Launch Chrome against localhost, with sourcemaps",
       "type": "chrome",
       "preLaunchTask": "start",

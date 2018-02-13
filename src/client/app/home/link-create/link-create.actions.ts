@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import {CreateLinkDto, CreateLinkResultDto} from "../../shared/entities";
+import {CreateLinkViewModel, CreateLinkResultViewModel} from "../../shared/entities";
 import {type} from "../../shared/type";
 
 /**
@@ -65,7 +65,7 @@ export namespace LinkCreate {
 
   export class InitializedAction implements Action {
     type = ActionTypes.INITIALIZED;
-    constructor(public payload: CreateLinkDto) { }
+    constructor(public payload: CreateLinkViewModel) { }
   }
 
   export class InitFailedAction implements Action {
@@ -75,22 +75,22 @@ export namespace LinkCreate {
 
   export class SubmitPageUrlAction implements Action {
     type = ActionTypes.SUBMIT_PAGE_URL;
-    constructor(public payload: CreateLinkDto) { }
+    constructor(public payload: CreateLinkViewModel) { }
   }
 
   export class SubmitSetupBrandAction implements Action {
     type = ActionTypes.SUBMIT_SETUP_BRAND;
-    constructor(public payload: CreateLinkDto) { }
+    constructor(public payload: CreateLinkViewModel) { }
   }
 
   export class SubmitSetupCtaAction implements Action {
     type = ActionTypes.SUBMIT_SETUP_CTA;
-    constructor(public payload: CreateLinkDto) { }
+    constructor(public payload: CreateLinkViewModel) { }
   }
 
   export class SubmitSetupCtaResultAction implements Action {
     type = ActionTypes.SUBMIT_SETUP_CTA_RESULT;
-    constructor(public payload: CreateLinkResultDto) { }
+    constructor(public payload: CreateLinkResultViewModel) { }
   }
 
   export class SetPageUrlPreviewAction implements Action {

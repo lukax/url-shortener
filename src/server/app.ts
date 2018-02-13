@@ -1,26 +1,20 @@
 import "reflect-metadata";
-import {Action, useContainer as rtUsec, createExpressServer} from "routing-controllers";
+import {Action, useContainer as rtUsec, createExpressServer, useExpressServer} from "routing-controllers";
 import {Container} from "typedi";
-import {Express} from "express";
 import morgan = require("morgan");
-import {readdirSync} from "fs";
 import bodyParser = require("body-parser");
-import {join} from "path";
-import {getConnectionManager, useContainer as ormUsec, createConnection} from "typeorm";
+import {useContainer as ormUsec, createConnection, getConnectionManager} from "typeorm";
 import {appConfig} from "./app.config";
 import * as compression from "compression";
 import * as jwt from 'jsonwebtoken';
 import {IUserJwt} from "./dtos/IUser";
 import {UserService} from "./services/UserService";
-import { PagesController } from "./controllers/web/PagesController";
-import { ApiLinksController } from "./controllers/api/ApiLinksController";
 import * as Raven from 'raven';
-import { User } from "./model/User";
-import { LinkCache } from "./model/LinkCache";
-import { Link } from "./model/Link";
-import { BrowserService } from "./services/BrowserService";
-import { LinkCacheService } from "./services/LinkCacheService";
-import { LinkService } from "./services/LinkService";
+import {join} from "path";
+import {readdirSync} from "fs";
+import {Express} from "express";
+import { ApiLinksController } from "./controllers/api/ApiLinksController";
+import { PagesController } from "./controllers/web/PagesController";
 Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0cc7a66a@sentry.io/284838', {
   autoBreadcrumbs: {
     'console': true,  // console logging
@@ -28,9 +22,12 @@ Raven.config('https://d1021346a5ad46c5b241716a7f0e0e2e:0cde665a1f2b46c39fad070c0
   }
 }).install();
 
-export async function createApp(): Promise<Express> {
+export function initApp(expressApp: Express) {
 
-  Container.provide([{ id: 'config', value: appConfig }]);
+  /**
+   * Provide a configuration injectable.
+   */
+  Container.set([{ id: 'config', value: appConfig }]);
 
   /**
    * Setup routing-controllers to use typedi container.
@@ -38,40 +35,15 @@ export async function createApp(): Promise<Express> {
   rtUsec(Container);
   ormUsec(Container);
 
-  /** 
-   * Import controllers, services and entities
-  */
-  const controllers = [
-    PagesController,
-    ApiLinksController
-  ];
-  const services = [
-    BrowserService,
-    LinkCacheService,
-    LinkService,
-    UserService
-  ];
-  const entities = [
-    Link,
-    User,
-    LinkCache
-  ];
-
-  try {
-    /**
-     * Connect to database
-     */
-    await createConnection(Object.assign({}, appConfig.database, { entities: entities }));
-  } catch(ex) {
-    console.log('Error! Failed to connect to db');
-  }
-  
-  const expressApp = createExpressServer({
+  useExpressServer(expressApp, {
     /**
      * We can add options about how routing-controllers should configure itself.
      * Here we specify what controllers should be registered in our express server.
      */
-    controllers: controllers,
+    controllers: [
+      ApiLinksController, 
+      PagesController 
+    ],
 
     // authorizationChecker: async (action: Action, roles: string[]) => {
     //   // here you can use request/response objects from action
@@ -89,7 +61,6 @@ export async function createApp(): Promise<Express> {
     //   //   return true;
     //   return !!action.request.user;
     // },
-
     currentUserChecker: async (action: Action) => {
       const token = action.request.headers["authorization"].split(' ')[1];
       const decoded: IUserJwt = <IUserJwt>jwt.decode(token);
@@ -100,10 +71,35 @@ export async function createApp(): Promise<Express> {
   });
 
   /**
+   * Import services
+   */
+  readdirSync(join(__dirname, '/services'))
+    .filter(file => file.endsWith('.js'))
+    .forEach((file) => require(join(__dirname, '/services', file)));
+
+  /**
+   * Import entities
+   */
+  appConfig.database.entities = [];
+  readdirSync(join(__dirname, '/model'))
+    .filter(file => file.endsWith('.js'))
+    .forEach((file) => {
+      const exported = require(join(__dirname, '/model', file));
+      Object.keys(exported).forEach(className => {
+        appConfig.database.entities.push(exported[className]);
+      });
+    });
+
+  /**
+   * This creates the default connection using appConfig
+   */
+  getConnectionManager().create(appConfig.database).connect().then(() => {
+    console.log('Connected to db!');
+  });
+
+  /**
    * Use middlewares
    */
-  // The request handler must be the first middleware on the app
-  expressApp.use(Raven.requestHandler());
   expressApp.use(morgan('combined')); //logger
   expressApp.use(bodyParser.raw());
   expressApp.use(bodyParser.urlencoded({ extended: false }));
@@ -111,14 +107,19 @@ export async function createApp(): Promise<Express> {
   //expressApp.use(bodyParser.text());
   expressApp.use(compression());
 
-  // The error handler must be before any other error middleware
-  expressApp.use(Raven.errorHandler());
-
   /**
    * Configure the view engine.
    */
   //expressApp.set('view engine', 'twig');
   //expressApp.set('views', join(__dirname, '/resources/views'));
 
-  return expressApp;
+  /**
+   * Setup static file serving
+   */
+  //expressApp.use(serveStatic('static'));
+  /**
+   * Start the express app.
+   */
+  //expressApp.listen(appConfig.host.port);
+  //console.log(`Server is up and running at port ${appConfig.host.port}`);
 }

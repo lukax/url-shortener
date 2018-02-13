@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActionsSubject } from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
-import {CreateLinkDto} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/entities";
 import {LinkCreate} from "../link-create/link-create.actions";
 
 @Component({
@@ -31,8 +31,8 @@ import {LinkCreate} from "../link-create/link-create.actions";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StepsSetupBrandComponent {
-  @Input() formState: FormGroupState<CreateLinkDto>;
-  submittedValue: CreateLinkDto;
+  @Input() formState: FormGroupState<CreateLinkViewModel>;
+  submittedValue: CreateLinkViewModel;
 
   constructor(private actionsSubject: ActionsSubject) { }
 

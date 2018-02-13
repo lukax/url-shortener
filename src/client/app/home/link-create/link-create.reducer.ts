@@ -1,6 +1,6 @@
 import { createFormGroupReducerWithUpdate, createFormGroupState, FormGroupState, validate } from 'ngrx-forms';
 import { required,pattern } from 'ngrx-forms/validation';
-import {CreateLinkDto} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/entities";
 import {LinkCreate} from "./link-create.actions";
 import {State as RootState} from "../../app.reducer";
 import {combineReducers} from "@ngrx/store";
@@ -9,24 +9,24 @@ import {DBSchema} from "@ngrx/db";
 
 export interface State extends RootState {
   linkCreate: {
-    chooseLinkForm: FormGroupState<CreateLinkDto>,
-    setupBrandForm: FormGroupState<CreateLinkDto>,
-    setupCtaForm: FormGroupState<CreateLinkDto>
+    chooseLinkForm: FormGroupState<CreateLinkViewModel>,
+    setupBrandForm: FormGroupState<CreateLinkViewModel>,
+    setupCtaForm: FormGroupState<CreateLinkViewModel>
     shortPageUrl: string,
     errorMessage: string,
-    cta: CreateLinkDto,
+    cta: CreateLinkViewModel,
     stepper: LinkCreate.StepperTypes,
     previewPageUrl: string
   };
 }
 
-export const CHOOSE_LINK_INITIAL_STATE = createFormGroupState<CreateLinkDto>('chooseLinkForm', {
+export const CHOOSE_LINK_INITIAL_STATE = createFormGroupState<CreateLinkViewModel>('chooseLinkForm', {
   pageUrl: ''
 });
-export const SETUP_BRAND_INITIAL_STATE = createFormGroupState<CreateLinkDto>('setupBrandForm', {
+export const SETUP_BRAND_INITIAL_STATE = createFormGroupState<CreateLinkViewModel>('setupBrandForm', {
   name: '',
 });
-export const SETUP_CTA_INITIAL_STATE = createFormGroupState<CreateLinkDto>('setupCtaForm', {
+export const SETUP_CTA_INITIAL_STATE = createFormGroupState<CreateLinkViewModel>('setupCtaForm', {
   message: '',
   buttonText: '',
   buttonUrl: ''
@@ -39,13 +39,13 @@ const CTA_INITIAL_STATE = {
 };
 const STEPPER_INITIAL_STATE: LinkCreate.StepperTypes = 'choose-link';
 
-const chooseLinkFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
+const chooseLinkFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkViewModel>({
   pageUrl: validate([required, pattern(URL_REGEXP)]),
 });
-const setupBrandFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
+const setupBrandFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkViewModel>({
   name: validate([required]),
 });
-const setupCtaFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkDto>({
+const setupCtaFormGroupReducerWithUpdate = createFormGroupReducerWithUpdate<CreateLinkViewModel>({
   message: validate([required]),
   buttonText: validate([required]),
   buttonUrl: validate([required, pattern(URL_REGEXP)]),

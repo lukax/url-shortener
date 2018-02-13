@@ -11,12 +11,16 @@ import {LinkCacheService} from "../../services/LinkCacheService";
 @Controller()
 export class PagesController {
 
-    @Inject() private linkSvc: LinkService;
-    @Inject() private browserSvc: BrowserService;
-    @Inject() private linkCacheSvc: LinkCacheService;
+    @Inject() 
+    private linkSvc: LinkService;
+    
+    @Inject() 
+    private browserSvc: BrowserService;
+    
+    @Inject() 
+    private linkCacheSvc: LinkCacheService;
 
-    constructor (@Inject('config') private config: IAppConfig) {}
-
+    
     @Get('/api/pages/:hash([a-z0-9]{5})') // match 5 digit hex string!
     @HttpCode(200)
     async viewUrlAction(@Param("hash") hash: string, @Req() req: Request): Promise<any> {

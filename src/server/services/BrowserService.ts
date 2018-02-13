@@ -7,11 +7,7 @@ import {BLOCKED_REGEXP} from '../app.blocked';
 @Service()
 export class BrowserService {
 
-  browser: puppeteer.Browser;
-
-  constructor() {
-    this.browser = null;
-  }
+  browser: puppeteer.Browser = null;
 
   async getContentOfPage(pageURL: string, hostURL: string): Promise<any> {
     let content: string;

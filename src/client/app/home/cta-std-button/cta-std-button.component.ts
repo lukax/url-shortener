@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from "@angular/core";
-import {CreateLinkDto} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/entities";
 import { LinkService } from "../index";
 
 @Component({
@@ -12,7 +12,7 @@ import { LinkService } from "../index";
 export class CtaStdButtonComponent {
 
   @Input()
-  cta: CreateLinkDto;
+  cta: CreateLinkViewModel;
 
   constructor(private linkService: LinkService) {
     

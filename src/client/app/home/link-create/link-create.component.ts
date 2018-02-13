@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild, AfterViewInit} from '@angular/
 import {AuthService, UserProfile} from "../../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {CreateLinkResultDto, CreateLinkDto} from "../../shared/entities";
+import {CreateLinkResultViewModel, CreateLinkViewModel} from "../../shared/entities";
 import {MatStepper, MatStep} from "@angular/material";
 import {Store} from "@ngrx/store";
 import {Observable} from "rxjs/Observable";
@@ -25,11 +25,11 @@ import { LinkCreate } from './link-create.actions';
   styleUrls: ['link-create.component.css'],
 })
 export class CreateLinkComponent implements OnInit, AfterViewInit {
-  chooseLinkForm$: Observable<FormGroupState<CreateLinkDto>>;
-  setupBrandForm$: Observable<FormGroupState<CreateLinkDto>>;
-  setupCtaForm$: Observable<FormGroupState<CreateLinkDto>>;
+  chooseLinkForm$: Observable<FormGroupState<CreateLinkViewModel>>;
+  setupBrandForm$: Observable<FormGroupState<CreateLinkViewModel>>;
+  setupCtaForm$: Observable<FormGroupState<CreateLinkViewModel>>;
   shortPageUrl$: Observable<string>;
-  cta$: Observable<CreateLinkDto>;
+  cta$: Observable<CreateLinkViewModel>;
   errorMessage$: Observable<string>;
   previewPageUrl$: Observable<string>;
 

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActionsSubject } from '@ngrx/store';
 import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
 
-import {CreateLinkDto} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/entities";
 import {LinkCreate} from "../link-create/link-create.actions";
 import {EmailPromptDialogComponent} from "../../email-prompt/email-prompt.component";
 import {MatDialog} from "@angular/material";
@@ -56,7 +56,7 @@ import {MatDialog} from "@angular/material";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StepsSetupCtaComponent {
-  @Input() formState: FormGroupState<CreateLinkDto>;
+  @Input() formState: FormGroupState<CreateLinkViewModel>;
   @Input() errorMessage: string;
 
   constructor(private actionsSubject: ActionsSubject,

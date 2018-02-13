@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {AuthService, UserProfile} from "../../auth/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
-import {CreateLinkDto} from "../../shared/entities";
+import {CreateLinkViewModel} from "../../shared/entities";
 import {Headers, Http} from '@angular/http';
 
 @Component({

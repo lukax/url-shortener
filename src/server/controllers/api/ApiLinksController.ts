@@ -9,6 +9,7 @@ import {CreateLinkDto, CreateLinkResultDto, ViewLinkDto} from "../../dtos/Create
 import {VerifyUrlDto, VerifyUrlResultDto} from "../../dtos/VerifyUrlDto";
 import {checkJwt} from "../../app.auth";
 import {User} from "../../model/User";
+import { LinkCacheService } from "../../services/LinkCacheService";
 
 
 @Service()
@@ -16,8 +17,9 @@ import {User} from "../../model/User";
 @UseBefore(checkJwt())
 export class ApiLinksController {
 
-    @Inject()
+    @Inject() 
     private links: LinkService;
+
 
     @Get('/api/links')
     async findAllLinks(): Promise<ViewLinkDto[]> {
