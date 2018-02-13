@@ -1,7 +1,7 @@
 {
   "name": "jeitin-app",
   "private": true,
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Jeit.in",
   "repository": "https://github.com/lukax/urlftw.git",
   "author": "Lucas Espindola <lukax>",
