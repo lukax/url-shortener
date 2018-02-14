@@ -55,8 +55,8 @@
 
 :host .link-preview {
   top: 0;
-  width: 100%!important;
-  height: 94vh!important;
+  width: 100% !important;
+  height: calc(100vh - 55px) !important;
   overflow: visible!important;
   border: none!important;
   position: relative;
