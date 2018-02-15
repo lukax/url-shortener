@@ -6,6 +6,7 @@ import {CreateLinkViewModel} from "../../shared/models";
 import {LinkCreate} from "../link-create/link-create.actions";
 import {EmailPromptDialogComponent} from "../../email-prompt/email-prompt.component";
 import {MatDialog} from "@angular/material";
+import {Auth} from "../../auth/auth.actions";
 
 @Component({
   selector: 'sd-steps-setup-cta',
@@ -66,7 +67,7 @@ export class StepsSetupCtaComponent {
     if (this.formState.isInvalid) {
       return;
     }
-    
+
     this.actionsSubject.next(new LinkCreate.SubmitSetupCtaAction(this.formState.value));
 
     // this.emailPrompt((email) => {

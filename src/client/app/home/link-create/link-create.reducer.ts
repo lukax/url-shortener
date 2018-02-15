@@ -15,7 +15,6 @@ export interface State extends RootState {
     shortPageUrl: string,
     previewPageUrl: string,
     errorMessage: string,
-    cta: CreateLinkViewModel,
     stepper: LinkCreate.StepperTypes,
     isCompleted: boolean
   };
@@ -75,18 +74,6 @@ export function reducer(_s: any, _a: any) {
       }
       return s;
     },
-    cta(s = CTA_INITIAL_STATE, a: LinkCreate.Actions) {
-      switch (a.type) {
-        case LinkCreate.ActionTypes.SUBMIT_PAGE_URL:
-        case LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND:
-        case LinkCreate.ActionTypes.SUBMIT_SETUP_CTA:
-          return Object.assign({}, s, a.payload);
-        case LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT:
-          return Object.assign({}, s, a.payload);
-        default:
-          return s;
-      }
-    },
     stepper(s = STEPPER_INITIAL_STATE, a: LinkCreate.Actions) {
       switch(a.type) {
         case LinkCreate.ActionTypes.SELECT_STEP:
@@ -127,8 +114,14 @@ export const getChooseLinkForm = (state: State) => state.linkCreate.chooseLinkFo
 export const getSetupBrandForm = (state: State) => state.linkCreate.setupBrandForm;
 export const getSetupCtaForm = (state: State) => state.linkCreate.setupCtaForm;
 export const getShortPageUrl = (state: State) => state.linkCreate.shortPageUrl;
-export const getCta = (state: State) => state.linkCreate.cta;
 export const getStepper = (state: State) => state.linkCreate.stepper;
 export const getErrorMessage = (state: State) => state.linkCreate.errorMessage;
 export const getPreviewPageUrl = (state: State) => state.linkCreate.previewPageUrl;
 export const getIsCompleted = (state: State) => state.linkCreate.isCompleted;
+export const getCta = (state: State): CreateLinkViewModel => ({
+  pageUrl: state.linkCreate.chooseLinkForm.value.pageUrl,
+  name: state.linkCreate.setupBrandForm.value.name,
+  buttonText: state.linkCreate.setupCtaForm.value.buttonText,
+  buttonUrl: state.linkCreate.setupCtaForm.value.buttonUrl,
+  message: state.linkCreate.setupCtaForm.value.message,
+});

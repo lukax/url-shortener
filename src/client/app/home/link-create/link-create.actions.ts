@@ -33,6 +33,11 @@ export namespace LinkCreate {
     SELECTED_STEP: string;
 
     NEW_LINK: string;
+
+    FORM_SAVE: string;
+    FORM_SAVED: string;
+    FORM_RESTORE: string;
+    FORM_RESTORED: string;
   }
 
   export const ActionTypes: IHomeActions = {
@@ -49,6 +54,11 @@ export namespace LinkCreate {
     SELECTED_STEP: type(`${CATEGORY} SELECTED_STEP`),
 
     NEW_LINK: type(`${CATEGORY} NEW_LINK`),
+
+    FORM_SAVE: type(`${CATEGORY} FORM_SAVE`),
+    FORM_SAVED: type(`${CATEGORY} FORM_SAVED`),
+    FORM_RESTORE: type(`${CATEGORY} FORM_RESTORE`),
+    FORM_RESTORED: type(`${CATEGORY} FORM_RESTORED`),
   };
 
   /**
@@ -110,7 +120,26 @@ export namespace LinkCreate {
 
   export class NewLinkAction implements Action {
     type = ActionTypes.NEW_LINK;
-    constructor() { }
+    constructor(public payload?: undefined) { }
+  }
+
+  export class FormSaveAction implements Action {
+    type = ActionTypes.FORM_SAVE;
+    constructor(public payload?: undefined) { }
+  }
+
+  export class FormSavedAction implements Action {
+    type = ActionTypes.FORM_SAVED;
+    constructor(public payload?: undefined) { }
+  }
+
+  export class FormRestoreAction implements Action {
+    type = ActionTypes.FORM_RESTORE;
+    constructor(public payload?: undefined) { }
+  }
+  export class FormRestoredAction implements Action {
+    type = ActionTypes.FORM_RESTORED;
+    constructor(public payload?: undefined) { }
   }
 
   /**
@@ -131,5 +160,8 @@ export namespace LinkCreate {
     | SubmitSetupCtaAction
     | SubmitSetupCtaResultAction
     | SetPageUrlPreviewAction
-    | SelectStepAction;
+    | SelectStepAction
+    | FormSaveAction | FormSavedAction
+    | FormRestoreAction | FormRestoredAction
+    ;
 }

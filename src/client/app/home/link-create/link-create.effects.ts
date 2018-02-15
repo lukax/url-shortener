@@ -11,9 +11,10 @@ import {LinkCreate} from './link-create.actions';
 import {
   CHOOSE_LINK_INITIAL_STATE, getChooseLinkForm, getCta, SETUP_BRAND_INITIAL_STATE, SETUP_CTA_INITIAL_STATE,
   State,
-  getIsCompleted
 } from "./link-create.reducer";
 import SelectStepAction = LinkCreate.SelectStepAction;
+import {AuthService} from "../../auth/auth.service";
+import {Auth} from "../../auth/auth.actions";
 
 @Injectable()
 export class LinkCreateEffects {
@@ -26,11 +27,19 @@ export class LinkCreateEffects {
     .ofType(LinkCreate.ActionTypes.INIT)
     .startWith(new LinkCreate.InitAction)
     .switchMap(() => this.linkService.getCurrentCreateLink())
-    .map(payload => {
-      return new LinkCreate.InitializedAction(payload);
-    })
+    .switchMap((payload) => {
+      const { linkCreate = null }: State = JSON.parse(localStorage.getItem('LINK_CREATE_FORM'));
+      const actions: Action[] = [];
+      if(linkCreate && typeof linkCreate === 'object') {
+        actions.push(new SelectStepAction(linkCreate.stepper));
+        actions.push(new SetValueAction(CHOOSE_LINK_INITIAL_STATE.id, linkCreate.chooseLinkForm.value));
+        actions.push(new SetValueAction(SETUP_BRAND_INITIAL_STATE.id, linkCreate.setupBrandForm.value));
+        actions.push(new SetValueAction(SETUP_CTA_INITIAL_STATE.id, linkCreate.setupCtaForm.value));
+      }
+      return Observable.of<LinkCreate.Actions>(...actions, new LinkCreate.InitializedAction(payload));
+    });
     // nothing reacting to failure at moment but you could if you want (here for example)
-    .catch(() => Observable.of(new LinkCreate.InitFailedAction()));
+    //.catch(() => Observable.of(new LinkCreate.InitFailedAction()));
 
   @Effect() submitPageUrl$: Observable<LinkCreate.Actions> = this.actions$
     .ofType<LinkCreate.SubmitPageUrlAction>(LinkCreate.ActionTypes.SUBMIT_PAGE_URL)
@@ -48,34 +57,36 @@ export class LinkCreateEffects {
       return new LinkCreate.SelectStepAction('setup-cta');
     });
 
-  @Effect() submitSetupCta$: Observable<Action> = this.actions$
+  @Effect() submitSetupCta$: Observable<LinkCreate.Actions> = this.actions$
     .ofType<LinkCreate.SubmitSetupCtaAction>(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
     .withLatestFrom(this.store.select(getCta))
     .switchMap(([action, cta]) =>
       Observable.timer(300)
         .map(() => new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', true))
         .concat(
+            Observable.if(this.authService.isAuthenticated,
               this.linkService.createLink(cta)
-                .flatMap(createLinkResult => {
-                  this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(createLinkResult) });
-                  return [
-                    new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false),
-                    new LinkCreate.SubmitSetupCtaResultAction(createLinkResult),
-                    new LinkCreate.SelectStepAction('share-link'),
-                  ];
-                })
-                .catch(err => {
-                  this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(err) });
-                  return [
-                    new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false),
-                    new LinkCreate.SubmitSetupCtaResultAction({ message: err.error.message }),
-                  ];
-                })
+                  .flatMap(createLinkResult => {
+                    this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(createLinkResult) });
+                    return [
+                      new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false),
+                      new LinkCreate.SubmitSetupCtaResultAction(createLinkResult),
+                      new LinkCreate.SelectStepAction('share-link'),
+                    ];
+                  })
+                  .catch(err => {
+                    this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT, { label: JSON.stringify(err) });
+                    return [
+                      new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', false),
+                      new LinkCreate.SubmitSetupCtaResultAction({ message: err.error.message }),
+                    ];
+                  }),
+              Observable.of(new LinkCreate.FormSaveAction(), new Auth.LoginAction())
             )
+        )
     );
 
-
-  @Effect() verifyPageUrl$: Observable<Action> = this.store
+  @Effect() verifyPageUrl$: Observable<LinkCreate.Actions> = this.store
     .select(getChooseLinkForm)
     .filter(fs => !!fs.value.pageUrl)
     .distinct(fs => fs.value)
@@ -103,7 +114,16 @@ export class LinkCreateEffects {
         )
     );
 
-  @Effect() newLinkEffect$: Observable<Action> = this.actions$
+  @Effect() formSave$: Observable<LinkCreate.Actions> = this.actions$
+    .ofType<LinkCreate.FormSaveAction>(LinkCreate.ActionTypes.FORM_SAVE)
+    .withLatestFrom(this.store.select(x => x.linkCreate))
+    .map(([fs, linkCreate]) => {
+      localStorage.setItem('LINK_CREATE_FORM', JSON.stringify({ linkCreate: linkCreate }));
+      return new LinkCreate.FormSavedAction();
+    });
+
+
+  @Effect() newLinkEffect$: Observable<LinkCreate.Actions> = this.actions$
     .ofType<LinkCreate.NewLinkAction>(LinkCreate.ActionTypes.NEW_LINK)
     .switchMap(() =>
       Observable.of<Action>(
@@ -120,6 +140,7 @@ export class LinkCreateEffects {
   constructor(
     private store: Store<State>,
     private actions$: Actions,
-    private linkService: LinkService
+    private linkService: LinkService,
+    private authService: AuthService
   ) { }
 }

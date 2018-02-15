@@ -32,7 +32,7 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
   cta$: Observable<CreateLinkViewModel>;
   errorMessage$: Observable<string>;
   previewPageUrl$: Observable<string>;
-  
+
   @ViewChild('formStepper') formStepper: MatStepper;
   stepperIndexDict: LinkCreate.StepperTypes[] = ['choose-link', 'setup-brand', 'setup-cta', 'share-link'];
 
@@ -53,14 +53,14 @@ export class CreateLinkComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this._auth.getProfile().subscribe(x => this.profile = x);
-    this._store.dispatch(new Auth.LoginAction());
   }
 
   ngAfterViewInit(): void {
     this._store.select(getStepper)
       .subscribe(x => {
-          this.formStepper.selectedIndex = this.stepperIndexDict.indexOf(x);
-          this.formStepper._stateChanged();
+          setTimeout(() => {
+            this.formStepper.selectedIndex = this.stepperIndexDict.indexOf(x);
+          }, 0);
       });
   }
 
