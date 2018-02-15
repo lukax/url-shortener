@@ -24,8 +24,20 @@ export class AuthEmbeddedService {
       primaryColor: '#800080'
     },
     languageDictionary: {
-      emailInputPlaceholder: "your@email.com",
-      title: "Jeit.in"
+      emailInputPlaceholder: "eumesmo@gmail.com",
+      title: "Jeit.in",
+      loginWithLabel: 'Login com %s',
+      passwordlessEmailAlternativeInstructions:
+        'Senão, digite seu email para entrar<br/>ou criar uma conta',
+      submitLabel: 'Enviar',
+      welcome: 'Bem-vindo %s!',
+      passwordlessEmailCodeInstructions: 'Um email com o código foi enviado para %s.',
+      resendCodeAction: 'Não recebeu o código?',
+      resendLabel: 'Reenviar',
+      resendingLabel: 'Reenviando...',
+      retryLabel: 'Tentar novamente',
+      blankErrorHint: 'Não pode estar em branco',
+      codeInputPlaceholder: 'seu código',
     },
   });
 
