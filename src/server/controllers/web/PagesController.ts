@@ -11,16 +11,16 @@ import {LinkCacheService} from "../../services/LinkCacheService";
 @Controller()
 export class PagesController {
 
-    @Inject() 
+    @Inject()
     private linkSvc: LinkService;
-    
-    @Inject() 
+
+    @Inject()
     private browserSvc: BrowserService;
-    
-    @Inject() 
+
+    @Inject()
     private linkCacheSvc: LinkCacheService;
 
-    
+
     @Get('/api/pages/:hash([a-z0-9]{5})') // match 5 digit hex string!
     @HttpCode(200)
     async viewUrlAction(@Param("hash") hash: string, @Req() req: Request): Promise<any> {
@@ -48,7 +48,7 @@ export class PagesController {
         return content;
     }
 
-    @Get('/api/pages/preview/:pageUrl') 
+    @Get('/api/pages/preview/:pageUrl')
     @HttpCode(200)
     async previewUrlAction(@Param("pageUrl") pageUrl: string, @Req() req: Request): Promise<any> {
         console.log("Loading url preview: " + pageUrl);

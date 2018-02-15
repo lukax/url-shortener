@@ -3,6 +3,7 @@ import {URL} from "url";
 import * as puppeteer from "puppeteer";
 import * as pTimeout from "p-timeout";
 import {BLOCKED_REGEXP} from '../app.blocked';
+import {Page} from "puppeteer";
 
 @Service()
 export class BrowserService {
@@ -13,17 +14,20 @@ export class BrowserService {
     let content: string;
     let page: puppeteer.Page;
 
+    const timeoutSeconds = 20;
+
     try {
       if(!this.browser) {
         console.log('⏳️ init browser');
         this.browser = await puppeteer.launch({
           ignoreHTTPSErrors: true,
-          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+          args: [/*'--no-sandbox', '--disable-setuid-sandbox',*/ '--disable-dev-shm-usage']
         });
       }
 
       console.log('⏳️ new page ' + pageURL);
       page = await this.browser.newPage();
+      await this.applyEvasions(page);
 
       const nowTime = +new Date();
       let reqCount = 0;
@@ -40,7 +44,7 @@ export class BrowserService {
         const otherResources = /^(manifest|other)$/i.test(resourceType);
         // Abort requests that exceeds 15 seconds
         // Also abort if more than 100 requests
-        if (seconds > 20 || reqCount > 100 || false) {
+        if (seconds > timeoutSeconds || reqCount > 100 || false) {
           console.log(`❌⏳ ${method} ${shortURL}`);
           request.abort();
         } else if (BLOCKED_REGEXP.test(url) || otherResources) {
@@ -67,7 +71,7 @@ export class BrowserService {
       console.log('⬇️ Fetching ' + pageURL);
       await Promise.race([
         responsePromise,
-        page.goto(pageURL, { waitUntil: 'networkidle2', timeout: 15 * 1000 })
+        page.goto(pageURL, { waitUntil: 'load', timeout: timeoutSeconds * 1000 })
       ]);
 
       // Pause all media and stop buffering
@@ -79,7 +83,7 @@ export class BrowserService {
             if (m.pause) m.pause();
             //m.preload = 'none';
           });
-        });
+        }).catch((e) => console.log('err frame.evaluate ' + e));
       });
 
 
@@ -138,7 +142,7 @@ export class BrowserService {
         content = content.replace(/<!--[\s\S]*?-->/g, '');
 
         return content;
-      }, htmlHandle), 20 * 1000, 'Render timed out');
+      }, htmlHandle), timeoutSeconds * 1000, 'Render timed out');
 
       console.log('💥 Done action render');
 
@@ -151,7 +155,7 @@ export class BrowserService {
           XMLHttpRequest.prototype.send = (_: any)=>_;
           // Disable all RAFs
           (<any>requestAnimationFrame) = (_: any)=>_;
-        });
+        }).catch((e) => console.log('err frame.evaluate ' + e));
       });
 
       page.removeAllListeners();
@@ -162,7 +166,7 @@ export class BrowserService {
         console.error(e);
         console.log('💔 Force close ' + pageURL);
         page.removeAllListeners();
-        page.close();
+        await page.close();
       }
       //cache.del(pageURL);
       const { message = '' } = e;
@@ -175,7 +179,7 @@ export class BrowserService {
       if (/not opened/i.test(message) && this.browser) {
         console.error('🕸 Web socket failed');
         try {
-          this.browser.close();
+          await this.browser.close();
           this.browser = null;
         } catch (err) {
           console.warn(`Chrome could not be killed ${err.message}`);
@@ -187,7 +191,85 @@ export class BrowserService {
     return content;
   }
 
-
   private truncate(str: string, len: number) { return  str.length > len ? str.slice(0, len) + '…' : str; }
 
+  private async applyEvasions(page: Page) {
+      // Pass the User-Agent Test.
+      const userAgent =
+        'Mozilla/5.0 (X11; Linux x86_64)' +
+        'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.39 Safari/537.36';
+      await page.setUserAgent(userAgent);
+
+      // Pass the Webdriver Test.
+      await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+          get: () => false
+        });
+      });
+
+      // Pass the Chrome Test.
+      await page.evaluateOnNewDocument(() => {
+        // We can mock this in as much depth as we need for the test.
+        (<any>window).chrome = {
+          runtime: {}
+        };
+      });
+
+      // Pass the Permissions Test.
+      await page.evaluateOnNewDocument(() => {
+        const originalQuery = (<any>window).navigator.permissions.query;
+        (<any>window).navigator.permissions.__proto__.query = (parameters: any) =>
+          parameters.name === 'notifications'
+            ? Promise.resolve({state: (<any>Notification).permission})
+            : originalQuery(parameters);
+
+        // Inspired by: https://github.com/ikarienator/phantomjs_hide_and_seek/blob/master/5.spoofFunctionBind.js
+        const oldCall = Function.prototype.call;
+        function call() {
+          return oldCall.apply(this, arguments);
+        }
+        Function.prototype.call = call;
+
+        const nativeToStringFunctionString = Error.toString().replace(/Error/g, "toString");
+        const oldToString = Function.prototype.toString;
+
+        function functionToString() {
+          if (this === (<any>window).navigator.permissions.query) {
+            return "function query() { [native code] }";
+          }
+          if (this === functionToString) {
+            return nativeToStringFunctionString;
+          }
+          return oldCall.call(oldToString, this);
+        }
+        Function.prototype.toString = functionToString;
+      });
+
+      // Pass the Plugins Length Test.
+      await page.evaluateOnNewDocument(() => {
+        // Overwrite the `plugins` property to use a custom getter.
+        Object.defineProperty(navigator, 'plugins', {
+          // This just needs to have `length > 0` for the current test,
+          // but we could mock the plugins too if necessary.
+          get: () => [1, 2, 3, 4, 5]
+        });
+      });
+
+      // Pass the Languages Test.
+      await page.evaluateOnNewDocument(() => {
+        // Overwrite the `plugins` property to use a custom getter.
+        Object.defineProperty(navigator, 'languages', {
+          get: () => ['en-US', 'en']
+        });
+      });
+
+      // Pass the iframe Test
+      // await page.evaluateOnNewDocument(() => {
+      //   Object.defineProperty(HTMLIFrameElement.prototype, 'contentWindow', {
+      //     get: function() {
+      //       return window;
+      //     }
+      //   });
+      // });
+  }
 }

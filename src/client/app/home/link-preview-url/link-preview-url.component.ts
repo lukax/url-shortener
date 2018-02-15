@@ -22,6 +22,7 @@ import {SafeResourceUrl} from "@angular/platform-browser/src/security/dom_saniti
       height: 100%;
       position: absolute;
       z-index: 2;
+      background-color: white;
     }
     .overlay {
       position:absolute;
