@@ -38,7 +38,6 @@ import {State} from "../../app.reducer";
 })
 export class StepsChooseLinkComponent {
   @Input() formState: FormGroupState<CreateLinkViewModel>;
-  submittedValue: CreateLinkViewModel;
 
   constructor(private actionsSubject: ActionsSubject) { }
 
@@ -47,7 +46,6 @@ export class StepsChooseLinkComponent {
       return;
     }
 
-    this.submittedValue = this.formState.value;
-    this.actionsSubject.next(new LinkCreate.SubmitPageUrlAction(this.submittedValue));
+    this.actionsSubject.next(new LinkCreate.SubmitPageUrlAction(this.formState.value));
   }
 }

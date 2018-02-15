@@ -13,10 +13,11 @@ export interface State extends RootState {
     setupBrandForm: FormGroupState<CreateLinkViewModel>,
     setupCtaForm: FormGroupState<CreateLinkViewModel>
     shortPageUrl: string,
+    previewPageUrl: string,
     errorMessage: string,
     cta: CreateLinkViewModel,
     stepper: LinkCreate.StepperTypes,
-    previewPageUrl: string
+    isCompleted: boolean
   };
 }
 
@@ -102,6 +103,14 @@ export function reducer(_s: any, _a: any) {
         default:
           return s;
       }
+    },
+    completed(s = false, a: LinkCreate.Actions) {
+      switch(a.type) {
+        case LinkCreate.ActionTypes.SUBMIT_SETUP_CTA_RESULT:
+          return true;
+        default:
+          return s;
+      }
     }
     // searchResults(s: string[] = [], a: Action) {
     //   if (a.type === SetSearchResultAction.TYPE) {
@@ -122,3 +131,4 @@ export const getCta = (state: State) => state.linkCreate.cta;
 export const getStepper = (state: State) => state.linkCreate.stepper;
 export const getErrorMessage = (state: State) => state.linkCreate.errorMessage;
 export const getPreviewPageUrl = (state: State) => state.linkCreate.previewPageUrl;
+export const getIsCompleted = (state: State) => state.linkCreate.isCompleted;

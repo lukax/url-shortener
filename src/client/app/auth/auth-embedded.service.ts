@@ -7,7 +7,8 @@ import {APP_CONFIG} from "../app.config";
 @Injectable()
 export class AuthEmbeddedService {
 
-  lock = new Auth0Lock(APP_CONFIG.AUTH_CLIENT_ID, APP_CONFIG.AUTH_DOMAIN, {
+  lock = new Auth0LockPasswordless(APP_CONFIG.AUTH_CLIENT_ID, APP_CONFIG.AUTH_DOMAIN, {
+    passwordlessMethod: 'code',
     autoclose: true,
     closable: false,
     auth: {

@@ -16,12 +16,14 @@
       <mat-step [completed]="(setupCtaForm$ | async).isValid" editable="false">
         <ng-template matStepLabel>Estamos quase lá :)</ng-template>
         <small>Todas as "chamadas" devem levar à uma ação (clickar no botão que leva o visitante ao seu site, página, whatsapp etc). Indique os textos que deseja para sua mensagem, botão e o link de destino.</small>
-        <sd-steps-setup-cta [formState]="setupCtaForm$ | async" [errorMessage]="errorMessage$ | async"></sd-steps-setup-cta>
+        <sd-steps-setup-cta [formState]="setupCtaForm$ | async" 
+                            [errorMessage]="errorMessage$ | async"></sd-steps-setup-cta>
       </mat-step>
       <mat-step>
         <ng-template matStepLabel>Compartilhe seu Jeit.in!</ng-template>
         <small>Qualquer um que acesse esse link verá o conteúdo original com sua chamada! Quanto mais pessoas acessarem maiores as chances de você atrair mais gente para seu site/página/conteúdo e vender mais!</small>
-        <sd-steps-share-link [shortPageUrl]="(shortPageUrl$ | async)" [pageMetadata]="(cta$ | async).metadata"></sd-steps-share-link>
+        <sd-steps-share-link [shortPageUrl]="(shortPageUrl$ | async)" 
+                             [pageMetadata]="(cta$ | async).metadata"></sd-steps-share-link>
       </mat-step>
 
     </mat-vertical-stepper>

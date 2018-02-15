@@ -32,7 +32,6 @@ import {LinkCreate} from "../link-create/link-create.actions";
 })
 export class StepsSetupBrandComponent {
   @Input() formState: FormGroupState<CreateLinkViewModel>;
-  submittedValue: CreateLinkViewModel;
 
   constructor(private actionsSubject: ActionsSubject) { }
 
@@ -41,7 +40,6 @@ export class StepsSetupBrandComponent {
       return;
     }
 
-    this.submittedValue = this.formState.value;
-    this.actionsSubject.next(new LinkCreate.SubmitSetupBrandAction(this.submittedValue));
+    this.actionsSubject.next(new LinkCreate.SubmitSetupBrandAction(this.formState.value));
   }
 }

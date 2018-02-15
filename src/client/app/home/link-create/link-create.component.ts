@@ -9,7 +9,7 @@ import {Observable} from "rxjs/Observable";
 import {FormGroupState} from "ngrx-forms";
 import {
   getChooseLinkForm, State, getSetupBrandForm, getSetupCtaForm, getShortPageUrl,
-  getCta, getStepper, getErrorMessage, getPreviewPageUrl
+  getCta, getStepper, getErrorMessage, getPreviewPageUrl, getIsCompleted
 } from "./link-create.reducer";
 import {Auth} from "../../auth/auth.actions";
 import { StepperSelectionEvent } from '@angular/cdk/stepper';

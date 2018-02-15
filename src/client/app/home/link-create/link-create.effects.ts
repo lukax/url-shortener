@@ -10,7 +10,8 @@ import {
 import {LinkCreate} from './link-create.actions';
 import {
   CHOOSE_LINK_INITIAL_STATE, getChooseLinkForm, getCta, SETUP_BRAND_INITIAL_STATE, SETUP_CTA_INITIAL_STATE,
-  State
+  State,
+  getIsCompleted
 } from "./link-create.reducer";
 import SelectStepAction = LinkCreate.SelectStepAction;
 
@@ -31,24 +32,24 @@ export class LinkCreateEffects {
     // nothing reacting to failure at moment but you could if you want (here for example)
     .catch(() => Observable.of(new LinkCreate.InitFailedAction()));
 
-  @Effect() choosePageLink$: Observable<LinkCreate.Actions> = this.actions$
-    .ofType(LinkCreate.ActionTypes.SUBMIT_PAGE_URL)
-    .map((action: LinkCreate.SubmitPageUrlAction) => {
-      // analytics
+  @Effect() submitPageUrl$: Observable<LinkCreate.Actions> = this.actions$
+    .ofType<LinkCreate.SubmitPageUrlAction>(LinkCreate.ActionTypes.SUBMIT_PAGE_URL)
+    .withLatestFrom(this.store.select(x => x.linkCreate))
+    .map(([action, linkCreate]) => {
       this.linkService.track(LinkCreate.ActionTypes.SUBMIT_PAGE_URL, { label: JSON.stringify(action.payload) });
       return new LinkCreate.SelectStepAction('setup-brand');
     });
 
-  @Effect() setupBrand$: Observable<LinkCreate.Actions> = this.actions$
-    .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND)
-    .map((action: LinkCreate.SubmitPageUrlAction) => {
+  @Effect() submitSetupBrand$: Observable<LinkCreate.Actions> = this.actions$
+    .ofType<LinkCreate.SubmitPageUrlAction>(LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND)
+    .map((action) => {
       // analytics
       this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_BRAND, { label: JSON.stringify(action.payload) });
       return new LinkCreate.SelectStepAction('setup-cta');
     });
 
-  @Effect() setupCta$: Observable<Action> = this.actions$
-    .ofType(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
+  @Effect() submitSetupCta$: Observable<Action> = this.actions$
+    .ofType<LinkCreate.SubmitSetupCtaAction>(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA)
     .withLatestFrom(this.store.select(getCta))
     .switchMap(([action, cta]) =>
       Observable.timer(300)
@@ -103,7 +104,7 @@ export class LinkCreateEffects {
     );
 
   @Effect() newLinkEffect$: Observable<Action> = this.actions$
-    .ofType(LinkCreate.ActionTypes.NEW_LINK)
+    .ofType<LinkCreate.NewLinkAction>(LinkCreate.ActionTypes.NEW_LINK)
     .switchMap(() =>
       Observable.of<Action>(
         new SelectStepAction('choose-link'),
