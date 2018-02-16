@@ -23,50 +23,50 @@ export class LinkStatsService {
     //-- page url --//
 
     public async trackPageUrlView(pageUrl: string): Promise<void> {
-      const x = await this.caches.findOne({ pageUrl: pageUrl});
-      if(x) {
-        x.stats = x.stats || new LinkCacheStats();
-        x.stats.pageViewCount++;
-        await this.caches.updateById(x._id, x);
-      }
+      const x = await this.caches.findOne({ pageUrl: pageUrl });
+      // if(x) {
+      //   x.stats = x.stats || new LinkCacheStats();
+      //   x.stats.pageViewCount++;
+      //   await this.caches.updateOne({ _id: x._id }, x);
+      // }
     }
 
     public async trackVerifyUrl(pageUrl: string): Promise<void> {
       const x = await this.caches.findOne({ pageUrl: pageUrl});
-      if(x) {
-        x.stats = x.stats || new LinkCacheStats();
-        x.stats.verifyUrlCount++;
-        await this.caches.updateById(x._id, x);
-      }
+      // if(x) {
+      //   x.stats = x.stats || new LinkCacheStats();
+      //   x.stats.verifyUrlCount++;
+      //   await this.caches.updateOne({ _id: x._id }, x);
+      // }
     }
 
     //-- hash --//
 
     public async trackHashView(hash: string): Promise<void> {
       const x = await this.links.findOne({ hash: hash });
-      if(x) {
-        x.stats = x.stats || new LinkStats();
-        x.stats.hashViewCount++;
-        await this.links.updateById(x._id, x);
-      }
+      // if(x) {
+      //   x.stats = x.stats || new LinkStats();
+      //   x.stats.hashViewCount++;
+      //   await this.links.updateOne({ _id: x._id }, x);
+      // }
     }
 
     public async trackCtaView(hash: string): Promise<void> {
       const x = await this.links.findOne({ hash: hash });
-      if(x) {
-        x.stats = x.stats || new LinkStats();
-        x.stats.ctaViewCount++;
-        await this.links.updateById(x._id, x);
-      }
+      // if(x) {
+      //   x.stats = x.stats || new LinkStats();
+      //   x.stats.ctaViewCount++;
+      //   await this.links.updateOne({ _id: x._id }, x);
+      // }
     }
 
     public async trackButtonClick(hash: string): Promise<void> {
       const x = await this.links.findOne({ hash: hash });
-      if(x) {
-        x.stats = x.stats || new LinkStats();
-        x.stats.buttonClickCount++;
-        await this.links.updateById(x._id, x);
-      }
+      // if(x) {
+      //   x.stats = x.stats || new LinkStats();
+      //   x.stats.buttonClickCount++;
+      //   await this.links.updateOne({ _id: x._id }, x);
+      // }
     }
 
 
