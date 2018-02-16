@@ -28,13 +28,13 @@ export class LinkCreateEffects {
     .startWith(new LinkCreate.InitAction)
     .switchMap(() => this.linkService.getCurrentCreateLink())
     .switchMap((payload) => {
-      const { linkCreate = null }: State = JSON.parse(localStorage.getItem('LINK_CREATE_FORM'));
+      const partialState: State = JSON.parse(localStorage.getItem('LINK_CREATE_FORM'));
       const actions: Action[] = [];
-      if(linkCreate && typeof linkCreate === 'object') {
-        actions.push(new SelectStepAction(linkCreate.stepper));
-        actions.push(new SetValueAction(CHOOSE_LINK_INITIAL_STATE.id, linkCreate.chooseLinkForm.value));
-        actions.push(new SetValueAction(SETUP_BRAND_INITIAL_STATE.id, linkCreate.setupBrandForm.value));
-        actions.push(new SetValueAction(SETUP_CTA_INITIAL_STATE.id, linkCreate.setupCtaForm.value));
+      if(partialState && partialState.linkCreate && typeof partialState.linkCreate === 'object') {
+        actions.push(new SelectStepAction(partialState.linkCreate.stepper));
+        actions.push(new SetValueAction(CHOOSE_LINK_INITIAL_STATE.id, partialState.linkCreate.chooseLinkForm.value));
+        actions.push(new SetValueAction(SETUP_BRAND_INITIAL_STATE.id, partialState.linkCreate.setupBrandForm.value));
+        actions.push(new SetValueAction(SETUP_CTA_INITIAL_STATE.id, partialState.linkCreate.setupCtaForm.value));
       }
       return Observable.of<LinkCreate.Actions>(...actions, new LinkCreate.InitializedAction(payload));
     });
