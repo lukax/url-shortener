@@ -14,7 +14,7 @@ import {State} from "../../app.reducer";
         <input matInput placeholder="Endereço do conteúdo" [ngrxFormControlState]="formState.controls.pageUrl">
         <mat-hint>Cole o link aqui. (ex: medium.com)</mat-hint>
         <mat-error *ngIf="formState.errors._pageUrl?.required">
-          Para avançarmos você precisa indicar um link com o conteúdo original
+          Para avançarmos você precisa indicar um link
         </mat-error>
         <mat-error *ngIf="formState.errors._pageUrl?.$exists || formState.errors._pageUrl?.pattern">
           Hummmm nos desculpe mas ainda não conseguimos criar um Jeit.in dessa página :(

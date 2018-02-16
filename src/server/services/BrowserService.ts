@@ -21,7 +21,7 @@ export class BrowserService {
         console.log('⏳️ init browser');
         this.browser = await puppeteer.launch({
           ignoreHTTPSErrors: true,
-          args: [/*'--no-sandbox', '--disable-setuid-sandbox',*/ '--disable-dev-shm-usage']
+          args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
         });
       }
 
