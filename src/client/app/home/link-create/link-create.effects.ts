@@ -125,7 +125,7 @@ export class LinkCreateEffects {
     });
 
 
-  @Effect() newLinkEffect$: Observable<LinkCreate.Actions> = this.actions$
+  @Effect() newLinkEffect$: Observable<Action> = this.actions$
     .ofType<LinkCreate.NewLinkAction>(LinkCreate.ActionTypes.NEW_LINK)
     .switchMap(() =>
       Observable.of<Action>(

@@ -16,13 +16,26 @@ export class LinkCache {
   @Column()
   public cacheTime: number;
 
-  @Column()
+  @Column(type => PageMetadata)
   metadata: PageMetadata;
+
+  @Column(type => LinkCacheStats)
+  stats: LinkCacheStats;
 
   isExpired(): boolean {
     const seconds = ((+new Date()) - this.cacheTime) / 1000;
     const maxTimeAliveSeconds = 60 * 60 * 24;
     return !this.fileKey || seconds > maxTimeAliveSeconds;
   }
+
+}
+
+export class LinkCacheStats {
+  
+  @Column()
+  pageViewCount = 0;
+
+  @Column()
+  verifyUrlCount = 0;
 
 }

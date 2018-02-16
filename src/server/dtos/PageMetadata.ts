@@ -1,4 +1,4 @@
-export interface PageMetadata {
+export class PageMetadata {
     author?: string;
     date?: string;
     description?: string;

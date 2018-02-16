@@ -10,6 +10,7 @@ import {VerifyUrlDto, VerifyUrlResultDto} from "../../dtos/VerifyUrlDto";
 import {checkJwt} from "../../app.auth";
 import {User} from "../../model/User";
 import { LinkCacheService } from "../../services/LinkCacheService";
+import { LinkStatsService } from "../../services/LinkStatsService";
 
 
 @Service()
@@ -18,6 +19,9 @@ export class ApiLinksController {
 
     @Inject()
     private links: LinkService;
+
+    @Inject()
+    private stats: LinkStatsService;
 
 
     @Get('/api/links')
@@ -59,6 +63,8 @@ export class ApiLinksController {
         throw new NotFoundError(`Link not found`);
       }
 
+      await this.stats.trackCtaView(hash);
+
       return l;
     }
 
@@ -68,6 +74,10 @@ export class ApiLinksController {
       log(`💥 verify link - ${JSON.stringify(model)}`);
 
       const isValid = await this.links.isUrlValid(model.url);
+      if(isValid) {
+        await this.stats.trackVerifyUrl(model.url);
+      }
+
       return <VerifyUrlResultDto>{
         isValid: isValid,
         message: !isValid ? 'Url not supported' : undefined

@@ -27,5 +27,20 @@ export class Link {
     @Column()
     userId: ObjectID;
 
+    @Column(type => LinkStats)
+    stats: LinkStats;
+
 }
 
+export class LinkStats {
+
+    @Column()
+    hashViewCount = 0;
+
+    @Column()
+    ctaViewCount = 0;
+
+    @Column()
+    buttonClickCount = 0;
+
+}

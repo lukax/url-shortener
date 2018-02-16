@@ -5,6 +5,7 @@ import { LinkService } from "../../services/LinkService";
 import { IAppConfig } from "../../app.config";
 import {BrowserService} from "../../services/BrowserService";
 import {LinkCacheService} from "../../services/LinkCacheService";
+import { LinkStatsService } from "../../services/LinkStatsService";
 
 
 @Service()
@@ -12,7 +13,10 @@ import {LinkCacheService} from "../../services/LinkCacheService";
 export class PagesController {
 
     @Inject()
-    private linkSvc: LinkService;
+    private links: LinkService;
+
+    @Inject()
+    private stats: LinkStatsService;
 
     @Inject()
     private browserSvc: BrowserService;
@@ -25,7 +29,7 @@ export class PagesController {
     @HttpCode(200)
     async viewUrlAction(@Param("hash") hash: string, @Req() req: Request): Promise<any> {
         console.log("Loading url hash: " + hash);
-        const link = await this.linkSvc.findOneByHash(hash);
+        const link = await this.links.findOneByHash(hash);
         if(!link) throw new NotFoundError();
 
         const { host } = req.headers;
@@ -41,6 +45,8 @@ export class PagesController {
           await this.linkCacheSvc.saveCache(link.pageUrl, content);
         }
 
+        await this.stats.trackHashView(hash);
+
         if(!content) {
             throw new BadRequestError("An error has occurred, please try again");
         }
@@ -54,10 +60,12 @@ export class PagesController {
         console.log("Loading url preview: " + pageUrl);
 
         pageUrl = decodeURIComponent(pageUrl);
-        const isValid = await this.linkSvc.isUrlValid(pageUrl);
+        const isValid = await this.links.isUrlValid(pageUrl);
         if(!isValid) {
             throw new NotFoundError();
         }
+
+        await this.stats.trackPageUrlView(pageUrl);
 
         const { host } = req.headers;
 
