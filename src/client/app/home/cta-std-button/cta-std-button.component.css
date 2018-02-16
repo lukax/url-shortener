@@ -3,24 +3,23 @@
 }
 
 :host .cta-std-button {
-  position: fixed !important;
-  bottom: 0px !important;
-  right: 0px !important;
-  margin: 25px !important;
+  position: fixed ;
+  bottom: 0px ;
+  right: 0px ;
+  margin: 25px ;
   /*z-index: 2147483647 !important;*/
-  z-index: 100000 !important;
-  border-radius: 0 !important;
+  z-index: 100000 ;
+  border-radius: 0 ;
 }
 
 :host .contact-cta-section {
-  font-weight: 400 !important;
-  -webkit-font-smoothing: antialiased !important;
-  text-rendering: optimizeLegibility !important;
-  -moz-osx-font-smoothing: grayscale !important;
-  /* padding: 75px 0 10px 0 !important; */
-  float: left !important;
-  text-align: center !important;
-  width: 100% !important;
+  font-weight: 400 ;
+  -webkit-font-smoothing: antialiased ;
+  text-rendering: optimizeLegibility ;
+  -moz-osx-font-smoothing: grayscale ;
+  float: left ;
+  text-align: center ;
+  width: 100% ;
   min-width: 360px;
 }
 :host .clearfix {
@@ -33,11 +32,11 @@
   margin: 0 auto !important;
 }
 :host .cta-wrapper {
-  margin-bottom: 0 !important;
-  text-align: left !important;
-  padding: 26px !important;
-  background-color: #800080 !important;
-  border-radius: 2px !important;
+  margin-bottom: 0 ;
+  text-align: left ;
+  padding: 26px ;
+  background-color: #800080 ;
+  border-radius: 2px ;
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 :host .cta-wrapper .details-wrapper {
@@ -47,37 +46,35 @@
   /*padding-right: 20px;*/
 }
 :host .cta-wrapper .details-wrapper h2 {
-  font-weight: 600 !important;
-  margin: 0 0 4px 0 !important;
-  color: #FFF !important;
-  font-size: 18px !important;
-  line-height: normal !important;
+  font-weight: 600 ;
+  margin: 0 0 4px 0 ;
+  color: #FFF ;
+  font-size: 18px ;
+  line-height: normal ;
   min-width: 80px;
-  padding-right: 20px !important;
+  padding-right: 20px ;
 }
 :host .cta-wrapper .details-wrapper p {
-  font-size: 15px !important;
-  color: #FFF !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  box-sizing: border-box !important;
+  font-size: 15px ;
+  color: #FFF ;
+  margin: 0 ;
+  box-sizing: border-box ;
   min-width: 80px;
-  padding-right: 20px !important;
+  padding: 0 20px 0 0;
 }
 :host .cta-wrapper .blue-cta-button {
   /* width: 30%; */
-  border-radius: 2px !important;
-  transition: all 0.2s ease-in-out !important;
-  text-decoration: none !important;
-  font-weight: 600 !important;
-  float: right !important;
-  margin: 0 !important;
-  color: #800080 !important;
-  background-color: #FFF !important;
-  padding: 17px 12px !important;
-  text-align: center !important;
-  margin-top: 5px !important;
-  font-size: 14px !important;
+  border-radius: 2px ;
+  transition: all 0.2s ease-in-out ;
+  text-decoration: none ;
+  font-weight: 600 ;
+  float: right ;
+  color: #800080 ;
+  background-color: #FFF ;
+  padding: 17px 12px ;
+  text-align: center ;
+  margin: 5px 0 0;
+  font-size: 14px ;
   min-width: 80px;
   max-width: 200px;
   overflow: hidden;
@@ -87,31 +84,33 @@
 
 @media screen and (max-width:830px) {
   :host .cta-wrapper .details-wrapper {
-    width: 100% !important;
+    /*width: 100% !important;*/
   }
   :host .cta-wrapper .blue-cta-button {
-    width: 100% !important;
+    /*width: 100% !important;*/
   }
 
   :host .cta-std-button {
-    left: unset !important;
-    right: 0 !important;
+    left: unset ;
+    right: 0 ;
   }
 }
 @media screen and (max-width: 768px) {
   :host .cta-std-button {
-    margin: 0 !important;
+    margin: 0 ;
+    left: 0;
+    right: 0;
   }
   :host .cta-wrapper {
-    padding: 20px !important;
+    padding: 13px ;
   }
   :host .cta-wrapper .details-wrapper h2 {
-    font-size: 15px !important;
+    font-size: 15px ;
   }
   :host .cta-wrapper .details-wrapper p {
-    font-size: 14px !important;
+    font-size: 14px ;
   }
   :host .cta-wrapper .blue-cta-button {
-    padding: 12px 11px !important;
+    padding: 12px 11px ;
   }
 }

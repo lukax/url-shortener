@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActionsSubject } from '@ngrx/store';
-import { cast, FormGroupState, NgrxValueConverter, NgrxValueConverters, ResetAction, SetValueAction } from 'ngrx-forms';
+import { FormGroupState } from 'ngrx-forms';
 
 import {CreateLinkViewModel} from "../../shared/models";
 import {LinkCreate} from "../link-create/link-create.actions";
-import {EmailPromptDialogComponent} from "../../email-prompt/email-prompt.component";
 import {MatDialog} from "@angular/material";
-import {Auth} from "../../auth/auth.actions";
 
 @Component({
   selector: 'sd-steps-setup-cta',
@@ -60,8 +58,7 @@ export class StepsSetupCtaComponent {
   @Input() formState: FormGroupState<CreateLinkViewModel>;
   @Input() errorMessage: string;
 
-  constructor(private actionsSubject: ActionsSubject,
-              private dialog: MatDialog) { }
+  constructor(private actionsSubject: ActionsSubject) { }
 
   submit() {
     if (this.formState.isInvalid) {
@@ -69,22 +66,7 @@ export class StepsSetupCtaComponent {
     }
 
     this.actionsSubject.next(new LinkCreate.SubmitSetupCtaAction(this.formState.value));
-
-    // this.emailPrompt((email) => {
-    //   this.submittedValue = this.formState.value;
-    //   this.submittedValue.userEmail = email;
-    // });
   }
 
-  emailPrompt(callback: (email: string) => void) {
-    const dialogRef = this.dialog.open(EmailPromptDialogComponent, {
-      width: '300px',
-      data: {  }
-    });
-
-    dialogRef.afterClosed().subscribe((result: any) => {
-      callback(result);
-    });
-  }
 
 }

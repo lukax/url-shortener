@@ -43,8 +43,7 @@ export class LinkCreateEffects {
 
   @Effect() submitPageUrl$: Observable<LinkCreate.Actions> = this.actions$
     .ofType<LinkCreate.SubmitPageUrlAction>(LinkCreate.ActionTypes.SUBMIT_PAGE_URL)
-    .withLatestFrom(this.store.select(x => x.linkCreate))
-    .map(([action, linkCreate]) => {
+    .map((action) => {
       this.linkService.track(LinkCreate.ActionTypes.SUBMIT_PAGE_URL, { label: JSON.stringify(action.payload) });
       return new LinkCreate.SelectStepAction('setup-brand');
     });
@@ -62,7 +61,10 @@ export class LinkCreateEffects {
     .withLatestFrom(this.store.select(getCta))
     .switchMap(([action, cta]) =>
       Observable.timer(300)
-        .map(() => new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', true))
+        .map(() => {
+          this.linkService.track(LinkCreate.ActionTypes.SUBMIT_SETUP_CTA, { label: JSON.stringify(action.payload) });
+          return new SetUserDefinedPropertyAction(SETUP_CTA_INITIAL_STATE.id, 'isLoading', true);
+        })
         .concat(
             Observable.if(this.authService.isAuthenticated,
               this.linkService.createLink(cta)
