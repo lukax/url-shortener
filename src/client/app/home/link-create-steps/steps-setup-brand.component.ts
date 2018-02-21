@@ -17,7 +17,15 @@ import {LinkCreate} from "../link-create/link-create.actions";
         </mat-error>
       </mat-form-field>
       <br>
-      
+      <mat-form-field>
+        <input matInput placeholder="Mensagem" [ngrxFormControlState]="formState.controls.message">
+        <mat-hint>Uma descrição para sua "chamada".</mat-hint>
+        <mat-error *ngIf="formState.errors._message?.required">
+          Ela é um complemento ao título e deve levar o visitante a clicar no botão da chamada.
+        </mat-error>
+      </mat-form-field>
+      <br>
+
       <button mat-raised-button color="primary" class="continue-btn"
               [disabled]="formState.isValidationPending 
                           || (formState.isInvalid && formState.isSubmitted) 

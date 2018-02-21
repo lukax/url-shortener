@@ -25,9 +25,9 @@ export const CHOOSE_LINK_INITIAL_STATE = createFormGroupState<CreateLinkViewMode
 });
 export const SETUP_BRAND_INITIAL_STATE = createFormGroupState<CreateLinkViewModel>('setupBrandForm', {
   name: '',
+  message: '',
 });
 export const SETUP_CTA_INITIAL_STATE = createFormGroupState<CreateLinkViewModel>('setupCtaForm', {
-  message: '',
   buttonText: '',
   buttonUrl: ''
 });
@@ -121,7 +121,7 @@ export const getIsCompleted = (state: State) => state.linkCreate.isCompleted;
 export const getCta = (state: State): CreateLinkViewModel => ({
   pageUrl: state.linkCreate.chooseLinkForm.value.pageUrl,
   name: state.linkCreate.setupBrandForm.value.name,
+  message: state.linkCreate.setupBrandForm.value.message,
   buttonText: state.linkCreate.setupCtaForm.value.buttonText,
   buttonUrl: state.linkCreate.setupCtaForm.value.buttonUrl,
-  message: state.linkCreate.setupCtaForm.value.message,
 });

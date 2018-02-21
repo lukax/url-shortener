@@ -11,14 +11,6 @@ import {MatDialog} from "@angular/material";
   template: `
     <form class="create-link-form" [ngrxFormState]="formState" (submit)="submit()">
       <mat-form-field>
-        <input matInput placeholder="Mensagem" [ngrxFormControlState]="formState.controls.message">
-        <mat-hint>Uma descrição para sua "chamada".</mat-hint>
-        <mat-error *ngIf="formState.errors._message?.required">
-          Ela é um complemento ao título e deve levar o visitante a clicar no botão da chamada.
-        </mat-error>
-      </mat-form-field>
-      <br>
-      <mat-form-field>
         <input matInput placeholder="Texto do botão" [ngrxFormControlState]="formState.controls.buttonText">
         <mat-hint>O que deve estar escrito no botão?</mat-hint>
         <mat-error *ngIf="formState.errors._buttonText?.required">
